@@ -1,0 +1,20 @@
+Package: spector
+Title: Computes a measure for the signal roughnes for genomic sequencing files
+Version: 0.1.1
+Authors@R: c(person("Anas Ahmad", "Rana", email = "anas.rana@oncology.ox.ac.uk", role = c("aut", "cre")), person("Anastasia", "Samsonova", email = "anastasia.samsonova@oncology.ox.ac.uk", role = c("aut")))
+Description: The package calculates a metric estimating noise levels of genomic data, it is based on wavelet transforms. The aim is to compare the signal to noise ratio between different samples and sample preparations.
+Depends: R (>= 3.1.0),
+  rtracklayer,
+  ggplot2,
+  dplyr
+Import:
+  ShortRead,
+  wavethresh,
+  readr,
+  parallel
+Suggests:
+  knitr,
+  rmarkdown
+License: MIT
+LazyData: true
+VignetteBuilder: knitr

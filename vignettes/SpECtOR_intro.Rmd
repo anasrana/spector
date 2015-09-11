@@ -1,0 +1,26 @@
+---
+title: "Introduction: SpECtOR (SEquence COverage Roughness)"
+author: "Anas A Rana"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{SpECtOR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Background
+
+Recent advances in high-throughput sequencing of cancer genomes has elucidated the landscape of genetic alterations in many tumor types, thus expanding molecular classification of cancer and facilitating routine whole genome sequencing in clinical oncology.
+
+The quality of tumor genome is a function of many variables, such as tissue quality and quantity, tumor content within a sample, depth of sequencing and effectiveness of the data processing pipeline. Tissue quality relates to the age and size of the tissue and a fixation protocol. The fresh or frozen (FF) tumor material generally yields high-quality tumor genomic DNA. However, in most cases archival specimens stored as formalin-fixed, paraffin-embedded (FFPE) tissue blocks. Formalin can fragment the genomic DNA and introduce chemical modifications during the fixation and storage process that, eventually, lead to false-positive mutation and copy-number alteration calls. As FFPE tissue currently comprise the most accessible clinical option, evaluation of which samples yield successful whole genome sequence is critically important for molecular diagnostics and production-level sequencing.
+
+## Aim
+
+To develop an approach and a metric for evaluation of noisiness (waviness) of sequenced genomic data. The metric should allow for comparison of whole genome sequence datasets (e.g. samples preserved with FFPE and FF protocols).
+
+## Method
+
+We designed an approach that combines classical methods routinely applied in signal processing field (wavelet transform and fractals) and ISO standards for surface texture roughness measurement.
