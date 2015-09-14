@@ -15,22 +15,22 @@ spector_bed <- function(file, header = FALSE, ucsc.coord = TRUE) {
   if (is.integer(region$chrom)) {
     if (ucsc.coord) {
       region <- region %>%
-        mutate(start = start + 1,
+        dplyr::mutate(start = start + 1,
           id = paste("chr", chrom, ":", start, "-", end, sep = ""),
           chr = paste("chr", chrom, sep = ""))
       } else {
         region <- region %>%
-          mutate(id = paste("chr", chrom, ":", start, "-", end, sep = ""),
+          dplyr::mutate(id = paste("chr", chrom, ":", start, "-", end, sep = ""),
             chr = paste("chr", chrom, sep = ""))
         }
     } else {
       if (ucsc.coord) {
         region <- region %>%
-          mutate(start = start + 1,
+          dplyr::mutate(start = start + 1,
             id = paste("chr", chrom, ":", start, "-", end, sep = ""), chr = chrom)
         } else {
           region <- region %>%
-            mutate(id = paste("chr", chrom, ":", start, "-", end, sep = ""), chr = chrom)
+            dplyr::mutate(id = paste("chr", chrom, ":", start, "-", end, sep = ""), chr = chrom)
         }
   }
 
