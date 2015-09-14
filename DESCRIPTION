@@ -18,3 +18,4 @@ Suggests:
 License: MIT
 LazyData: true
 VignetteBuilder: knitr
+biocViews: rtracklayer
