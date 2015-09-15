@@ -129,11 +129,14 @@ plot_box <- function(plot_df, id_df) {
                         breaks = .sample_col(id_df, plot_df$s_prep),
                         values = c("lightcoral", "dodgerblue2", "gray")) +
         geom_boxplot(stat = 'identity', aes(fill = s_prep))
+  } else if (!is.null(plotgg_box$gr_bam)) {
+    spector_boxplot <- spector_boxplot +
+        geom_boxplot(stat = 'identity', aes(fill = gr_bam)) +
+        guides(fill = FALSE)
   } else {
     spector_boxplot <- spector_boxplot +
-        geom_boxplot(stat = 'identity', aes(fill = id)) +
-        guides(fill = FALSE)
-
+      geom_boxplot(stat = 'identity', aes(fill = id)) +
+      guides(fill = FALSE)
   }
 
   if (!is.null(plotgg_box$gr_bam) && !is.na(plotgg_box$gr_bam)) {
@@ -201,7 +204,8 @@ plot_circ <- function(plot_df) {
 
 plot_dot <- function(plot_df) {
   if (is.null(plot_df$base_id)) {
-    warning("No baseline provided, therefore no 'dotplot' produced. \nThis plot type requires a baseline.\n", call. = FALSE)
+    warning("No baseline provided, therefore no 'dotplot' produced.
+            \nThis plot type requires a baseline.\n", call. = FALSE)
     return()
   }
 
