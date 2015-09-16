@@ -113,15 +113,21 @@ spector <- function(bam_f = NULL,
   if (var_s == "rms") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(R_rms, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(1 / R_rms, na.rm = TRUE),
+                       sd_rm = sd(1 / R_rms, na.rm = TRUE),
+                       iqr_rm = IQR(1 / R_rms, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(R_a, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(1 / R_a, na.rm = TRUE),
+                       sd_rm = sd(1 / R_a, na.rm = TRUE),
+                       iqr_rm = IQR(1 / R_a, na.rm = TRUE))
   } else if (var_s == "df") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(Df, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(Df, na.rm = TRUE),
+                       sd_rm = sd(Df, na.rm = TRUE),
+                       iqr_rm = IQR(Df, na.rm = TRUE))
   }
 
   write.csv(stat_spector, file = paste(out, "SUMMARY_STAT_metric.csv", sep = ""),
