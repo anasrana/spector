@@ -41,14 +41,11 @@ spector <- function(bam_f = NULL,
                     samtools_cmd = "samtools",
                     ...) {
   ## Create output folder if it doesn't exist already
+  out_F <- .out_trailing_fix(out_F)
   if (!dir.exists(out_F)) {
     dir.create(out_F)
     message(paste("Folder '", out_F, "' created in current working directory ('",
                    getwd(), "')", sep = ""))
-  }
-  if (length(grep("*/", out_F)) == 0) {
-    out_F <- paste(out_F, "/", sep = "")
-    message(out_F)
   }
 
 # ================================================================================
@@ -153,4 +150,13 @@ spector <- function(bam_f = NULL,
 dir.exists <- function(d) {
     de <- file.info(d)$isdir
     ifelse(is.na(de), FALSE, de)
+}
+
+.out_trailing_fix <- function(out_F) {
+  tmp_out <- unlist(strsplit(out_F, split = ""))
+  if (!(tmp_out[length(tmp_out)] == "/")) {
+    out_F <- paste(out_F, "/", sep = "")
+  }
+  return(out_F)
+
 }
