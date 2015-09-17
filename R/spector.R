@@ -41,14 +41,11 @@ spector <- function(bam_f = NULL,
                     samtools_cmd = "samtools",
                     ...) {
   ## Create output folder if it doesn't exist already
+  out_F <- .out_trailing_fix(out_F)
   if (!dir.exists(out_F)) {
     dir.create(out_F)
     message(paste("Folder '", out_F, "' created in current working directory ('",
                    getwd(), "')", sep = ""))
-  }
-  if (length(grep("*/", out_F)) == 0) {
-    out_F <- paste(out_F, "/", sep = "")
-    message(out_F)
   }
 
 # ================================================================================
@@ -113,15 +110,21 @@ spector <- function(bam_f = NULL,
   if (var_s == "rms") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(R_rms, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(1 / R_rms, na.rm = TRUE),
+                       sd_rm = sd(1 / R_rms, na.rm = TRUE),
+                       iqr_rm = IQR(1 / R_rms, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(R_a, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(1 / R_a, na.rm = TRUE),
+                       sd_rm = sd(1 / R_a, na.rm = TRUE),
+                       iqr_rm = IQR(1 / R_a, na.rm = TRUE))
   } else if (var_s == "df") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mu = mean(Df, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(Df, na.rm = TRUE),
+                       sd_rm = sd(Df, na.rm = TRUE),
+                       iqr_rm = IQR(Df, na.rm = TRUE))
   }
 
   write.csv(stat_spector, file = paste(out, "SUMMARY_STAT_metric.csv", sep = ""),
@@ -147,4 +150,13 @@ spector <- function(bam_f = NULL,
 dir.exists <- function(d) {
     de <- file.info(d)$isdir
     ifelse(is.na(de), FALSE, de)
+}
+
+.out_trailing_fix <- function(out_F) {
+  tmp_out <- unlist(strsplit(out_F, split = ""))
+  if (!(tmp_out[length(tmp_out)] == "/")) {
+    out_F <- paste(out_F, "/", sep = "")
+  }
+  return(out_F)
+
 }
