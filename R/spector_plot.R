@@ -148,7 +148,7 @@ plot_box <- function(plot_df, id_df) {
 
 plot_circ <- function(plot_df) {
   circ_df <- plot_df %>%
-    dplyr::group_by(id, base_id, gr_bam) %>%
+    dplyr::group_by(id, gr_bam) %>%
     dplyr::summarise(mu = mean(res_y, na.rm = TRUE),
               range = boxplot.stats(res_y)$stats[5] -
                       boxplot.stats(res_y)$stats[1])
