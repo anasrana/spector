@@ -111,18 +111,21 @@ spector <- function(bam_f = NULL,
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
       dplyr::summarise(mean_rm = mean(1 / R_rms, na.rm = TRUE),
+                       median_rm = median(1 / R_rms, na.rm = TRUE),
                        sd_rm = sd(1 / R_rms, na.rm = TRUE),
                        iqr_rm = IQR(1 / R_rms, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
       dplyr::summarise(mean_rm = mean(1 / R_a, na.rm = TRUE),
+                       median_rm = median(1 / R_a, na.rm = TRUE),
                        sd_rm = sd(1 / R_a, na.rm = TRUE),
                        iqr_rm = IQR(1 / R_a, na.rm = TRUE))
   } else if (var_s == "df") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
       dplyr::summarise(mean_rm = mean(Df, na.rm = TRUE),
+                       median_rm = median(Df, na.rm = TRUE),
                        sd_rm = sd(Df, na.rm = TRUE),
                        iqr_rm = IQR(Df, na.rm = TRUE))
   }
