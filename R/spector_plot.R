@@ -88,7 +88,6 @@ spector_plot <- function(id_file = NULL,
     stop("Please choose a valid plot_type")
   }
 
-return(spector_pl)
 }
 
 plot_box <- function(plot_df, id_df) {
