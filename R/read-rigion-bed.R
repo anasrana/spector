@@ -25,7 +25,7 @@ spector_bed <- function(file, header = FALSE, ucsc.coord = TRUE) {
                                 ))
 # removing unneccsary columns
 # ----------------------------------------------------------------
-  if ncol(region > 3) {
+  if (ncol(region > 3)) {
     region <- region %>%
       dplyr::select(chrom, start, end)
   }
