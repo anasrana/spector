@@ -127,7 +127,8 @@ plot_box <- function(plot_df, id_df) {
     spector_boxplot <- spector_boxplot +
       scale_fill_manual(name = "Sample type",
                         breaks = .sample_col(id_df, plot_df$s_prep),
-                        values = c("lightcoral", "dodgerblue2", "gray")) +
+                        values = c(RColorBrewer::brewer.pal(
+                              length(unique(plot_df$s_pre)) - 1, "Set1"), "gray")) +
         geom_boxplot(stat = 'identity', aes(fill = s_prep))
   } else if (!is.null(plotgg_box$gr_bam)) {
     spector_boxplot <- spector_boxplot +
@@ -254,7 +255,6 @@ plot_dot <- function(plot_df) {
 
   tmp <- dplyr::tbl_df(read.csv(res_file, header = TRUE,
                           stringsAsFactors = FALSE, strip.white = TRUE))
-tmp$id[1]
 }
 
 .spector_id_res <- function(res_df, id_df) {
@@ -282,7 +282,7 @@ tmp$id[1]
 
 .sample_col <- function(id_df, s_prep) {
   s_b <- .id_base(id_df) %>%
-  dplyr::filter(fs_bam == baseline) %>%
+  dplyr::filter(fs_bam == baseline | id_bam == baseline) %>%
   dplyr::select(s_prep) %>%
   unique() %>%
   .$s_prep
