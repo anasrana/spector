@@ -92,7 +92,7 @@ spector <- function(bam_f = NULL,
 
   .save_summary(res = srm.df, var_s = plot_var, out = out_F)
 
-  return(list(srm.df = srm.df, gr_plot = spector_pl))
+  return(srm.df = srm.df)
 }
 
 #=================================================================================

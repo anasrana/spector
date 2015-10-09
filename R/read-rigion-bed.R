@@ -5,13 +5,34 @@
 #' @param ucsc.coord \code{TRUE} if coordinates start with 0 like ucsc
 #'
 #' @return A \code{data.frame} used in the following calculations
-#' @export
+#'
 spector_bed <- function(file, header = FALSE, ucsc.coord = TRUE) {
-# Reading data files ----------------------------------------------------------------
-  region <- readr::read_delim(file, delim = "\t", col_names = header)
-  colnames(region) <- c("chrom", "start", 'end')
+# column names and first line
+# ----------------------------------------------------------------
 
-# Shift the data if ucsc convention -------------------------------------------------
+  c_name <- c("chrom", "start", "end", "name", "score", "shade", "strand",
+   "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
+  tmp <- readr::read_delim(file, delim = "\t", n_max = 1, col_names = FALSE)
+
+# Reading bed files
+# ----------------------------------------------------------------
+  region <- readr::read_delim(file, delim = "\t",  col_names = c_name[1:ncol(tmp)],
+                              progress = FALSE,
+                              col_type = list(
+                                chrom = readr::col_character(),
+                                start = readr::col_integer(),
+                                end = readr::col_integer()
+                                ))
+# removing unneccsary columns
+# ----------------------------------------------------------------
+  if (ncol(region > 3)) {
+    region <- region %>%
+      dplyr::select(chrom, start, end)
+  }
+
+# Shift the data if ucsc convention
+# ----------------------------------------------------------------
+
   if (is.integer(region$chrom)) {
     if (ucsc.coord) {
       region <- region %>%
