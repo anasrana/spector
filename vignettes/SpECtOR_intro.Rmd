@@ -24,3 +24,33 @@ To develop an approach and a metric for evaluation of noisiness (waviness) of se
 ## Method
 
 We designed an approach that combines classical methods routinely applied in signal processing field (wavelet transform and fractals) and ISO standards for surface texture roughness measurement.
+
+# Using the code
+
+## Running
+
+To run the analysis use `spector()`.
+
+### Id file
+
+The important thing before running `spector` on  your data is to ensure you have created a file containing grouping, id, and baseline information. A sample file is provided `bam_id.csv`. The file can be `TAB` or `,` delimited, but make sure to change the `f_delim` variable accordingly. There is no header by default, but that can be adjusted with the binary `f_head`.
+
+The variables contained in the file are as follows:
+
+|                 | Description                                                                         |
+| :----           | ----                                                                                |
+| bam file path*  | full path to that bam file                                                          |
+| bam id*         | unique id for that bam sample                                                       |
+| group id        | group id only if samples come in groups                                             |
+| baseline        | id for the baseline such as germline if it exists                                   |
+| prep identifier | if there is a unique identifier grouping such as sample prep used for colour coding |
+
+### Plotting
+
+There are three types of plots that can be generated with this package. You can choose the ones you want to generate by adjusting the `plot_type` variable, which takes a vector. The three options are `"boxplot", "circle", "dot"`.
+
+The __boxplot__ is a simple side-by-side boxplot of all samples.
+
+The __circle__ option will plot circles, where the size central part of the circle represents mean value of the _roughness metric_ across all regions in the sample, the size of the edge of the circle represents the interquartile range of the _roughness metric_ across all regions in a sample. If there is a baseline provided the colour of the each will represent how far they are from the baseline.
+
+The __dot__ option will plot the _roughness metric_ for all regions grouped by chromosome along the horizontal and different samples along the vertical. This allows for an easy visualisation of noise levels in different chromosomes.
