@@ -1,0 +1,12 @@
+---
+title: "Plotting: SpECtOR (SEquence COverage Roughness)"
+author: "Anas A Rana"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{SpECtOR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
