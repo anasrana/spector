@@ -62,7 +62,9 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
     chr <- intersect(bed.d$chr, bam.c)
   } else if (is.integer(bed.d$chrom)) {
     chr <- intersect(bed.d$chrom, bam.c)
-  } else {
+  } else if (is.character(bed.d$chrom)) {
+    chr <- intersect(bed.d$chrom, bam.c)
+  }else {
     stop("No overlap found for chromosome names between bam and bed files \nCheck files")
   }
 
