@@ -34,14 +34,25 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
 
   ## Subset bed.d by chromosome intersect -------------------------------------------
   bed.d <- bed.d %>%
-    dplyr::filter(chrom %in% chr.i) %>%  # make sure only chr found in bam file are used
+    dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%  # make sure only chr found in bam file are used
     dplyr::rowwise()
 
-  bed.d <-  bed.d %>%
-    dplyr::do(.region_metric(f.bam, .$chrom, .$start, .$end, n.read,
-      metric = metric, methods = f.method)) %>%
-    data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id) %>%
-    dplyr::tbl_df()
+  if (bed.d$chrom %in% chr.i) {
+    bed.d <-  bed.d %>%
+      dplyr::do(.region_metric(f.bam, .$chrom, .$start, .$end, n.read,
+        metric = metric, methods = f.method)) %>%
+      data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id) %>%
+      dplyr::tbl_df()
+  } else if (bed.d$chr %in% chr.i ) {
+    bed.d <-  bed.d %>%
+      dplyr::do(.region_metric(f.bam, .$chr, .$start, .$end, n.read,
+        metric = metric, methods = f.method)) %>%
+      data.frame(chr = bed.d$chr, chr.bed = bed.d$chr, id = bed.d$id) %>%
+      dplyr::tbl_df()
+  } else {
+    stop("Issue matching chromosome name in bed file with chromosome name in bam file")
+  }
+
 
   if (metric == "fractal") {
     bed.d <- bed.d %>%
