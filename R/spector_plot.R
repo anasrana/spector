@@ -17,7 +17,7 @@ spector_plot <- function(id_file = NULL,
                       f_head = FALSE,
                       plot_type = "boxplot",
                       plot_var =  "rms",
-                      out_F = NULL) {
+                      out_F = FALSE) {
   # Read id assignment file file
   if (is.null(id_file)) {
     message("No file provided for sample grouping")
@@ -60,34 +60,45 @@ spector_plot <- function(id_file = NULL,
 
   if ("boxplot" %in% plot_type) {
     spector_boxplot <- plot_box(plot_df, id_df)
-    ggsave(filename = paste(out_F, "spector_box.pdf", sep =""), spector_boxplot)
     spector_pl$spector_boxplot <- spector_boxplot
-    plot_path <- paste(out_F, "spector_box.Rdata", sep = "")
-    save(spector_boxplot, file = plot_path)
+    if (out_F) {
+      ggsave(filename = paste(out_F, "spector_box.pdf", sep =""), spector_boxplot)
+      plot_path <- paste(out_F, "spector_box.Rdata", sep = "")
+      save(spector_boxplot, file = plot_path)
+    } else {
+      message("Plot not saved no output folder provided")
+    }
   }
 
   if ("circle" %in% plot_type) {
     spector_circplot <- plot_circ(plot_df)
-    ggsave(filename = paste(out_F, "spector_circ.pdf", sep =""), spector_circplot)
     spector_pl$spector_circplot <- spector_circplot
-    plot_path <- paste(out_F, "spector_circ.Rdata", sep = "")
-    save(spector_circplot, file = plot_path)
+    if (out_F){
+      ggsave(filename = paste(out_F, "spector_circ.pdf", sep =""), spector_circplot)
+      plot_path <- paste(out_F, "spector_circ.Rdata", sep = "")
+      save(spector_circplot, file = plot_path)
+    } else {
+      message("Plot not saved no output folder provided")
+    }
   }
 
   if ("dot" %in% plot_type) {
     spector_dotplot <- plot_dot(plot_df)
-    if (!is.null(spector_dotplot)) {
-     ggsave(filename = paste(out_F, "spector_dot.pdf", sep =""), spector_dotplot)
-     spector_pl$spector_dotplot <- spector_dotplot
+    spector_pl$spector_dotplot <- spector_dotplot
+    if (out_F) {
+      if (!is.null(spector_dotplot)) {
+        ggsave(filename = paste(out_F, "spector_dot.pdf", sep =""),
+          spector_dotplot)
+      }
+      plot_path <- paste(out_F, "spector_dot.Rdata", sep = "")
+      save(spector_dotplot, file = plot_path)
     }
-    plot_path <- paste(out_F, "spector_dot.Rdata", sep = "")
-    save(spector_dotplot, file = plot_path)
   }
 
   if (sum(c("boxplot", "circle", "dot") %in% plot_type) == 0) {
     stop("Please choose a valid plot_type")
   }
-
+return(spector_pl)
 }
 
 plot_box <- function(plot_df, id_df) {
