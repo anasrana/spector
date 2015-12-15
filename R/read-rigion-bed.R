@@ -12,7 +12,8 @@ spector_bed <- function(file, header = FALSE, ucsc.coord = TRUE) {
 
   c_name <- c("chrom", "start", "end", "name", "score", "shade", "strand",
    "thickStart", "thickEnd", "itemRgb", "blockCount", "blockSizes", "blockStarts")
-  tmp <- readr::read_delim(file, delim = "\t", n_max = 1, col_names = FALSE)
+  tmp <- readr::read_delim(file, delim = "\t", n_max = 1, col_names = FALSE,
+    col_type = 'ciiciccddccc')
 
 # Reading bed files
 # ----------------------------------------------------------------
