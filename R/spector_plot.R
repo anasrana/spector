@@ -61,7 +61,7 @@ spector_plot <- function(id_file = NULL,
   if ("boxplot" %in% plot_type) {
     spector_boxplot <- plot_box(plot_df, id_df)
     spector_pl$spector_boxplot <- spector_boxplot
-    if (out_F) {
+    if (out_F != FALSE) {
       ggsave(filename = paste(out_F, "spector_box.pdf", sep =""), spector_boxplot)
       plot_path <- paste(out_F, "spector_box.Rdata", sep = "")
       save(spector_boxplot, file = plot_path)
@@ -73,7 +73,7 @@ spector_plot <- function(id_file = NULL,
   if ("circle" %in% plot_type) {
     spector_circplot <- plot_circ(plot_df)
     spector_pl$spector_circplot <- spector_circplot
-    if (out_F){
+    if (out_F != FALSE){
       ggsave(filename = paste(out_F, "spector_circ.pdf", sep =""), spector_circplot)
       plot_path <- paste(out_F, "spector_circ.Rdata", sep = "")
       save(spector_circplot, file = plot_path)
@@ -85,7 +85,7 @@ spector_plot <- function(id_file = NULL,
   if ("dot" %in% plot_type) {
     spector_dotplot <- plot_dot(plot_df)
     spector_pl$spector_dotplot <- spector_dotplot
-    if (out_F) {
+    if (out_F != FALSE) {
       if (!is.null(spector_dotplot)) {
         ggsave(filename = paste(out_F, "spector_dot.pdf", sep =""),
           spector_dotplot)
