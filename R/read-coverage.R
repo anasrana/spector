@@ -11,8 +11,7 @@
 #'
 read_cov <- function(f.name, chr, start, end, n.read) {
   # Create param from provided information
-  param <- Rsamtools::ScanBamParam(which = GenomicRanges::GRanges(Rle(chr),
-    ranges = IRanges(start = start, end = end)))
+  param <- Rsamtools::ScanBamParam(which = rng_obj(chr, start, end))
 
   raw.reads <- GenomicAlignments::readGAlignments(f.name, param = param,
       use.names = F) %>%
@@ -49,4 +48,8 @@ read_cov <- function(f.name, chr, start, end, n.read) {
   }
 
   return(signal)
+}
+
+rng_obj <- function(chr, start, end) {
+  GenomicRanges::GRanges(Rle(chr), ranges = IRanges(start = start, end = end))
 }
