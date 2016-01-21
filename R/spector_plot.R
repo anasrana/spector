@@ -62,7 +62,8 @@ spector_plot <- function(id_file = NULL,
     spector_boxplot <- plot_box(plot_df, id_df)
     spector_pl$spector_boxplot <- spector_boxplot
     if (out_F != FALSE) {
-      ggsave(filename = paste(out_F, "spector_box.pdf", sep =""), spector_boxplot)
+      ggsave(filename = paste(out_F, "spector_box.pdf", sep = ""),
+                spector_boxplot)
       plot_path <- paste(out_F, "spector_box.Rdata", sep = "")
       save(spector_boxplot, file = plot_path)
     } else {
@@ -74,7 +75,8 @@ spector_plot <- function(id_file = NULL,
     spector_circplot <- plot_circ(plot_df)
     spector_pl$spector_circplot <- spector_circplot
     if (out_F != FALSE){
-      ggsave(filename = paste(out_F, "spector_circ.pdf", sep =""), spector_circplot)
+      ggsave(filename = paste(out_F, "spector_circ.pdf", sep = ""),
+            spector_circplot)
       plot_path <- paste(out_F, "spector_circ.Rdata", sep = "")
       save(spector_circplot, file = plot_path)
     } else {
@@ -87,7 +89,7 @@ spector_plot <- function(id_file = NULL,
     spector_pl$spector_dotplot <- spector_dotplot
     if (out_F != FALSE) {
       if (!is.null(spector_dotplot)) {
-        ggsave(filename = paste(out_F, "spector_dot.pdf", sep =""),
+        ggsave(filename = paste(out_F, "spector_dot.pdf", sep = ""),
           spector_dotplot)
       }
       plot_path <- paste(out_F, "spector_dot.Rdata", sep = "")
@@ -126,8 +128,8 @@ plot_box <- function(plot_df, id_df) {
               Q3 = boxplot.stats(res_y)$stats[4],
               Q4 = boxplot.stats(res_y)$stats[5])
 
-  spector_boxplot <- ggplot2::ggplot(plotgg_box, aes(x = id, ymin = Q0, lower = Q1,
-                            middle = Q2, upper = Q3, ymax = Q4)) +
+  spector_boxplot <- ggplot2::ggplot(plotgg_box, aes(x = id, ymin = Q0,
+        lower = Q1, middle = Q2, upper = Q3, ymax = Q4)) +
     spector_theme() +
     xlab("Sample ID") +
     ylab("Roughness metric")
@@ -136,22 +138,23 @@ plot_box <- function(plot_df, id_df) {
   if (!is.null(plotgg_box$s_prep)) {
     spector_boxplot <- spector_boxplot +
       scale_fill_manual(name = "Sample type",
-                        breaks = .sample_col(id_df, plot_df$s_prep),
-                        values = c(RColorBrewer::brewer.pal(
-                              length(unique(plot_df$s_pre)) - 1, "Set1"), "gray")) +
-        geom_boxplot(stat = 'identity', aes(fill = s_prep))
+        breaks = .sample_col(id_df, plot_df$s_prep),
+        values = c(RColorBrewer::brewer.pal(
+              length(unique(plot_df$s_pre)) - 1, "Set1"), "gray")) +
+        geom_boxplot(stat = "identity", aes(fill = s_prep))
   } else if (!is.null(plotgg_box$gr_bam)) {
     spector_boxplot <- spector_boxplot +
-        geom_boxplot(stat = 'identity', aes(fill = gr_bam)) +
+        geom_boxplot(stat = "identity", aes(fill = gr_bam)) +
         guides(fill = FALSE)
   } else {
     spector_boxplot <- spector_boxplot +
-      geom_boxplot(stat = 'identity', aes(fill = id)) +
+      geom_boxplot(stat = "identity", aes(fill = id)) +
       guides(fill = FALSE)
   }
 
   if (!is.null(plotgg_box$gr_bam) && !is.na(plotgg_box$gr_bam)) {
-    spector_boxplot <- spector_boxplot + facet_grid(.~gr_bam, scales = "free_x")
+    spector_boxplot <- spector_boxplot +
+         ggplot2::facet_grid(.~gr_bam, scales = "free_x")
   }
 
   return(spector_boxplot)
@@ -169,7 +172,7 @@ plot_circ <- function(plot_df) {
       dplyr::filter(base_id == id) %>%
       dplyr::group_by(id, base_id, gr_bam) %>%
       dplyr::summarise(mu = mean(res_y, na.rm = TRUE),
-            range = boxplot.stats(res_y)$stats[5] - boxplot.stats(res_y)$stats[1])
+        range = boxplot.stats(res_y)$stats[5] - boxplot.stats(res_y)$stats[1])
 
     circ_df <- circ_df %>%
       dplyr::rowwise() %>%
@@ -184,19 +187,21 @@ plot_circ <- function(plot_df) {
     geom_point(aes(size = mu), fill = "darkseagreen", shape = 21) +
     scale_size_continuous(range = c(20, 50), guide = FALSE) +
     theme_bw() +
-    theme(axis.text.x = element_blank(),
-          axis.text.y = element_blank(),
-          axis.ticks.y = element_blank(),
-          axis.ticks.x = element_blank(),
-          panel.border = element_blank(),
-          panel.background = element_rect(colour="seashell", fill='seashell'),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          axis.title.x = element_blank(),
-          axis.title.y = element_blank(),
-          legend.key = element_blank(),
-          strip.text.x = element_text(face = "plain", size=14),
-          strip.background = element_rect(colour="seashell", fill='seashell')) +
+    theme(
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_rect(colour = "seashell", fill = "seashell"),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        legend.key = element_blank(),
+        strip.text.x = element_text(face = "plain", size = 14),
+        strip.background = element_rect( colour = "seashell",
+            fill = "seashell")) +
     facet_wrap(~id)
 
     if (!is.null(plot_df$base_id)) {
@@ -206,7 +211,7 @@ plot_circ <- function(plot_df) {
         geom_point(aes(size = mu, fill = mu_d), shape = 21) +
         scale_colour_gradient2(name = "RM Quartile range",
           space = "Lab", high = "dodgerblue", low = "darkseagreen") +
-        scale_fill_gradient2(name = "RM", space = "Lab", high ="darkorange")
+        scale_fill_gradient2(name = "RM", space = "Lab", high = "darkorange")
       }
 
 
@@ -232,26 +237,26 @@ plot_dot <- function(plot_df) {
   spector_dotplot <- ggplot2::ggplot(dot_df, aes(x = chr, y = res_y)) +
     geom_point(aes(col = mu_d)) +
     scale_colour_gradient2(name = "spector - spector(baseline)",
-      space = "Lab", low ="gray", mid = "gray") +
+      space = "Lab", low = "gray", mid = "gray") +
     theme_bw() +
     xlab("Chromosome") +
     ylab("RM genomic region") +
     theme(strip.background = element_rect(colour = NA),
-    axis.text.x = element_text(size=5, , angle = 45, hjust = 1,
+    axis.text.x = element_text(size = 5, angle = 45, hjust = 1,
       colour = "darkgray"),
-    axis.text.y = element_text(size=11),
-    axis.title.x = element_text(face='bold', size=22),
-    axis.title.y = element_text(face='bold', angle=90, size=22),
-    plot.title = element_text(face='bold', size=22),
+    axis.text.y = element_text(size = 11),
+    axis.title.x = element_text(face = "bold", size = 22),
+    axis.title.y = element_text(face = "bold", angle = 90, size = 22),
+    plot.title = element_text(face = "bold", size = 22),
     legend.key = element_blank(),
     panel.margin = grid::unit(0, "lines"),
-    strip.text.x = element_text(size=12),
-    strip.background = element_rect(colour="#DBDBDB", fill='#DBDBDB'))
+    strip.text.x = element_text(size = 12),
+    strip.background = element_rect(colour = "#DBDBDB", fill = "#DBDBDB"))
 
   if (!is.null(dot_df$s_prep) && !is.na(dot_df$s_prep)) {
-    spector_dotplot <- spector_dotplot + facet_grid(gr_bam ~ s_prep)
+    spector_dotplot <- spector_dotplot + ggplot2::facet_grid(gr_bam ~ s_prep)
   } else if (!is.null(dot_df$gr_bam) && !is.na(dot_df$gr_bam)) {
-    spector_dotplot <- spector_dotplot + facet_grid(id ~.)
+    spector_dotplot <- spector_dotplot + ggplot2::facet_grid(id ~.)
   }
 
   return(spector_dotplot)
@@ -310,16 +315,17 @@ theme(
                       hjust = 0.5, vjust = 0.5, angle = 0,
                       lineheight = 0.9),
   strip.background = element_rect(colour = NA),
-  axis.text.x = element_text(size=10, angle = 45, hjust = 1, colour = "darkgray"),
-  axis.text.y = element_text(size=14),
-  axis.title.x = element_text(face='bold', size=22),
-  axis.title.y = element_text(face='bold', angle=90, size=22),
+  axis.text.x = element_text(size = 10, angle = 45, hjust = 1,
+      colour = "darkgray"),
+  axis.text.y = element_text(size = 14),
+  axis.title.x = element_text(face = "bold", size = 22),
+  axis.title.y = element_text(face = "bold", angle = 90, size = 22),
   axis.ticks.x = element_line(colour = "darkgray"),
-  plot.title = element_text(face='bold', size=22),
+  plot.title = element_text(face = "bold", size = 22),
   legend.key = element_blank(),
   legend.text = element_text(size = 12),
   legend.title = element_text(size = 14),
-  strip.text.x = element_text(size=12),
-  strip.background = element_rect(colour="#DBDBDB", fill='#DBDBDB')
+  strip.text.x = element_text(size = 12),
+  strip.background = element_rect(colour = "#DBDBDB", fill = "#DBDBDB")
   )
 }
