@@ -86,7 +86,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
 .region_metric <- function(f.name, chr, start, end, n.read, metric = "wavelet",
                             methods = NA, n.lag = "auto",
                             w.size = length(sig)) {
-
+  print(stringr::str_c(chr, ":", start,"-", end))
   sig <- read_cov(f.name, chr, start, end, n.read)
 
   if (metric == "wavelet") {
