@@ -51,5 +51,6 @@ read_cov <- function(f.name, chr, start, end, n.read) {
 }
 
 rng_obj <- function(chr, start, end) {
-  GenomicRanges::GRanges(Rle(chr), ranges = IRanges(start = start, end = end))
+  GenomicRanges::GRanges(Rle(chr),
+    ranges = IRanges(start = as.integer(start), end = as.integer(end)))
 }

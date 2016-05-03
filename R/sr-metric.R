@@ -35,6 +35,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
   ## Subset bed.d by chromosome intersect -------------------------------------------
   bed.d <- bed.d %>%
     dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%  # make sure only chr found in bam file are used
+    dplyr::filter(!is.na(chrom) & !is.na(chr)) %>%
     dplyr::rowwise()
 
   if (bed.d$chrom %in% chr.i) {
@@ -63,6 +64,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
               R_rms = replace(R_rms, which(R_rms == 0), NA))
   }
 
+  bed.d$chrom <- as.character(bed.d$chrom)
 
   message(paste("Completed file:", f.bam))
   return(bed.d)

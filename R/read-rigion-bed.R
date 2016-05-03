@@ -20,8 +20,8 @@ spector_bed <- function(file, header = FALSE, ucsc.coord = TRUE) {
                               progress = FALSE,
                               col_type = list(
                                 chrom = readr::col_character(),
-                                start = readr::col_integer(),
-                                end = readr::col_integer()
+                                start = readr::col_double(),
+                                end = readr::col_double()
                                 ))
 # removing unneccsary columns
 # ----------------------------------------------------------------
