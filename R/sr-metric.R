@@ -42,13 +42,15 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
     bed.d <-  bed.d %>%
       dplyr::do(.region_metric(f.bam, .$chrom, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
-      data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id) %>%
+      data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id,
+        stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else if (all(bed.d$chr %in% chr.i)) {
     bed.d <-  bed.d %>%
       dplyr::do(.region_metric(f.bam, .$chr, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
-      data.frame(chr = bed.d$chr, chr.bed = bed.d$chr, id = bed.d$id) %>%
+      data.frame(chr = bed.d$chr, chr.bed = bed.d$chr, id = bed.d$id,
+        stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else {
     stop("Issue matching chromosome name in bed file with chromosome name in bam file")
