@@ -71,6 +71,11 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
   return(bed.d)
 }
 
+#
+# TODO
+#
+# => fix check for style of chromosome name
+
 .chr_intersect <- function(bed.d, bam.c) {
   if (bed.d$chr[1] %in% bam.c) {
     chr <- intersect(bed.d$chr, bam.c)
