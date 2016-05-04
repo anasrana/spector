@@ -80,10 +80,10 @@ spector <- function(bam_f = NULL,
                                   plot_var =  plot_var, out_F = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
-      srm.df <- .spector_file(bam_f, out_F, stl_cmd = samtools_cmd, ...)
-      spector_pl <- spector_plot(id_file = NULL, res_df = srm.df, res_p = NULL,
-                                 f_head = FALSE, plot_type = plot_type,
-                                 plot_var =  plot_var, out_F = out_F)
+      srm.df <- .spector_file(bam_f, out_F = out_F, stl_cmd = samtools_cmd, ...)
+      # spector_pl <- spector_plot(id_file = NULL, res_df = srm.df, res_p = NULL,
+      #                            f_head = FALSE, plot_type = plot_type,
+      #                            plot_var =  plot_var, out_F = out_F)
     } else if(!file.exists(bam_f)) {
       stop("bam_f: file / folder not found
             Make sure you provide the correct path")
