@@ -38,13 +38,13 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
     dplyr::filter(!is.na(chrom) & !is.na(chr)) %>%
     dplyr::rowwise()
 
-  if (bed.d$chrom %in% chr.i) {
+  if (all(bed.d$chrom %in% chr.i)) {
     bed.d <-  bed.d %>%
       dplyr::do(.region_metric(f.bam, .$chrom, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
       data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id) %>%
       dplyr::tbl_df()
-  } else if (bed.d$chr %in% chr.i ) {
+  } else if (all(bed.d$chr %in% chr.i)) {
     bed.d <-  bed.d %>%
       dplyr::do(.region_metric(f.bam, .$chr, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
@@ -64,14 +64,13 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
               R_rms = replace(R_rms, which(R_rms == 0), NA))
   }
 
-  bed.d$chrom <- as.character(bed.d$chrom)
 
   message(paste("Completed file:", f.bam))
   return(bed.d)
 }
 
 .chr_intersect <- function(bed.d, bam.c) {
-  if (bed.d$chr %in% bam.c) {
+  if (bed.d$chr[1] %in% bam.c) {
     chr <- intersect(bed.d$chr, bam.c)
   } else if (is.integer(bed.d$chrom)) {
     chr <- intersect(bed.d$chrom, bam.c)
