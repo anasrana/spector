@@ -97,7 +97,12 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
   sig <- read_cov(f.name, chr, start, end, n.read)
 
   if (metric == "wavelet") {
-    if (is.na(sig[1])) {
+    #
+    # TODO
+    #
+    # => Make sure this is the best option should all regions be dropped
+    #
+    if (anyNA(sig)) {
       data.frame(R_a = NA, R_rms = NA)
     } else {
       wd.sig <- wavethresh::wd(sig, filter.number = 1, family = "DaubExPhase")
