@@ -11,7 +11,11 @@
 #'
 read_cov <- function(f.name, chr, start, end, n.read) {
   # Create param from provided information
-  param <- Rsamtools::ScanBamParam(which = rng_obj(chr, start, end))
+  flag <- Rsamtools::scanBamFlag(isNotPassingQualityControls=FALSE,
+    isDuplicate=FALSE, isProperPair = TRUE, hasUnmappedMate = FALSE)
+
+  param <- Rsamtools::ScanBamParam(which = rng_obj(chr, start, end),
+    flag = flag, mapqFilter = 30)
 
   raw.reads <- GenomicAlignments::readGAlignments(f.name, param = param,
       use.names = F) %>%
