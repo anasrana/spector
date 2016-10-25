@@ -108,16 +108,25 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
       wd.sig <- wavethresh::wd(sig, filter.number = 1, family = "DaubExPhase")
       wd.sig.tr <- wavethresh::threshold(wd.sig, by.level = TRUE,
           policy = "universal", return.thresh = TRUE)
-      data.frame(R_a = .spector_ra(wd.sig.tr), R_rms = .spector_rms(wd.sig.tr))
+      data.frame(
+        R_a = .spector_ra(wd.sig.tr),
+        R_rms = .spector_rms(wd.sig.tr),
+        R_md = .spector_med(wd.sig.tr)
+        )
     }
   }
 }
 
 
 .spector_ra <- function(wd.thr) {
-  mean(abs(wd.thr))
+  mean(abs(wd.thr), na.rm = T)
 }
 
 .spector_rms <- function(wd.thr) {
   sqrt(mean(wd.thr^2))
 }
+
+.spector_med <- function(wd.thr) {
+  sqrt(median(abs(wd.thr), na.rm = T))
+}
+
