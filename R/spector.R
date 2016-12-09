@@ -13,11 +13,12 @@
 #' @param out_F path to output folder
 #' @param n_core number of cores that should be used
 #' @param plot_type Vector for the type of plots to be saved. Options include
-#'                  \code{"boxplot", "circle", "dot"}, see \code{spector_plot} for
-#'                  further details.
+#'                  \code{"boxplot", "circle", "dot"}, see \code{spector_plot}
+#'                  for further details.
 #' @param plot_var The variable to be used for plotting, default is \code{"rms"}
 #'                  for wavelets.
-#' @param samtools_cmd System command for samtools including full path if necessary
+#' @param samtools_cmd System command for samtools including full path
+#'                     (default is \code{samtools})
 #' @param r.region choose between the default \code{"10k"} **or** \code{"20k"}
 #'                  \code{"custom"} regions
 #' @param f.bed file path for bed file if \code{r.region = "custom"}
@@ -25,8 +26,8 @@
 #' @param ... additional options passed to \code{gr_metric()}
 
 #'
-#' @return Output files saved in folder \code{out_F}, also saves a reference file
-#'          with file names
+#' @return Output files saved in folder \code{out_F}, also saves a reference
+#'          file with file names
 #' @export
 #'
 spector <- function(bam_f = NULL,
@@ -44,12 +45,14 @@ spector <- function(bam_f = NULL,
   out_F <- .out_trailing_fix(out_F)
   if (!dir.exists(out_F)) {
     dir.create(out_F)
-    message(paste("Folder '", out_F, "' created in current working directory ('",
-                   getwd(), "')", sep = ""))
+    message(paste("Folder '", out_F,
+      "' created in current working directory ('", getwd(), "')", sep = ""))
   }
 
-# ================================================================================
+#
 # Computing metric after checking what bam_f is
+# --------------------------------------------------------------------------
+
   if (dir.exists(bam_f)) {
     # TODO include path check
     fs_bam <- paste(bam_f, '/', list.files(path = bam_f, pattern = "*.bam$"),
@@ -81,7 +84,8 @@ spector <- function(bam_f = NULL,
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
       srm.df <- .spector_file(bam_f, out_F = out_F, stl_cmd = samtools_cmd, ...)
-      # spector_pl <- spector_plot(id_file = NULL, res_df = srm.df, res_p = NULL,
+      # spector_pl <- spector_plot(id_file = NULL, res_df = srm.df,
+      #                            res_p = NULL,
       #                            f_head = FALSE, plot_type = plot_type,
       #                            plot_var =  plot_var, out_F = out_F)
     } else if(!file.exists(bam_f)) {
@@ -95,9 +99,9 @@ spector <- function(bam_f = NULL,
   return(srm.df = srm.df)
 }
 
-#=================================================================================
+#
 # Auxillary function
-
+# --------------------------------------------------------------------------
 
 .unpack_list <- function(object) {
   for(.x in names(object)){
@@ -130,7 +134,8 @@ spector <- function(bam_f = NULL,
                        iqr_rm = IQR(Df, na.rm = TRUE))
   }
 
-  write.csv(stat_spector, file = paste(out, "SUMMARY_STAT_metric.csv", sep = ""),
+  write.csv(stat_spector,
+            file = paste(out, "SUMMARY_STAT_metric.csv", sep = ""),
             row.names = FALSE)
 }
 
