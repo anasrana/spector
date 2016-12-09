@@ -262,8 +262,10 @@ plot_dot <- function(plot_df) {
   return(spector_dotplot)
 }
 
-#==================================================================================
-### Auxiliary function used for plotting
+#
+# Auxiliary function used for plotting
+# --------------------------------------------------------------------------
+
 .spector_plot_read <- function(res_path) {
   res_file <- paste(res_path, list.files(path = res_path,
                                 pattern = "*out_merged.csv"), sep = "")

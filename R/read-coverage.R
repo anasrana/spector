@@ -31,7 +31,8 @@ read_cov <- function(f.name, chr, start, end, n.read) {
       } else {
           ll <- round(length(read.norm) / 2) -
                 2^floor(log2(length(read.norm))) / 2 + 1
-          ul <- round(length(read.norm) / 2) + 2^floor(log2(length(read.norm))) / 2
+          ul <- round(length(read.norm) / 2) +
+              2^floor(log2(length(read.norm))) / 2
       }
       signal <- read.norm[ll:ul]
   }

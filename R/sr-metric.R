@@ -13,7 +13,9 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
                           f.bed = NULL, bed.header = FALSE, metric = "wavelet",
                           f.method = NA) {
 
-  ## Load data frame from bed file --------------------------------------------------
+#
+# Load data frame from bed file
+# --------------------------------------------------------------------------
   if (r.region == "custom" & is.null(f.bed)) {
     stop(paste("Regions of genome chosen as 'custom' but no bed file provided"))
   } else if (r.region == "custom" || !is.null(f.bed)) {
@@ -24,17 +26,27 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
     bed.d <- spector:::giab.20k
   }
 
-### Extract bam file stats using samtools ===========================================
+# ==========================================================================
+# EXTRACT BAM FILE STATS USING SAMTOOLS
+# ==========================================================================
+
   tmp.bam <- .nReadsBam(f.bam, cmd = stl_cmd)
   n.read <- tmp.bam$n.read
 
-### Compare chromosome lists between bam and bed file ===============================
+# ==========================================================================
+# COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
+# ==========================================================================
+
   chr.i <- .chr_intersect(bed.d, tmp.bam$chrom)
   message(c("Running spector for:\n", paste("Chrom. ", chr.i, "\n", sep = "")))
 
-  ## Subset bed.d by chromosome intersect -------------------------------------------
+#
+# Subset bed.d by chromosome intersect
+# --------------------------------------------------------------------------
+
   bed.d <- bed.d %>%
-    dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%  # make sure only chr found in bam file are used
+    dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%
+    # make sure only chr found in bam file are used
     dplyr::filter(!is.na(chrom) & !is.na(chr)) %>%
     dplyr::rowwise()
 
@@ -53,7 +65,8 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
         stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else {
-    stop("Issue matching chromosome name in bed file with chromosome name in bam file")
+    stop("Issue matching chromosome name in bed file with chromosome
+      name in bam file")
   }
 
 
@@ -84,7 +97,8 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
   } else if (is.character(bed.d$chrom)) {
     chr <- intersect(bed.d$chrom, bam.c)
   }else {
-    stop("No overlap found for chromosome names between bam and bed files \nCheck files")
+    stop("No overlap found for chromosome names between bam and bed files \n
+      Check files")
   }
 
   return(chr)
