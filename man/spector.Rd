@@ -24,13 +24,14 @@ only used when \code{file_type = "list"}}
 \item{n_core}{number of cores that should be used}
 
 \item{plot_type}{Vector for the type of plots to be saved. Options include
-\code{"boxplot", "circle", "dot"}, see \code{spector_plot} for
-further details.}
+\code{"boxplot", "circle", "dot"}, see \code{spector_plot}
+for further details.}
 
 \item{plot_var}{The variable to be used for plotting, default is \code{"rms"}
 for wavelets.}
 
-\item{samtools_cmd}{System command for samtools including full path if necessary}
+\item{samtools_cmd}{System command for samtools including full path
+(default is \code{samtools})}
 
 \item{...}{additional options passed to \code{gr_metric()}}
 
@@ -42,8 +43,8 @@ for wavelets.}
 \item{bed.header}{binary, \code{TRUE} if bed file has a header}
 }
 \value{
-Output files saved in folder \code{out_F}, also saves a reference file
-         with file names
+Output files saved in folder \code{out_F}, also saves a reference
+         file with file names
 }
 \description{
 Takes in a path to a folder of .bam files, a single .bam file or a file
