@@ -14,8 +14,8 @@
 #'
 #' @export
 #'
-spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
-                          f_bed = NULL, bed.header = FALSE, metric = "wavelet",
+spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
+                          bed.header = FALSE, metric = "wavelet",
                           f.method = NA, region_giab = TRUE) {
 
 #
@@ -36,7 +36,7 @@ spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
 # EXTRACT BAM FILE STATS USING SAMTOOLS
 # ==========================================================================
 
-  tmp.bam <- .nReadsBam(f_bam, cmd = stl_cmd)
+  tmp.bam <- nReadsBam(f_bam)
   n.read <- tmp.bam$n.read
 
 # ==========================================================================
