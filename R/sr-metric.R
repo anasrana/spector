@@ -33,7 +33,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
   }
 
 # ==========================================================================
-# EXTRACT BAM FILE STATS USING SAMTOOLS
+# EXTRACT BAM FILE STATS USING RSamtools
 # ==========================================================================
 
   bam_stats <- nReadsBam(f_bam)
@@ -43,8 +43,9 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 # COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
 # ==========================================================================
 
-  chr.i <- .chr_intersect(region_df, bam_stats$chrom)
-  message(c("Running spector for:\n", paste("Chrom. ", chr.i, "\n", sep = "")))
+  region_df <- chrIntersect(region_df, bam_stats$chrom)
+  message(c("Running spector for:\n",
+    paste0("Chromosome: ", unique(region_df$chrom), "\n")))
 
 #
 # Subset region_df by chromosome intersect
@@ -90,24 +91,23 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
   return(region_df)
 }
 
-#
-# TODO
-#
-# => fix check for style of chromosome name
-
-.chr_intersect <- function(region_df, bam.c) {
-  if (region_df$chr[1] %in% bam.c) {
-    chr <- intersect(region_df$chr, bam.c)
-  } else if (is.integer(region_df$chrom)) {
-    chr <- intersect(region_df$chrom, bam.c)
-  } else if (is.character(region_df$chrom)) {
-    chr <- intersect(region_df$chrom, bam.c)
-  }else {
-    stop("No overlap found for chromosome names between bam and bed files \n
-      Check files")
-  }
-
-  return(chr)
+#' chrIntersect
+#'
+#' @param region_df
+#' @param bam_c
+#'
+#' @importFrom dplyr filter mutate select if_else
+#'
+chrIntersect <- function(region_df, bam_c) {
+chr_v <- as.character(bam_c)
+region_df %>%
+  mutate(
+    chr = if_else(chrom %in% chr_v, chrom, ""),
+    chr2 = if_else(paste0("chr", chrom) %in% chr_v,
+      paste0("chr", chrom), "")) %>%
+  filter(chr != "" | chr2 != "") %>%
+  mutate(chrom = if_else(chr != "", chr, chr2)) %>%
+  select(chrom, start, end)
 }
 
 .region_metric <- function(f.name, chr, start, end, n_read, metric = "wavelet",
