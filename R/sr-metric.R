@@ -1,29 +1,34 @@
 #' Calculate SpECtOR metric for one bam file
 #'
 #' @param f.bam
-#' @param r.region
+#' @param region_size
+#' @param region_giab
 #' @param f.bed
 #' @param bed.header
 #' @param metric
 #'
 #' @return Metric for all specified regions
+#' @importFrom dplyr mutate
+#' @importFrom magrittr %>%
+#'
 #' @export
 #'
-spector_metric <- function(f.bam = NULL, stl_cmd = NULL, r.region = '10k',
+spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
                           f.bed = NULL, bed.header = FALSE, metric = "wavelet",
-                          f.method = NA) {
+                          f.method = NA, region_giab = TRUE) {
 
 #
 # Load data frame from bed file
 # --------------------------------------------------------------------------
-  if (r.region == "custom" & is.null(f.bed)) {
-    stop(paste("Regions of genome chosen as 'custom' but no bed file provided"))
-  } else if (r.region == "custom" || !is.null(f.bed)) {
-    bed.d <- spector_bed(file = f.bed, header = bed.header, ucsc.coord = TRUE)
-  } else if (r.region == "10k") {
-    bed.d <- spector:::giab.10k
-  } else if (r.region == "20k") {
-    bed.d <- spector:::giab.20k
+  if (region_giab) {
+    bed.d <-
+      spector:::giab_10k %>%
+        mutate(reg_length = end - start) %>%
+        spector:::bed_region_split(region_size)
+
+  } else if (!region_giab) {
+    bed.d <- read_bed(file = f.bed, header = bed.header,
+      region_size = region_size)
   }
 
 # ==========================================================================
