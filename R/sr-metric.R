@@ -22,13 +22,13 @@ spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
 # Load data frame from bed file
 # --------------------------------------------------------------------------
   if (region_giab) {
-    bed.d <-
+    region_df <-
       giab_10k %>%
         mutate(reg_length = end - start) %>%
         bed_region_split(region_size)
 
   } else if (!region_giab) {
-    bed.d <- read_bed(bed_file = f_bed, header = bed.header,
+    region_df <- read_bed(bed_file = f_bed, header = bed.header,
       region_size = region_size)
   }
 
@@ -43,31 +43,31 @@ spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
 # COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
 # ==========================================================================
 
-  chr.i <- .chr_intersect(bed.d, tmp.bam$chrom)
+  chr.i <- .chr_intersect(region_df, tmp.bam$chrom)
   message(c("Running spector for:\n", paste("Chrom. ", chr.i, "\n", sep = "")))
 
 #
-# Subset bed.d by chromosome intersect
+# Subset region_df by chromosome intersect
 # --------------------------------------------------------------------------
 
-  bed.d <- bed.d %>%
+  region_df <- region_df %>%
     dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%
     # make sure only chr found in bam file are used
     dplyr::filter(!is.na(chrom) & !is.na(chr)) %>%
     dplyr::rowwise()
 
-  if (all(bed.d$chrom %in% chr.i)) {
-    bed.d <-  bed.d %>%
+  if (all(region_df$chrom %in% chr.i)) {
+    region_df <-  region_df %>%
       dplyr::do(.region_metric(f_bam, .$chrom, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
-      data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id,
+      data.frame(chr = region_df$chr, chr.bed = region_df$chrom, id = region_df$id,
         stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
-  } else if (all(bed.d$chr %in% chr.i)) {
-    bed.d <-  bed.d %>%
+  } else if (all(region_df$chr %in% chr.i)) {
+    region_df <-  region_df %>%
       dplyr::do(.region_metric(f_bam, .$chr, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
-      data.frame(chr = bed.d$chr, chr.bed = bed.d$chr, id = bed.d$id,
+      data.frame(chr = region_df$chr, chr.bed = region_df$chr, id = region_df$id,
         stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else {
@@ -77,17 +77,17 @@ spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
 
 
   if (metric == "fractal") {
-    bed.d <- bed.d %>%
+    region_df <- region_df %>%
       dplyr::mutate(Df = replace(Df, which(Df == 0), NA))
   } else {
-    bed.d <- bed.d %>%
+    region_df <- region_df %>%
       dplyr::mutate(R_a = replace(R_a, which(R_a == 0), NA),
               R_rms = replace(R_rms, which(R_rms == 0), NA))
   }
 
 
   message(paste("Completed file:", f_bam))
-  return(bed.d)
+  return(region_df)
 }
 
 #
@@ -95,13 +95,13 @@ spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
 #
 # => fix check for style of chromosome name
 
-.chr_intersect <- function(bed.d, bam.c) {
-  if (bed.d$chr[1] %in% bam.c) {
-    chr <- intersect(bed.d$chr, bam.c)
-  } else if (is.integer(bed.d$chrom)) {
-    chr <- intersect(bed.d$chrom, bam.c)
-  } else if (is.character(bed.d$chrom)) {
-    chr <- intersect(bed.d$chrom, bam.c)
+.chr_intersect <- function(region_df, bam.c) {
+  if (region_df$chr[1] %in% bam.c) {
+    chr <- intersect(region_df$chr, bam.c)
+  } else if (is.integer(region_df$chrom)) {
+    chr <- intersect(region_df$chrom, bam.c)
+  } else if (is.character(region_df$chrom)) {
+    chr <- intersect(region_df$chrom, bam.c)
   }else {
     stop("No overlap found for chromosome names between bam and bed files \n
       Check files")
