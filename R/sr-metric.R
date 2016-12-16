@@ -22,9 +22,9 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
 # --------------------------------------------------------------------------
   if (region_giab) {
     bed.d <-
-      spector:::giab_10k %>%
+      giab_10k %>%
         mutate(reg_length = end - start) %>%
-        spector:::bed_region_split(region_size)
+        bed_region_split(region_size)
 
   } else if (!region_giab) {
     bed.d <- read_bed(file = f.bed, header = bed.header,
