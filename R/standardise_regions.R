@@ -10,6 +10,8 @@
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #'
+#' @export
+#'
 read_bed <- function(bed_file,
   header = FALSE,
   ucsc_coord = TRUE,
