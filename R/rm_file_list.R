@@ -1,4 +1,4 @@
-.spector_file <- function(f.bam,
+.spector_file <- function(f_bam,
                           id_bam = NULL,
                           srm_bam = NULL,
                           s_prep = NULL,
@@ -6,13 +6,13 @@
                           stl_cmd = NULL,
                           ...) {
 
-  message(paste("File:", f.bam, "\n=>\n"))
+  message(paste("File:", f_bam, "\n=>\n"))
 
   add.args <- list(...)
 
-  srm.df <- spector_metric(f.bam = f.bam, stl_cmd = stl_cmd, ...)
+  srm.df <- spector_metric(f_bam = f_bam, stl_cmd = stl_cmd, ...)
   if (is.null(id_bam)) {
-    id_bam <- gsub(".bam", "", x = basename(f.bam))
+    id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
 
   srm.df$id <- rep(id_bam, nrow(srm.df))
@@ -40,7 +40,7 @@
     function(idx) {
                             message(paste("Running file:", fs_bam[idx]))
                             .spector_file(
-                              f.bam = fs_bam[idx],
+                              f_bam = fs_bam[idx],
                               id_bam = id_v[idx],
                               srm_bam = grp_v[idx],
                               s_prep = NULL,
