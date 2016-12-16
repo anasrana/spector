@@ -3,14 +3,13 @@
                           srm_bam = NULL,
                           s_prep = NULL,
                           out_F = NULL,
-                          stl_cmd = NULL,
                           ...) {
 
   message(paste("File:", f_bam, "\n=>\n"))
 
   add.args <- list(...)
 
-  srm.df <- spector_metric(f_bam = f_bam, stl_cmd = stl_cmd, ...)
+  srm.df <- spector_metric(f_bam = f_bam, ...)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
@@ -33,7 +32,7 @@
 }
 
 .spector_list <- function(fs_bam, id_v, grp_v, s_v, out_F,
-                          n_core = 1, stl_cmd, ...) {
+                          n_core = 1, ...) {
 # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
   spector_l <- parallel::mclapply(X = f_idx,
@@ -45,7 +44,7 @@
                               srm_bam = grp_v[idx],
                               s_prep = NULL,
                               out_F = out_F,
-                              stl_cmd = stl_cmd, ...)},
+                              ...)},
                                   mc.cores = n_core)
   srm.df <- dplyr::bind_rows(spector_l)
   return(srm.df)
