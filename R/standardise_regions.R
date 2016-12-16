@@ -13,7 +13,7 @@
 read_bed <- function(bed_file,
   header = FALSE,
   ucsc_coord = TRUE,
-  bed_region_size = 10^4) {
+  bed_region_size = NULL) {
 
 # column names and first line
 # ----------------------------------------------------------------
@@ -42,9 +42,17 @@ read_bed <- function(bed_file,
     mutate(reg_length = end - start)
 
   if (is.null(bed_region_size)) {
+    message("No region size specified:
+      Using largest power of 2 that fits into min(region) in the bed file")
     bed_region_size <- 2^(floor(log2(min(bed_region$reg_length))))
   } else {
     bed_region_size <- 2^(floor(log2(min(bed_region_size))))
+    message(paste0("Regions standardised to length ", bed_region_size))
+  }
+
+  if (max(bed_region$reg_length) < bed_region_size) {
+    stop(paste0("min region size invalid
+      Choose a number smaller than: ", max(bed_region$reg_length)))
   }
 
   bed_region <-
@@ -97,13 +105,14 @@ read_bed <- function(bed_file,
 #'
 #' @examples
 #'
-#' @importFrom dplyr as_data_frame select mutate
+#' @importFrom dplyr as_data_frame select mutate filter
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #' @importFrom tidyr separate_rows separate
 #'
 bed_region_split <- function(bed_region, bed_region_size) {
   bed_region %>%
+    filter(reg_length > bed_region_size) %>%
     mutate(
       n_reg = reg_length %/% bed_region_size,
       uncov = reg_length %% bed_region_size,
