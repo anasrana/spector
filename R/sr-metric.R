@@ -36,14 +36,14 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 # EXTRACT BAM FILE STATS USING SAMTOOLS
 # ==========================================================================
 
-  tmp.bam <- nReadsBam(f_bam)
-  n.read <- tmp.bam$n.read
+  bam_stats <- nReadsBam(f_bam)
+  n_read <- bam_stats$n_read
 
 # ==========================================================================
 # COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
 # ==========================================================================
 
-  chr.i <- .chr_intersect(region_df, tmp.bam$chrom)
+  chr.i <- .chr_intersect(region_df, bam_stats$chrom)
   message(c("Running spector for:\n", paste("Chrom. ", chr.i, "\n", sep = "")))
 
 #
@@ -58,14 +58,14 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 
   if (all(region_df$chrom %in% chr.i)) {
     region_df <-  region_df %>%
-      dplyr::do(.region_metric(f_bam, .$chrom, .$start, .$end, n.read,
+      dplyr::do(.region_metric(f_bam, .$chrom, .$start, .$end, n_read,
         metric = metric, methods = f.method)) %>%
       data.frame(chr = region_df$chr, chr.bed = region_df$chrom, id = region_df$id,
         stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else if (all(region_df$chr %in% chr.i)) {
     region_df <-  region_df %>%
-      dplyr::do(.region_metric(f_bam, .$chr, .$start, .$end, n.read,
+      dplyr::do(.region_metric(f_bam, .$chr, .$start, .$end, n_read,
         metric = metric, methods = f.method)) %>%
       data.frame(chr = region_df$chr, chr.bed = region_df$chr, id = region_df$id,
         stringsAsFactors = FALSE) %>%
@@ -110,11 +110,11 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
   return(chr)
 }
 
-.region_metric <- function(f.name, chr, start, end, n.read, metric = "wavelet",
+.region_metric <- function(f.name, chr, start, end, n_read, metric = "wavelet",
                             methods = NA, n.lag = "auto",
                             w.size = length(sig)) {
 
-  sig <- read_cov(f.name, chr, start, end, n.read)
+  sig <- read_cov(f.name, chr, start, end, n_read)
 
   if (metric == "wavelet") {
     #
