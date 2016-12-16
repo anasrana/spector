@@ -6,7 +6,8 @@
 #'
 #' @return A \code{data.frame} used in the following calculations
 #'
-#' @importFrom dplyr as_data_frame select mutate
+#' @importFrom dplyr select mutate
+#' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #'
@@ -42,20 +43,6 @@ read_bed <- function(bed_file,
     setNames(c_name[1:ncol(tmp.row1)]) %>%
     select(chrom, start, end) %>%
     mutate(reg_length = end - start)
-
-  if (is.null(bed_region_size)) {
-    message("No region size specified:
-      Using largest power of 2 that fits into min(region) in the bed file")
-    bed_region_size <- 2^(floor(log2(min(bed_region$reg_length))))
-  } else {
-    bed_region_size <- 2^(floor(log2(min(bed_region_size))))
-    message(paste0("Regions standardised to length ", bed_region_size))
-  }
-
-  if (max(bed_region$reg_length) < bed_region_size) {
-    stop(paste0("min region size invalid
-      Choose a number smaller than: ", max(bed_region$reg_length)))
-  }
 
   bed_region <-
     bed_region %>%
@@ -113,18 +100,40 @@ read_bed <- function(bed_file,
 #' @importFrom tidyr separate_rows separate
 #'
 bed_region_split <- function(bed_region, bed_region_size) {
+
+  min_region <- check_region_size(bed_region_size, bed_region$reg_length)
+
   bed_region %>%
-    filter(reg_length > bed_region_size) %>%
+    filter(reg_length > min_region) %>%
     mutate(
-      n_reg = reg_length %/% bed_region_size,
-      uncov = reg_length %% bed_region_size,
-      new.reg = bed_expand_bed_region(bed_region_size, start, end, n_reg, uncov),
+      n_reg = reg_length %/% min_region,
+      uncov = reg_length %% min_region,
+      new.reg = bed_expand_bed_region(min_region, start, end, n_reg, uncov),
       orig_reg = str_c(chrom, ":", start, "-", end)
       ) %>%
     select(-start, -end, -reg_length) %>%
     separate_rows(new.reg, sep = ",") %>%
     separate(new.reg, into = c("start", "end"), convert = TRUE) %>%
     select(chrom, start, end)
+}
+
+check_region_size <- function(bed_region_size, file_region_v) {
+  if (is.null(bed_region_size)) {
+    message("No region size specified:
+      Using largest power of 2 that fits into min(region) in the bed file")
+    bed_region_size <- 2^(floor(log2(min(file_region_v))))
+  } else {
+    bed_region_size <- 2^(floor(log2(min(bed_region_size))))
+    message(paste0("Regions standardised to length ", bed_region_size))
+  }
+
+  if (max(file_region_v) < bed_region_size) {
+    stop(paste0("min region size invalid
+      Choose a number smaller than: ", max(file_region_v)))
+  } else {
+    return(bed_region_size)
+  }
+
 }
 
 # ==========================================================================
