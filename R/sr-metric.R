@@ -1,11 +1,12 @@
 #' Calculate SpECtOR metric for one bam file
 #'
-#' @param f.bam
-#' @param region_size
-#' @param region_giab
-#' @param f.bed
-#' @param bed.header
-#' @param metric
+#' @param bed.header binary, \code{TRUE} if bed file has a header
+#' @param f_bam
+#' @param f_bed file path for bed file if \code{region_giab = FALSE}
+#' @param region_giab logial indicating if giab regions use or not, the default
+#'                    TRUE
+#' @param region_size choose size of the regions defualt NULL chooses the max
+#'    power of 2 that fits in the smallest region
 #'
 #' @return Metric for all specified regions
 #' @importFrom dplyr mutate
@@ -13,8 +14,8 @@
 #'
 #' @export
 #'
-spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
-                          f.bed = NULL, bed.header = FALSE, metric = "wavelet",
+spector_metric <- function(f_bam = NULL, stl_cmd = NULL, region_size = NULL,
+                          f_bed = NULL, bed.header = FALSE, metric = "wavelet",
                           f.method = NA, region_giab = TRUE) {
 
 #
@@ -27,7 +28,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
         bed_region_split(region_size)
 
   } else if (!region_giab) {
-    bed.d <- read_bed(file = f.bed, header = bed.header,
+    bed.d <- read_bed(bed_file = f_bed, header = bed.header,
       region_size = region_size)
   }
 
@@ -35,7 +36,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
 # EXTRACT BAM FILE STATS USING SAMTOOLS
 # ==========================================================================
 
-  tmp.bam <- .nReadsBam(f.bam, cmd = stl_cmd)
+  tmp.bam <- .nReadsBam(f_bam, cmd = stl_cmd)
   n.read <- tmp.bam$n.read
 
 # ==========================================================================
@@ -57,14 +58,14 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
 
   if (all(bed.d$chrom %in% chr.i)) {
     bed.d <-  bed.d %>%
-      dplyr::do(.region_metric(f.bam, .$chrom, .$start, .$end, n.read,
+      dplyr::do(.region_metric(f_bam, .$chrom, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
       data.frame(chr = bed.d$chr, chr.bed = bed.d$chrom, id = bed.d$id,
         stringsAsFactors = FALSE) %>%
       dplyr::tbl_df()
   } else if (all(bed.d$chr %in% chr.i)) {
     bed.d <-  bed.d %>%
-      dplyr::do(.region_metric(f.bam, .$chr, .$start, .$end, n.read,
+      dplyr::do(.region_metric(f_bam, .$chr, .$start, .$end, n.read,
         metric = metric, methods = f.method)) %>%
       data.frame(chr = bed.d$chr, chr.bed = bed.d$chr, id = bed.d$id,
         stringsAsFactors = FALSE) %>%
@@ -85,7 +86,7 @@ spector_metric <- function(f.bam = NULL, stl_cmd = NULL, region_size = NULL,
   }
 
 
-  message(paste("Completed file:", f.bam))
+  message(paste("Completed file:", f_bam))
   return(bed.d)
 }
 
