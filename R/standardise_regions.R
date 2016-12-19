@@ -51,31 +51,10 @@ read_bed <- function(bed_file,
 # Shift the data if ucsc convention
 # ----------------------------------------------------------------
 
-  if (is.integer(bed_region$chrom)) {
-    if (ucsc_coord) {
-      bed_region <- bed_region %>%
-        dplyr::mutate(start = start + 1,
-          id = paste("chr", chrom, ":", start, "-", end, sep = ""),
-          chr = paste("chr", chrom, sep = ""))
-      } else {
-        bed_region <- bed_region %>%
-          dplyr::mutate(
-            id = paste("chr", chrom, ":", start, "-", end, sep = ""),
-            chr = paste("chr", chrom, sep = ""))
-        }
-    } else {
-      if (ucsc_coord) {
-        bed_region <- bed_region %>%
-          dplyr::mutate(start = start + 1,
-            id = paste("chr", chrom, ":", start, "-", end, sep = ""),
-              chr = chrom)
-        } else {
-          bed_region <- bed_region %>%
-            dplyr::mutate(
-              id = paste("chr", chrom, ":", start, "-", end, sep = ""),
-              chr = chrom)
-        }
-  }
+  if (ucsc_coord) {
+    bed_region <- bed_region %>%
+      dplyr::mutate(start = start + 1)
+    }
 
   return(bed_region)
 }
