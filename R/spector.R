@@ -17,14 +17,7 @@
 #'                  for further details.
 #' @param plot_var The variable to be used for plotting, default is \code{"rms"}
 #'                  for wavelets.
-#' @param samtools_cmd System command for samtools including full path
-#'                     (default is \code{samtools})
-#' @param r.region choose between the default \code{"10k"} **or** \code{"20k"}
-#'                  \code{"custom"} regions
-#' @param f.bed file path for bed file if \code{r.region = "custom"}
-#' @param bed.header binary, \code{TRUE} if bed file has a header
-#' @param ... additional options passed to \code{gr_metric()}
-
+#' @inheritParams spector_metric
 #'
 #' @return Output files saved in folder \code{out_F}, also saves a reference
 #'          file with file names
@@ -39,7 +32,6 @@ spector <- function(bam_f = NULL,
                     spector_plot = TRUE,
                     plot_type = "boxplot",
                     plot_var = "rms",
-                    samtools_cmd = "samtools",
                     ...) {
   ## Create output folder if it doesn't exist already
   out_F <- .out_trailing_fix(out_F)
@@ -59,8 +51,7 @@ spector <- function(bam_f = NULL,
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
     srm.df <- .spector_list(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
-                           out_F = out_F, n_core = n_core,
-                           stl_cmd = samtools_cmd, ...)
+                           out_F = out_F, n_core = n_core, ...)
     # save outputs
     .save_merged(res_v = srm.df, out = out_F)
     spector_pl <- spector_plot(id_file = NULL, res_df = srm.df, res_p = NULL,
@@ -73,8 +64,7 @@ spector <- function(bam_f = NULL,
       fs_bam <- .read_id_assign(id_path = bam_f, f_head = f_head)
       .unpack_list(fs_bam)
       srm.df <- .spector_list(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
-                              out_F = out_F, n_core = n_core,
-                              stl_cmd = samtools_cmd, ...)
+                              out_F = out_F, n_core = n_core, ...)
 
       # save output
       .save_merged(res_v = srm.df, out = out_F)
@@ -83,7 +73,7 @@ spector <- function(bam_f = NULL,
                                   plot_var =  plot_var, out_F = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
-      srm.df <- .spector_file(bam_f, out_F = out_F, stl_cmd = samtools_cmd, ...)
+      srm.df <- .spector_file(bam_f, out_F = out_F,  ...)
       # spector_pl <- spector_plot(id_file = NULL, res_df = srm.df,
       #                            res_p = NULL,
       #                            f_head = FALSE, plot_type = plot_type,
@@ -113,25 +103,18 @@ spector <- function(bam_f = NULL,
 
   if (var_s == "rms") {
     stat_spector <- res %>%
-      dplyr::group_by(id) %>%
-      dplyr::summarise(mean_rm = mean(1 / R_rms, na.rm = TRUE),
-                       median_rm = median(1 / R_rms, na.rm = TRUE),
-                       sd_rm = sd(1 / R_rms, na.rm = TRUE),
-                       iqr_rm = IQR(1 / R_rms, na.rm = TRUE))
+      dplyr::group_by(id_bam) %>%
+      dplyr::summarise(mean_rm = mean(1 / rms, na.rm = TRUE),
+                       median_rm = median(1 / rms, na.rm = TRUE),
+                       sd_rm = sd(1 / rms, na.rm = TRUE),
+                       iqr_rm = IQR(1 / rms, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       dplyr::group_by(id) %>%
-      dplyr::summarise(mean_rm = mean(1 / R_a, na.rm = TRUE),
-                       median_rm = median(1 / R_a, na.rm = TRUE),
-                       sd_rm = sd(1 / R_a, na.rm = TRUE),
-                       iqr_rm = IQR(1 / R_a, na.rm = TRUE))
-  } else if (var_s == "df") {
-    stat_spector <- res %>%
-      dplyr::group_by(id) %>%
-      dplyr::summarise(mean_rm = mean(Df, na.rm = TRUE),
-                       median_rm = median(Df, na.rm = TRUE),
-                       sd_rm = sd(Df, na.rm = TRUE),
-                       iqr_rm = IQR(Df, na.rm = TRUE))
+      dplyr::summarise(mean_rm = mean(1 / mean, na.rm = TRUE),
+                       median_rm = median(1 / mean, na.rm = TRUE),
+                       sd_rm = sd(1 / mean, na.rm = TRUE),
+                       iqr_rm = IQR(1 / mean, na.rm = TRUE))
   }
 
   write.csv(stat_spector,
@@ -168,3 +151,13 @@ dir.exists <- function(d) {
   return(out_F)
 
 }
+
+#' Pipe operator
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL
