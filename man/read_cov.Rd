@@ -4,7 +4,7 @@
 \alias{read_cov}
 \title{Read the coverage of a region}
 \usage{
-read_cov(f.name, chr, start, end, n.read)
+read_cov(f.name, chr, start, end, n_read)
 }
 \arguments{
 \item{f.name}{}

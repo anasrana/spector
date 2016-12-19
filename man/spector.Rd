@@ -6,7 +6,7 @@
 \usage{
 spector(bam_f = NULL, file_type = "list", f_delim = "\\t",
   f_head = FALSE, out_F = NULL, n_core = NULL, spector_plot = TRUE,
-  plot_type = "boxplot", plot_var = "rms", samtools_cmd = "samtools", ...)
+  plot_type = "boxplot", plot_var = "rms", ...)
 }
 \arguments{
 \item{bam_f}{path to bam file, txt file with paths or folder}
@@ -29,18 +29,6 @@ for further details.}
 
 \item{plot_var}{The variable to be used for plotting, default is \code{"rms"}
 for wavelets.}
-
-\item{samtools_cmd}{System command for samtools including full path
-(default is \code{samtools})}
-
-\item{...}{additional options passed to \code{gr_metric()}}
-
-\item{r.region}{choose between the default \code{"10k"} **or** \code{"20k"}
-\code{"custom"} regions}
-
-\item{f.bed}{file path for bed file if \code{r.region = "custom"}}
-
-\item{bed.header}{binary, \code{TRUE} if bed file has a header}
 }
 \value{
 Output files saved in folder \code{out_F}, also saves a reference
