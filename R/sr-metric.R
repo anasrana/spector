@@ -86,6 +86,7 @@ chrIntersect <- function(region_df, bam_c) {
 chr_v <- as.character(bam_c)
 region_df %>%
   mutate(
+    chrom = as.character(chrom),
     chr = if_else(chrom %in% chr_v, chrom, ""),
     chr2 = if_else(paste0("chr", chrom) %in% chr_v,
       paste0("chr", chrom), "")) %>%
