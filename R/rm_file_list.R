@@ -14,9 +14,9 @@
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
 
-  srm.df$id <- rep(id_bam, nrow(srm.df))
-  srm.df$grp <- rep(srm_bam, nrow(srm.df))
-  srm.df$prep <- rep(s_prep, nrow(srm.df))
+  srm.df$id_bam <- id_bam
+  srm.df$grp <- srm_bam
+  srm.df$prep <- s_prep
 
 
   if (is.null(out_F)) {
