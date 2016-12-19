@@ -53,7 +53,7 @@ read_bed <- function(bed_file,
 
   if (ucsc_coord) {
     bed_region <- bed_region %>%
-      dplyr::mutate(start = start + 1)
+      mutate(start = start + 1)
     }
 
   return(bed_region)
