@@ -9,14 +9,15 @@
 #'    power of 2 that fits in the smallest region
 #'
 #' @return Metric for all specified regions
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate group_by summarise
 #' @importFrom magrittr %>%
+#' @importFrom tidyr separate separate_rows
 #'
 #' @export
 #'
 spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
-                          bed.header = FALSE, metric = "wavelet",
-                          f.method = NA, region_giab = TRUE) {
+                          bed.header = FALSE, f.method = NA,
+                          region_giab = TRUE) {
 
 #
 # Load data frame from bed file
@@ -44,48 +45,31 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 # ==========================================================================
 
   region_df <- chrIntersect(region_df, bam_stats$chrom)
-  message(c("Running spector for:\n",
-    paste0("Chromosome: ", unique(region_df$chrom), "\n")))
+
+  if (nrow(region_df) > 0) {
+    message(c("Running spector for:\n",
+      paste0("Chromosome: ", unique(region_df$chrom), "\n")))
+  } else {
+    stop("Issues matching chr in '*.bed' and '*.bam' or no overlap")
+  }
 
 #
 # Subset region_df by chromosome intersect
 # --------------------------------------------------------------------------
 
-  region_df <- region_df %>%
-    dplyr::filter(chrom %in% chr.i | chr %in% chr.i) %>%
-    # make sure only chr found in bam file are used
-    dplyr::filter(!is.na(chrom) & !is.na(chr)) %>%
-    dplyr::rowwise()
-
-  if (all(region_df$chrom %in% chr.i)) {
-    region_df <-  region_df %>%
-      dplyr::do(.region_metric(f_bam, .$chrom, .$start, .$end, n_read,
-        metric = metric, methods = f.method)) %>%
-      data.frame(chr = region_df$chr, chr.bed = region_df$chrom, id = region_df$id,
-        stringsAsFactors = FALSE) %>%
-      dplyr::tbl_df()
-  } else if (all(region_df$chr %in% chr.i)) {
-    region_df <-  region_df %>%
-      dplyr::do(.region_metric(f_bam, .$chr, .$start, .$end, n_read,
-        metric = metric, methods = f.method)) %>%
-      data.frame(chr = region_df$chr, chr.bed = region_df$chr, id = region_df$id,
-        stringsAsFactors = FALSE) %>%
-      dplyr::tbl_df()
-  } else {
-    stop("Issue matching chromosome name in bed file with chromosome
-      name in bam file")
-  }
-
-
-  if (metric == "fractal") {
-    region_df <- region_df %>%
-      dplyr::mutate(Df = replace(Df, which(Df == 0), NA))
-  } else {
-    region_df <- region_df %>%
-      dplyr::mutate(R_a = replace(R_a, which(R_a == 0), NA),
-              R_rms = replace(R_rms, which(R_rms == 0), NA))
-  }
-
+  region_df <-
+    region_df %>%
+    group_by(chrom) %>%
+    mutate(
+      id = paste0(chrom, ":", start, "-", end),
+      cov = get_chr_cov(f_bam, chrom, start, end, n_read)) %>%
+    separate_rows(cov, sep = ",") %>%
+    group_by(id) %>%
+    summarise(metric = region_metric(cov)) %>%
+    separate(
+      metric, into = c("mean", "median", "rms"),
+      sep = ",", convert = TRUE) %>%
+    select(id, mean, median, rms)
 
   message(paste("Completed file:", f_bam))
   return(region_df)
@@ -110,31 +94,31 @@ region_df %>%
   select(chrom, start, end)
 }
 
-.region_metric <- function(f.name, chr, start, end, n_read, metric = "wavelet",
-                            methods = NA, n.lag = "auto",
-                            w.size = length(sig)) {
+get_chr_cov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
 
-  sig <- read_cov(f.name, chr, start, end, n_read)
+  chr <- unique(chr)
 
-  if (metric == "wavelet") {
-    #
-    # TODO
-    #
-    # => Make sure this is the best option should all regions be dropped
-    #
-    if (anyNA(sig)) {
-      data.frame(R_a = NA, R_rms = NA)
-    } else {
-      wd.sig <- wavethresh::wd(sig, filter.number = 1, family = "DaubExPhase")
-      wd.sig.tr <- wavethresh::threshold(wd.sig, by.level = TRUE,
-          policy = "universal", return.thresh = TRUE)
-      data.frame(
-        R_a = .spector_ra(wd.sig.tr),
-        R_rms = .spector_rms(wd.sig.tr),
-        R_md = .spector_med(wd.sig.tr)
-        )
-    }
+  sig <-
+    read_cov(f.name, chr, start, end, n_read)
+
+  sapply(1:length(start), function(i_start) {
+    paste0(sig[(start[i_start] + 1):end[i_start]], collapse = ",")
+  })
+
+}
+
+region_metric <- function(reg_cov) {
+  if (anyNA(reg_cov)) {
+    "NA,NA,NA"
+  } else {
+    wd.sig <- wavethresh::wd(reg_cov, filter.number = 1, family = "DaubExPhase")
+    wd.sig.tr <- wavethresh::threshold(wd.sig, by.level = TRUE,
+        policy = "universal", return.thresh = TRUE)
+    paste(.spector_ra(wd.sig.tr), .spector_med(wd.sig.tr),
+      .spector_rms(wd.sig.tr), sep = ",")
+
   }
+
 }
 
 
@@ -147,6 +131,14 @@ region_df %>%
 }
 
 .spector_med <- function(wd.thr) {
-  sqrt(median(abs(wd.thr), na.rm = T))
+  median(abs(wd.thr), na.rm = T)
 }
 
+.sig_norm <- function(signal) {
+  if (max(signal, na.rm = TRUE) != 0) {
+    signal <- (signal - min(signal, na.rm = TRUE)) /
+              (max(signal, na.rm = TRUE) - min(signal, na.rm = TRUE))
+  }
+
+  return(signal)
+}
