@@ -7,16 +7,22 @@
 #' @param f.name
 #'
 #' @return Vector of the coverage in a given region
+#'
+#' @importFrom Rsamtools ScanBamParam
+#' @importFrom GenomicAlignments readGAlignments
+#' @importFrom IRanges coverage
+#' @importFrom magrittr extract2
+#'
 #' @export
 #'
 read_cov <- function(f.name, chr, start, end, n_read) {
   # Create param from provided information
-  param <- Rsamtools::ScanBamParam(which = rng_obj(chr, start, end))
+  param <- ScanBamParam(which = rng_obj(chr, start, end))
 
-  raw_reads <- GenomicAlignments::readGAlignments(f.name, param = param,
+  raw_reads <- readGAlignments(f.name, param = param,
       use.names = F) %>%
-    IRanges::coverage() %>%
-    magrittr::extract2(chr)
+    coverage() %>%
+    extract2(chr)
 
     return(raw_reads)
 
@@ -43,7 +49,17 @@ read_cov <- function(f.name, chr, start, end, n_read) {
   # return(signal)
 }
 
+#' generate genomic ranges object
+#'
+#' @param chr
+#' @param start
+#' @param end
+#'
+#' @importFrom GenomicRanges GRanges
+#' @importFrom S4Vectors Rle
+#' @importFrom IRanges IRanges
+#'
 rng_obj <- function(chr, start, end) {
-  GenomicRanges::GRanges(S4Vectors::Rle(chr),
-    ranges = IRanges::IRanges(start = as.integer(start), end = as.integer(end)))
+  GRanges(Rle(chr),
+    ranges = IRanges(start = as.integer(start), end = as.integer(end)))
 }
