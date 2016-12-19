@@ -107,18 +107,23 @@ get_chr_cov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
 
 }
 
+#' Calculate metric
+#'
+#' @param reg_cov
+#'
+#' @importFrom wavethresh wd threshold
+#'
 region_metric <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     "NA,NA,NA"
   } else {
-    wd.sig <- wavethresh::wd(reg_cov, filter.number = 1, family = "DaubExPhase")
-    wd.sig.tr <- wavethresh::threshold(wd.sig, by.level = TRUE,
+    wd.sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
+    wd.sig.tr <- threshold(wd.sig, by.level = TRUE,
         policy = "universal", return.thresh = TRUE)
     paste(.spector_ra(wd.sig.tr), .spector_med(wd.sig.tr),
       .spector_rms(wd.sig.tr), sep = ",")
 
   }
-
 }
 
 
