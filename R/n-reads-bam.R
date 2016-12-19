@@ -2,7 +2,7 @@
 #'
 #' @param bam_file
 #'
-#'
+#' @importFrom Rsamtools indexBam
 #'
 nReadsBam <- function(bam_file) {
     if (file.exists(paste0(bam_file, ".bai"))) {
@@ -23,7 +23,7 @@ nReadsBam <- function(bam_file) {
 #'
 #'
 #' @importFrom dplyr filter mutate select
-#' @importFrom Rsamtools idxstatsBam indexBam
+#' @importFrom Rsamtools idxstatsBam
 #' @importFrom tibble as_data_frame
 #'
 readIdxstats <- function(bam_file) {
@@ -32,6 +32,6 @@ readIdxstats <- function(bam_file) {
         mutate(
           n_read = mapped + unmapped,
           chrom = as.character(seqnames)) %>%
-        dplyr::filter(n_read > 0) %>%
-        dplyr::select(chrom, n_read)
+        filter(n_read > 0) %>%
+        select(chrom, n_read)
 }
