@@ -9,8 +9,7 @@
 #' @return Vector of the coverage in a given region
 #'
 #' @importFrom Rsamtools ScanBamParam
-#' @importFrom GenomicAlignments readGAlignments
-#' @importFrom IRanges coverage
+#' @importFrom GenomicAlignments readGAlignments coverage
 #' @importFrom magrittr extract2
 #'
 #' @export
