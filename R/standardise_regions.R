@@ -44,10 +44,6 @@ read_bed <- function(bed_file,
     select(chrom, start, end) %>%
     mutate(reg_length = end - start)
 
-  bed_region <-
-    bed_region %>%
-    bed_region_split(bed_region_size)
-
 # Shift the data if ucsc convention
 # ----------------------------------------------------------------
 
@@ -55,6 +51,14 @@ read_bed <- function(bed_file,
     bed_region <- bed_region %>%
       mutate(start = start + 1)
     }
+
+#
+# Split regions
+# --------------------------------------------------------------------------
+
+  bed_region <-
+    bed_region %>%
+    bed_region_split(bed_region_size)
 
   return(bed_region)
 }
@@ -93,6 +97,7 @@ bed_region_split <- function(bed_region, bed_region_size) {
     select(-start, -end, -reg_length) %>%
     separate_rows(new.reg, sep = ",") %>%
     separate(new.reg, into = c("start", "end"), convert = TRUE) %>%
+    mutate(start = start + 1) %>%
     select(chrom, start, end)
 }
 
