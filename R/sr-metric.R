@@ -99,7 +99,7 @@ region_df %>%
   filter(chr != "" | chr2 != "" | chr3 != "") %>%
   mutate(
     chrom = if_else(chr != "", chr, chr2),
-    chrom = if_else(chrom == "", str_replace(chr3, "chr", ""), chr2)) %>%
+    chrom = if_else(chrom == "", str_replace(chr3, "chr", ""), chrom)) %>%
   select(chrom, start, end)
 }
 
