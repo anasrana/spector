@@ -85,6 +85,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 #' @param bam_c
 #'
 #' @importFrom dplyr filter mutate select if_else
+#' @importFrom stringr str_replace
 #'
 chrIntersect <- function(region_df, bam_c) {
 chr_v <- as.character(bam_c)
@@ -93,9 +94,12 @@ region_df %>%
     chrom = as.character(chrom),
     chr = if_else(chrom %in% chr_v, chrom, ""),
     chr2 = if_else(paste0("chr", chrom) %in% chr_v,
-      paste0("chr", chrom), "")) %>%
-  filter(chr != "" | chr2 != "") %>%
-  mutate(chrom = if_else(chr != "", chr, chr2)) %>%
+      paste0("chr", chrom), ""),
+    chr3 = if_else(chrom %in% paste0("chr", chr_v), chrom, "")) %>%
+  filter(chr != "" | chr2 != "" | chr3 != "") %>%
+  mutate(
+    chrom = if_else(chr != "", chr, chr2),
+    chrom = if_else(chrom == "", str_replace(chr3, "chr", ""), chr2)) %>%
   select(chrom, start, end)
 }
 
