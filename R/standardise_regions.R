@@ -87,7 +87,7 @@ bed_region_split <- function(bed_region, bed_region_size) {
   min_region <- check_region_size(bed_region_size, bed_region$reg_length)
 
   bed_region %>%
-    filter(reg_length > min_region) %>%
+    filter(reg_length >= min_region) %>%
     mutate(
       n_reg = reg_length %/% min_region,
       uncov = reg_length %% min_region,
