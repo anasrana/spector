@@ -10,6 +10,7 @@
 #'
 #' @return Metric for all specified regions
 #' @importFrom dplyr mutate group_by summarise
+#' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
 #'
@@ -52,6 +53,9 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
   } else {
     stop("Issues matching chr in '*.bed' and '*.bam' or no overlap")
   }
+
+  message(str_c(format(nrow(region_df), big.mark = ","),
+    " regions identified."))
 
 #
 # Subset region_df by chromosome intersect
