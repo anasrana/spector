@@ -41,8 +41,7 @@ read_bed <- function(bed_file,
       sep = "\t") %>%
     as_data_frame() %>%
     setNames(c_name[1:ncol(tmp.row1)]) %>%
-    select(chrom, start, end) %>%
-    mutate(reg_length = end - start)
+    select(chrom, start, end)
 
 # Shift the data if ucsc convention
 # ----------------------------------------------------------------
@@ -58,6 +57,7 @@ read_bed <- function(bed_file,
 
   bed_region <-
     bed_region %>%
+    mutate(reg_length = end - start) %>%
     bed_region_split(bed_region_size)
 
   return(bed_region)
