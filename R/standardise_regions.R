@@ -15,7 +15,7 @@
 #'
 read_bed <- function(bed_file,
   header = FALSE,
-  ucsc_coord = TRUE,
+  ucsc_coord = FALSE,
   bed_region_size = NULL) {
 
 # column names and first line
