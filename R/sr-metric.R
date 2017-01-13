@@ -121,7 +121,7 @@ get_chr_cov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
     read_cov(f.name, chr, start, end, n_read)
 
   sapply(1:length(start), function(i_start) {
-    paste0(sig[(start[i_start] + 1):end[i_start]], collapse = ",")
+    paste0(sig[(start[i_start]):end[i_start]], collapse = ",")
   })
 
 }
