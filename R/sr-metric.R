@@ -13,12 +13,13 @@
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
+#' @importFrom parallel mclapply
 #'
 #' @export
 #'
 spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
                           bed.header = FALSE, f.method = NA,
-                          region_giab = TRUE) {
+                          region_giab = TRUE, chr_cores = 1) {
 
 #
 # Load data frame from bed file
@@ -61,19 +62,28 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 # Subset region_df by chromosome intersect
 # --------------------------------------------------------------------------
 
+ chr_idx <- unique(region_df$chrom)
+
   region_df <-
-    region_df %>%
-    group_by(chrom) %>%
-    mutate(
-      id = paste0(chrom, ":", start, "-", end),
-      cov = get_chr_cov(f_bam, chrom, start, end, n_read)) %>%
-    separate_rows(cov, sep = ",") %>%
-    group_by(id) %>%
-    summarise(metric = region_metric(cov)) %>%
-    separate(
-      metric, into = c("mean", "median", "rms"),
-      sep = ",", convert = TRUE) %>%
-    select(id, mean, median, rms)
+  mclapply(chr_idx, function(i_chr) {
+    res_df <- region_df %>%
+      dplyr::filter(chrom == i_chr) %>%
+      mutate(
+        id = paste0(chrom, ":", start, "-", end),
+        cov = get_chr_cov(f_bam, chrom, start, end, n_read)) %>%
+        separate_rows(cov, sep = ",") %>%
+      group_by(id) %>%
+      summarise(metric = region_metric(cov)) %>%
+      separate(
+        metric, into = c("mean", "median", "rms"),
+        sep = ",", convert = TRUE) %>%
+      select(id, mean, median, rms)
+
+      message(str_c("Completed run chr:", i_chr))
+
+      return(res_df)
+  }, mc.cores = chr_cores) %>%
+  bind_rows()
 
   message(paste("Completed file:", f_bam))
   return(region_df)

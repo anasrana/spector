@@ -5,7 +5,7 @@
 \title{Calculate SpECtOR metric for one bam file}
 \usage{
 spector_metric(f_bam = NULL, region_size = NULL, f_bed = NULL,
-  bed.header = FALSE, f.method = NA, region_giab = TRUE)
+  bed.header = FALSE, f.method = NA, region_giab = TRUE, chr_cores = 1)
 }
 \arguments{
 \item{region_size}{choose size of the regions defualt NULL chooses the max
