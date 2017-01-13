@@ -4,7 +4,7 @@
 \alias{read_bed}
 \title{Read bed bed_file with bed_regions to run spector}
 \usage{
-read_bed(bed_file, header = FALSE, ucsc_coord = TRUE,
+read_bed(bed_file, header = FALSE, ucsc_coord = FALSE,
   bed_region_size = NULL)
 }
 \arguments{

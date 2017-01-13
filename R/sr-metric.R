@@ -9,7 +9,7 @@
 #'    power of 2 that fits in the smallest region
 #'
 #' @return Metric for all specified regions
-#' @importFrom dplyr mutate group_by summarise
+#' @importFrom dplyr mutate group_by summarise bind_rows
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
