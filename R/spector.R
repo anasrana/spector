@@ -23,6 +23,8 @@
 #'          file with file names
 #' @export
 #'
+#' @importFrom stringr str_c
+#'
 spector <- function(bam_f = NULL,
                     file_type = "list",
                     f_delim = "\t",
@@ -33,6 +35,13 @@ spector <- function(bam_f = NULL,
                     plot_type = "boxplot",
                     plot_var = "rms",
                     ...) {
+
+  ## Check if have read access to bam_f
+  if (file.access(bam_f, mode = 4) == -1) {
+    stop(str_c("'", bam_f,
+      "'\nYou do not have acces to the file or the file does not exist"))
+  }
+
   ## Create output folder if it doesn't exist already
   out_F <- .out_trailing_fix(out_F)
   if (!dir.exists(out_F)) {
@@ -46,7 +55,6 @@ spector <- function(bam_f = NULL,
 # --------------------------------------------------------------------------
 
   if (dir.exists(bam_f)) {
-    # TODO include path check
     fs_bam <- paste(bam_f, '/', list.files(path = bam_f, pattern = "*.bam$"),
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
