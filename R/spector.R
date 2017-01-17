@@ -12,11 +12,6 @@
 #'               only used when \code{file_type = "list"}
 #' @param out_F path to output folder
 #' @param n_core number of cores that should be used
-#' @param plot_type Vector for the type of plots to be saved. Options include
-#'                  \code{"boxplot", "circle", "dot"}, see \code{spector_plot}
-#'                  for further details.
-#' @param plot_var The variable to be used for plotting, default is \code{"rms"}
-#'                  for wavelets.
 #' @inheritParams spector_metric
 #'
 #' @return Output files saved in folder \code{out_F}, also saves a reference
@@ -31,9 +26,6 @@ spector <- function(bam_f = NULL,
                     f_head = FALSE,
                     out_F = NULL,
                     n_core = NULL,
-                    spector_plot = TRUE,
-                    plot_type = "boxplot",
-                    plot_var = "rms",
                     ...) {
 
   ## Check if have read access to bam_f
@@ -62,9 +54,6 @@ spector <- function(bam_f = NULL,
                            out_F = out_F, n_core = n_core, ...)
     # save outputs
     .save_merged(res_v = srm.df, out = out_F)
-    spector_pl <- spector_plot(id_file = NULL, res_df = srm.df, res_p = NULL,
-                              f_head = f_head, plot_type = plot_type,
-                              plot_var =  plot_var, out_F = out_F)
 
   } else if (file.exists(bam_f)) {
     if (file_type == "list") {
@@ -76,23 +65,18 @@ spector <- function(bam_f = NULL,
 
       # save output
       .save_merged(res_v = srm.df, out = out_F)
-      spector_pl <- spector_plot(id_file = bam_f, res_df = srm.df, res_p = NULL,
-                                  f_head = f_head, plot_type = plot_type,
-                                  plot_var =  plot_var, out_F = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
+
       srm.df <- .spector_file(bam_f, out_F = out_F,  ...)
-      # spector_pl <- spector_plot(id_file = NULL, res_df = srm.df,
-      #                            res_p = NULL,
-      #                            f_head = FALSE, plot_type = plot_type,
-      #                            plot_var =  plot_var, out_F = out_F)
+
     } else if(!file.exists(bam_f)) {
       stop("bam_f: file / folder not found
             Make sure you provide the correct path")
     }
   }
 
-  .save_summary(res = srm.df, var_s = plot_var, out = out_F)
+  .save_summary(res = srm.df, out = out_F)
 
   return(srm.df = srm.df)
 }
