@@ -25,8 +25,9 @@ spector <- function(bam_f = NULL,
                     f_delim = "\t",
                     f_head = FALSE,
                     out_F = NULL,
-                    n_core = NULL,
+                    n_core = 1,
                     smr_var = "rms",
+                    save_out = FALSE,
                     ...) {
 
   ## Check if have read access to bam_f
@@ -36,11 +37,13 @@ spector <- function(bam_f = NULL,
   }
 
   ## Create output folder if it doesn't exist already
-  out_F <- outTrailingFix(out_F)
-  if (!dir.exists(out_F)) {
-    dir.create(out_F)
-    message(paste("Folder '", out_F,
-      "' created in current working directory ('", getwd(), "')", sep = ""))
+  if (save_out) {
+    out_F <- outTrailingFix(out_F)
+    if (!dir.exists(out_F)) {
+      dir.create(out_F)
+      message(paste("Folder '", out_F,
+        "' created in current working directory ('", getwd(), "')", sep = ""))
+    }
   }
 
 #
@@ -52,9 +55,8 @@ spector <- function(bam_f = NULL,
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
     srm_df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
-                           out_F = out_F, n_core = n_core, ...)
-    # save outputs
-    saveMerged(res_v = srm_df, out = out_F)
+                           out_F = out_F, n_core = n_core, save_out = save_out,
+                           ...)
 
   } else if (file.exists(bam_f)) {
     if (file_type == "list") {
@@ -62,14 +64,13 @@ spector <- function(bam_f = NULL,
       fs_bam <- readIdAssign(id_path = bam_f, f_head = f_head)
       unpackList(fs_bam)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
-                              out_F = out_F, n_core = n_core, ...)
+                            out_F = out_F, n_core = n_core,
+                            save_out = save_out, ...)
 
-      # save output
-      saveMerged(res_v = srm_df, out = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
 
-      srm_df <- spectorFile(bam_f, out_F = out_F,  ...)
+      srm_df <- spectorFile(bam_f, out_F = out_F, save_out = save_out, ...)
 
     } else if(!file.exists(bam_f)) {
       stop("bam_f: file / folder not found
@@ -77,7 +78,12 @@ spector <- function(bam_f = NULL,
     }
   }
 
-  saveSummary(res = srm_df, out = out_F, var_s = smr_var)
+  if (save_out) {
+    # save outputs
+    saveMerged(res_v = srm_df, out = out_F)
+
+    saveSummary(res = srm_df, out = out_F, var_s = smr_var)
+  }
 
   return(srm_df = srm_df)
 }
