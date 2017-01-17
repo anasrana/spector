@@ -1,4 +1,4 @@
-.spector_file <- function(f_bam,
+spectorFile <- function(f_bam,
                           id_bam = NULL,
                           srm_bam = NULL,
                           s_prep = NULL,
@@ -31,14 +31,14 @@
   return(srm.df)
 }
 
-.spector_list <- function(fs_bam, id_v, grp_v, s_v, out_F,
+spectorList <- function(fs_bam, id_v, grp_v, s_v, out_F,
                           n_core = 1, ...) {
 # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
   spector_l <- parallel::mclapply(X = f_idx,
     function(idx) {
                             message(paste("Running file:", fs_bam[idx]))
-                            .spector_file(
+                            spectorFile(
                               f_bam = fs_bam[idx],
                               id_bam = id_v[idx],
                               srm_bam = grp_v[idx],
