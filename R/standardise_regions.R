@@ -58,7 +58,7 @@ read_bed <- function(bed_file,
   bed_region <-
     bed_region %>%
     mutate(reg_length = end - start) %>%
-    bed_region_split(bed_region_size)
+    bedRegionSplit(bed_region_size)
 
   return(bed_region)
 }
@@ -68,7 +68,7 @@ read_bed <- function(bed_file,
 # Determine number of bed_regions to be split into and uncovered area
 # ==========================================================================
 
-#' mutate function bed_region_split
+#' mutate function bedRegionSplit
 #'
 #' @param bed_region
 #' @param bed_region_size
@@ -82,16 +82,16 @@ read_bed <- function(bed_file,
 #' @importFrom stringr str_c
 #' @importFrom tidyr separate_rows separate
 #'
-bed_region_split <- function(bed_region, bed_region_size) {
+bedRegionSplit <- function(bed_region, bed_region_size) {
 
-  min_region <- check_region_size(bed_region_size, bed_region$reg_length)
+  min_region <- checkRegionSize(bed_region_size, bed_region$reg_length)
 
   bed_region %>%
     filter(reg_length >= min_region) %>%
     mutate(
       n_reg = reg_length %/% min_region,
       uncov = reg_length %% min_region,
-      new.reg = bed_expand_bed_region(min_region, start, end, n_reg, uncov),
+      new.reg = expandBedRegion(min_region, start, end, n_reg, uncov),
       orig_reg = str_c(chrom, ":", start, "-", end)
       ) %>%
     select(-start, -end, -reg_length) %>%
@@ -101,7 +101,7 @@ bed_region_split <- function(bed_region, bed_region_size) {
     select(chrom, start, end)
 }
 
-check_region_size <- function(bed_region_size, file_region_v) {
+checkRegionSize <- function(bed_region_size, file_region_v) {
   if (is.null(bed_region_size)) {
     message("No region size specified:
       Using largest power of 2 that fits into min(region) in the bed file")
@@ -140,7 +140,7 @@ check_region_size <- function(bed_region_size, file_region_v) {
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #'
-bed_expand_bed_region <- function(bed_region_size, start, end, n_reg, uncov) {
+expandBedRegion <- function(bed_region_size, start, end, n_reg, uncov) {
 sapply(1:length(n_reg), function(i_v) {
   gap.bp <- round(uncov[i_v] / (n_reg[i_v] + 1))
   tmp.st <- c(rep(NA, n_reg[i_v]))
