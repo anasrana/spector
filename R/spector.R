@@ -35,7 +35,7 @@ spector <- function(bam_f = NULL,
   }
 
   ## Create output folder if it doesn't exist already
-  out_F <- .out_trailing_fix(out_F)
+  out_F <- outTrailingFix(out_F)
   if (!dir.exists(out_F)) {
     dir.create(out_F)
     message(paste("Folder '", out_F,
@@ -53,18 +53,18 @@ spector <- function(bam_f = NULL,
     srm.df <- .spector_list(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
                            out_F = out_F, n_core = n_core, ...)
     # save outputs
-    .save_merged(res_v = srm.df, out = out_F)
+    saveMerged(res_v = srm.df, out = out_F)
 
   } else if (file.exists(bam_f)) {
     if (file_type == "list") {
 
-      fs_bam <- .read_id_assign(id_path = bam_f, f_head = f_head)
-      .unpack_list(fs_bam)
+      fs_bam <- readIdAssign(id_path = bam_f, f_head = f_head)
+      unpackList(fs_bam)
       srm.df <- .spector_list(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
                               out_F = out_F, n_core = n_core, ...)
 
       # save output
-      .save_merged(res_v = srm.df, out = out_F)
+      saveMerged(res_v = srm.df, out = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
 
@@ -76,7 +76,7 @@ spector <- function(bam_f = NULL,
     }
   }
 
-  .save_summary(res = srm.df, out = out_F)
+  saveSummary(res = srm.df, out = out_F)
 
   return(srm.df = srm.df)
 }
@@ -85,13 +85,13 @@ spector <- function(bam_f = NULL,
 # Auxillary function
 # --------------------------------------------------------------------------
 
-.unpack_list <- function(object) {
+unpackList <- function(object) {
   for(.x in names(object)){
     assign(value = object[[.x]], x=.x, envir = parent.frame())
   }
 }
 
-.save_summary <- function(res, var_s, out) {
+saveSummary <- function(res, var_s, out) {
 
   if (var_s == "rms") {
     stat_spector <- res %>%
@@ -114,12 +114,12 @@ spector <- function(bam_f = NULL,
             row.names = FALSE)
 }
 
-.save_merged <- function(res_v, out) {
+saveMerged <- function(res_v, out) {
     out_path <- paste(out, "results_bam_out_merged.csv", sep = "")
     write.csv(res_v, file = out_path, row.names = FALSE)
 }
 
-.read_id_assign <- function(id_path, f_head = FALSE) {
+readIdAssign <- function(id_path, f_head = FALSE) {
   list.name <- c("fs_bam", 'id_bam', 'gr_bam', 'baseline', 's_prep')
   for (i in 1:length(list.name)) {
     assign(list.name[i], NULL)
@@ -130,12 +130,7 @@ spector <- function(bam_f = NULL,
   return(id_df)
 }
 
-dir.exists <- function(d) {
-    de <- file.info(d)$isdir
-    ifelse(is.na(de), FALSE, de)
-}
-
-.out_trailing_fix <- function(out_F) {
+outTrailingFix <- function(out_F) {
   tmp_out <- unlist(strsplit(out_F, split = ""))
   if (!(tmp_out[length(tmp_out)] == "/")) {
     out_F <- paste(out_F, "/", sep = "")
