@@ -4,10 +4,10 @@
 \alias{read_cov}
 \title{Read the coverage of a region}
 \usage{
-read_cov(f.name, chr, start, end, n_read)
+read_cov(f_name, chr, start, end, n_read)
 }
 \arguments{
-\item{f.name}{}
+\item{f_name}{}
 }
 \value{
 Vector of the coverage in a given region

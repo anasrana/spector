@@ -5,7 +5,7 @@
 \title{Calculate SpECtOR metric for one bam file}
 \usage{
 spector_metric(f_bam = NULL, region_size = NULL, f_bed = NULL,
-  bed.header = FALSE, f.method = NA, region_giab = TRUE, chr_cores = 1)
+  bed_header = FALSE, region_giab = TRUE, chr_cores = 1)
 }
 \arguments{
 \item{region_size}{choose size of the regions defualt NULL chooses the max
@@ -13,7 +13,7 @@ power of 2 that fits in the smallest region}
 
 \item{f_bed}{file path for bed file if \code{region_giab = FALSE}}
 
-\item{bed.header}{binary, \code{TRUE} if bed file has a header}
+\item{bed_header}{binary, \code{TRUE} if bed file has a header}
 
 \item{region_giab}{logial indicating if giab regions use or not, the default
 TRUE}
