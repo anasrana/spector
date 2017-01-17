@@ -70,10 +70,10 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
       dplyr::filter(chrom == i_chr) %>%
       mutate(
         id = paste0(chrom, ":", start, "-", end),
-        cov = get_chr_cov(f_bam, chrom, start, end, n_read)) %>%
+        cov = chrCov(f_bam, chrom, start, end, n_read)) %>%
         separate_rows(cov, sep = ",") %>%
       group_by(id) %>%
-      summarise(metric = region_metric(cov)) %>%
+      summarise(metric = regionMetric(cov)) %>%
       separate(
         metric, into = c("mean", "median", "rms"),
         sep = ",", convert = TRUE) %>%
@@ -113,7 +113,7 @@ region_df %>%
   select(chrom, start, end)
 }
 
-get_chr_cov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
+chrCov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
 
   chr <- unique(chr)
 
@@ -132,33 +132,33 @@ get_chr_cov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
 #'
 #' @importFrom wavethresh wd threshold
 #'
-region_metric <- function(reg_cov) {
+regionMetric <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     "NA,NA,NA"
   } else {
     wd.sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
     wd.sig.tr <- threshold(wd.sig, by.level = TRUE,
         policy = "universal", return.thresh = TRUE)
-    paste(.spector_ra(wd.sig.tr), .spector_med(wd.sig.tr),
-      .spector_rms(wd.sig.tr), sep = ",")
+    paste(spectorRa(wd.sig.tr), spectorMed(wd.sig.tr),
+      spectorRms(wd.sig.tr), sep = ",")
 
   }
 }
 
 
-.spector_ra <- function(wd.thr) {
+spectorRa <- function(wd.thr) {
   mean(abs(wd.thr), na.rm = T)
 }
 
-.spector_rms <- function(wd.thr) {
+spectorRms <- function(wd.thr) {
   sqrt(mean(wd.thr^2))
 }
 
-.spector_med <- function(wd.thr) {
+spectorMed <- function(wd.thr) {
   median(abs(wd.thr), na.rm = T)
 }
 
-.sig_norm <- function(signal) {
+sigNorm <- function(signal) {
   if (max(signal, na.rm = TRUE) != 0) {
     signal <- (signal - min(signal, na.rm = TRUE)) /
               (max(signal, na.rm = TRUE) - min(signal, na.rm = TRUE))
