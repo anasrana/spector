@@ -5,7 +5,7 @@
 \title{Run spector for a specified path or specified files}
 \usage{
 spector(bam_f = NULL, file_type = "list", f_delim = "\\t",
-  f_head = FALSE, out_F = NULL, n_core = NULL, ...)
+  f_head = FALSE, out_F = NULL, n_core = NULL, smr_var = "rms", ...)
 }
 \arguments{
 \item{bam_f}{path to bam file, txt file with paths or folder}

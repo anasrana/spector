@@ -26,6 +26,7 @@ spector <- function(bam_f = NULL,
                     f_head = FALSE,
                     out_F = NULL,
                     n_core = NULL,
+                    smr_var = "rms",
                     ...) {
 
   ## Check if have read access to bam_f
@@ -76,7 +77,7 @@ spector <- function(bam_f = NULL,
     }
   }
 
-  saveSummary(res = srm_df, out = out_F)
+  saveSummary(res = srm_df, out = out_F, var_s = smr_var)
 
   return(srm_df = srm_df)
 }
