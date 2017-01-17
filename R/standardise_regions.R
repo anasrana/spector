@@ -26,9 +26,9 @@ read_bed <- function(bed_file,
    "blockStarts")
 
   if (header) {
-    tmp.row1 <- read.table(bed_file , nrows = 1, skip = 1)
+    tmp_row1 <- read.table(bed_file , nrows = 1, skip = 1)
   } else {
-    tmp.row1 <- read.table(bed_file , nrows = 1)
+    tmp_row1 <- read.table(bed_file , nrows = 1)
   }
 
 # Reading bed files
@@ -40,7 +40,7 @@ read_bed <- function(bed_file,
       stringsAsFactors = F,
       sep = "\t") %>%
     as_data_frame() %>%
-    setNames(c_name[1:ncol(tmp.row1)]) %>%
+    setNames(c_name[1:ncol(tmp_row1)]) %>%
     select(chrom, start, end)
 
 # Shift the data if ucsc convention
@@ -91,12 +91,12 @@ bedRegionSplit <- function(bed_region, bed_region_size) {
     mutate(
       n_reg = reg_length %/% min_region,
       uncov = reg_length %% min_region,
-      new.reg = expandBedRegion(min_region, start, end, n_reg, uncov),
+      new_reg = expandBedRegion(min_region, start, end, n_reg, uncov),
       orig_reg = str_c(chrom, ":", start, "-", end)
       ) %>%
     select(-start, -end, -reg_length) %>%
-    separate_rows(new.reg, sep = ",") %>%
-    separate(new.reg, into = c("start", "end"), convert = TRUE) %>%
+    separate_rows(new_reg, sep = ",") %>%
+    separate(new_reg, into = c("start", "end"), convert = TRUE) %>%
     mutate(start = start + 1) %>%
     select(chrom, start, end)
 }
@@ -142,18 +142,18 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
 #'
 expandBedRegion <- function(bed_region_size, start, end, n_reg, uncov) {
 sapply(1:length(n_reg), function(i_v) {
-  gap.bp <- round(uncov[i_v] / (n_reg[i_v] + 1))
-  tmp.st <- c(rep(NA, n_reg[i_v]))
-  tmp.ed <- c(start[i_v], rep(NA, n_reg[i_v]))
-  res.v <- rep(NA, n_reg[i_v])
+  gap_bp <- round(uncov[i_v] / (n_reg[i_v] + 1))
+  tmp_st <- c(rep(NA, n_reg[i_v]))
+  tmp_ed <- c(start[i_v], rep(NA, n_reg[i_v]))
+  res_v <- rep(NA, n_reg[i_v])
 
   for (i_n in 1:n_reg[i_v]) {
-    tmp.st[i_n] <- tmp.ed[i_n] + gap.bp
-    tmp.ed[i_n + 1] <- tmp.st[i_n] + bed_region_size
-    res.v[i_n] <- str_c(tmp.st[i_n], "-", tmp.ed[i_n + 1])
+    tmp_st[i_n] <- tmp_ed[i_n] + gap_bp
+    tmp_ed[i_n + 1] <- tmp_st[i_n] + bed_region_size
+    res_v[i_n] <- str_c(tmp_st[i_n], "-", tmp_ed[i_n + 1])
   }
 
-  res.v %>% str_c(collapse = ",")
+  res_v %>% str_c(collapse = ",")
 })
 
 }

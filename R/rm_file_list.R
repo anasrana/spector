@@ -9,14 +9,14 @@ spectorFile <- function(f_bam,
 
   add.args <- list(...)
 
-  srm.df <- spector_metric(f_bam = f_bam, ...)
+  srm_df <- spector_metric(f_bam = f_bam, ...)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
 
-  srm.df$id_bam <- id_bam
-  srm.df$grp <- srm_bam
-  srm.df$prep <- s_prep
+  srm_df$id_bam <- id_bam
+  srm_df$grp <- srm_bam
+  srm_df$prep <- s_prep
 
 
   if (is.null(out_F)) {
@@ -24,11 +24,11 @@ spectorFile <- function(f_bam,
       call. = FALSE, domain = 'spector_run')
   } else {
     out_path <- paste(out_F, id_bam, "_out.csv", sep = "")
-    write.csv(srm.df, file = out_path, row.names = FALSE)
+    write.csv(srm_df, file = out_path, row.names = FALSE)
     message(paste("Completed, output written to:", out_path))
   }
 
-  return(srm.df)
+  return(srm_df)
 }
 
 spectorList <- function(fs_bam, id_v, grp_v, s_v, out_F,
@@ -46,7 +46,7 @@ spectorList <- function(fs_bam, id_v, grp_v, s_v, out_F,
                               out_F = out_F,
                               ...)},
                                   mc.cores = n_core)
-  srm.df <- dplyr::bind_rows(spector_l)
-  return(srm.df)
+  srm_df <- dplyr::bind_rows(spector_l)
+  return(srm_df)
 }
 

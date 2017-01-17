@@ -3,8 +3,8 @@
 #' @param chr
 #' @param start
 #' @param end
-#' @param n.read
-#' @param f.name
+#' @param n_read
+#' @param f_name
 #'
 #' @return Vector of the coverage in a given region
 #'
@@ -14,11 +14,11 @@
 #'
 #' @export
 #'
-read_cov <- function(f.name, chr, start, end, n_read) {
+read_cov <- function(f_name, chr, start, end, n_read) {
   # Create param from provided information
   param <- ScanBamParam(which = rngObj(chr, start, end))
 
-  raw_reads <- readGAlignments(f.name, param = param,
+  raw_reads <- readGAlignments(f_name, param = param,
       use.names = F) %>%
     coverage() %>%
     extract2(chr)

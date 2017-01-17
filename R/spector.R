@@ -50,25 +50,25 @@ spector <- function(bam_f = NULL,
     fs_bam <- paste(bam_f, '/', list.files(path = bam_f, pattern = "*.bam$"),
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
-    srm.df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
+    srm_df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
                            out_F = out_F, n_core = n_core, ...)
     # save outputs
-    saveMerged(res_v = srm.df, out = out_F)
+    saveMerged(res_v = srm_df, out = out_F)
 
   } else if (file.exists(bam_f)) {
     if (file_type == "list") {
 
       fs_bam <- readIdAssign(id_path = bam_f, f_head = f_head)
       unpackList(fs_bam)
-      srm.df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
+      srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
                               out_F = out_F, n_core = n_core, ...)
 
       # save output
-      saveMerged(res_v = srm.df, out = out_F)
+      saveMerged(res_v = srm_df, out = out_F)
 
     } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
 
-      srm.df <- spectorFile(bam_f, out_F = out_F,  ...)
+      srm_df <- spectorFile(bam_f, out_F = out_F,  ...)
 
     } else if(!file.exists(bam_f)) {
       stop("bam_f: file / folder not found
@@ -76,9 +76,9 @@ spector <- function(bam_f = NULL,
     }
   }
 
-  saveSummary(res = srm.df, out = out_F)
+  saveSummary(res = srm_df, out = out_F)
 
-  return(srm.df = srm.df)
+  return(srm_df = srm_df)
 }
 
 #

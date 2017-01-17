@@ -1,6 +1,6 @@
 #' Calculate SpECtOR metric for one bam file
 #'
-#' @param bed.header binary, \code{TRUE} if bed file has a header
+#' @param bed_header binary, \code{TRUE} if bed file has a header
 #' @param f_bam
 #' @param f_bed file path for bed file if \code{region_giab = FALSE}
 #' @param region_giab logial indicating if giab regions use or not, the default
@@ -18,8 +18,8 @@
 #' @export
 #'
 spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
-                          bed.header = FALSE, f.method = NA,
-                          region_giab = TRUE, chr_cores = 1) {
+                          bed_header = FALSE, region_giab = TRUE,
+                          chr_cores = 1) {
 
 #
 # Load data frame from bed file
@@ -31,7 +31,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
         bedRegionSplit(region_size)
 
   } else if (!region_giab) {
-    region_df <- read_bed(bed_file = f_bed, header = bed.header,
+    region_df <- read_bed(bed_file = f_bed, header = bed_header,
       bed_region_size = region_size)
   }
 
@@ -113,12 +113,12 @@ region_df %>%
   select(chrom, start, end)
 }
 
-chrCov <- function(f.name, chr, start, end, n_reawd.sig.trd) {
+chrCov <- function(f_name, chr, start, end, n_read) {
 
   chr <- unique(chr)
 
   sig <-
-    read_cov(f.name, chr, start, end, n_read)
+    read_cov(f_name, chr, start, end, n_read)
 
   sapply(1:length(start), function(i_start) {
     paste0(sig[(start[i_start]):end[i_start]], collapse = ",")
@@ -136,26 +136,26 @@ regionMetric <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     "NA,NA,NA"
   } else {
-    wd.sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
-    wd.sig.tr <- threshold(wd.sig, by.level = TRUE,
+    wd_sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
+    wd_sig_tr <- threshold(wd_sig, by.level = TRUE,
         policy = "universal", return.thresh = TRUE)
-    paste(spectorRa(wd.sig.tr), spectorMed(wd.sig.tr),
-      spectorRms(wd.sig.tr), sep = ",")
+    paste(spectorRa(wd_sig_tr), spectorMed(wd_sig_tr),
+      spectorRms(wd_sig_tr), sep = ",")
 
   }
 }
 
 
-spectorRa <- function(wd.thr) {
-  mean(abs(wd.thr), na.rm = T)
+spectorRa <- function(wd_thr) {
+  mean(abs(wd_thr), na.rm = T)
 }
 
-spectorRms <- function(wd.thr) {
-  sqrt(mean(wd.thr^2))
+spectorRms <- function(wd_thr) {
+  sqrt(mean(wd_thr^2))
 }
 
-spectorMed <- function(wd.thr) {
-  median(abs(wd.thr), na.rm = T)
+spectorMed <- function(wd_thr) {
+  median(abs(wd_thr), na.rm = T)
 }
 
 sigNorm <- function(signal) {
