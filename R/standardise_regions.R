@@ -33,15 +33,26 @@ read_bed <- function(bed_file,
 
 # Reading bed files
 # ----------------------------------------------------------------
-
-  bed_region <- read.table(
-      bed_file,
-      as.is = TRUE,
-      stringsAsFactors = F,
-      sep = "\t") %>%
-    as_data_frame() %>%
-    setNames(c_name[1:ncol(tmp_row1)]) %>%
-    select(chrom, start, end)
+  if (header) {
+    bed_region <- read.table(
+        bed_file,
+        as.is = TRUE,
+        stringsAsFactors = F,
+        sep = "\t",
+        skip = 1) %>%
+      as_data_frame() %>%
+      setNames(c_name[1:ncol(tmp_row1)]) %>%
+      select(chrom, start, end)
+  } else {
+    bed_region <- read.table(
+        bed_file,
+        as.is = TRUE,
+        stringsAsFactors = F,
+        sep = "\t") %>%
+      as_data_frame() %>%
+      setNames(c_name[1:ncol(tmp_row1)]) %>%
+      select(chrom, start, end)
+  }
 
 # Shift the data if ucsc convention
 # ----------------------------------------------------------------
