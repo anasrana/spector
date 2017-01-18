@@ -9,7 +9,7 @@
 #'    power of 2 that fits in the smallest region
 #'
 #' @return Metric for all specified regions
-#' @importFrom dplyr mutate group_by summarise bind_rows
+#' @importFrom dplyr mutate group_by summarise bind_rows filter
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
@@ -69,7 +69,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
   region_df <-
   mclapply(chr_idx, function(i_chr) {
     res_df <- region_df %>%
-      dplyr::filter(chrom == i_chr) %>%
+      filter(chrom == i_chr) %>%
       mutate(
         id = paste0(chrom, ":", start, "-", end),
         cov = chrCov(f_bam, chrom, start, end, n_read)) %>%

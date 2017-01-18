@@ -88,7 +88,8 @@ read_bed <- function(bed_file,
 #'
 #' @examples
 #'
-#' @importFrom dplyr as_data_frame select mutate filter
+#' @importFrom dplyr select mutate filter
+#' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #' @importFrom tidyr separate_rows separate
@@ -150,7 +151,8 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
 #'
 #' @examples
 #'
-#' @importFrom dplyr as_data_frame select mutate
+#' @importFrom dplyr select mutate
+#' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
 #'

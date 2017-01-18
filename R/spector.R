@@ -98,19 +98,28 @@ unpackList <- function(object) {
   }
 }
 
+#' saveSummary
+#'
+#' @param res
+#' @param var_s
+#' @param out
+#'
+#' @importFrom dplyr group_by summarise
+#'
+#'
 saveSummary <- function(res, var_s, out) {
 
   if (var_s == "rms") {
     stat_spector <- res %>%
-      dplyr::group_by(id_bam) %>%
-      dplyr::summarise(mean_rm = mean(1 / rms, na.rm = TRUE),
+      group_by(id_bam) %>%
+      summarise(mean_rm = mean(1 / rms, na.rm = TRUE),
                        median_rm = median(1 / rms, na.rm = TRUE),
                        sd_rm = sd(1 / rms, na.rm = TRUE),
                        iqr_rm = IQR(1 / rms, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
-      dplyr::group_by(id) %>%
-      dplyr::summarise(mean_rm = mean(1 / mean, na.rm = TRUE),
+      group_by(id) %>%
+      summarise(mean_rm = mean(1 / mean, na.rm = TRUE),
                        median_rm = median(1 / mean, na.rm = TRUE),
                        sd_rm = sd(1 / mean, na.rm = TRUE),
                        iqr_rm = IQR(1 / mean, na.rm = TRUE))
@@ -126,13 +135,21 @@ saveMerged <- function(res_v, out) {
     write.csv(res_v, file = out_path, row.names = FALSE)
 }
 
+#' Title
+#'
+#' @param id_path
+#' @param f_head
+#'
+#' @importFrom tibble as_data_frame
+#'
 readIdAssign <- function(id_path, f_head = FALSE) {
   list.name <- c("fs_bam", 'id_bam', 'gr_bam', 'baseline', 's_prep')
   for (i in 1:length(list.name)) {
     assign(list.name[i], NULL)
   }
-  id_df <- dplyr::tbl_df(read.csv(id_path, sep = ",", header = f_head,
-    stringsAsFactors = FALSE, strip.white = TRUE))
+  id_df <- read.csv(id_path, sep = ",", header = f_head,
+    stringsAsFactors = FALSE, strip.white = TRUE) %>%
+    as_data_frame()
   colnames(id_df) <- list.name[1:ncol(id_df)]
   return(id_df)
 }
