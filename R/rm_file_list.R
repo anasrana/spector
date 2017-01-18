@@ -39,7 +39,7 @@ spectorFile <- function(f_bam,
 #' @param grp_v
 #' @param s_v
 #' @param out_F
-#' @param n_core
+#' @param file_cores
 #' @param save_out
 #'
 #' @return
@@ -47,14 +47,14 @@ spectorFile <- function(f_bam,
 #' @importFrom parallel mclapply
 #' @importFrom dplyr bind_rows
 spectorList <- function(fs_bam, id_v, grp_v, s_v, out_F,
-                          n_core = 1, save_out, ...) {
+                          file_cores = 1, save_out, ...) {
 # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
   spector_l <- mclapply(X = f_idx, function(idx) {
     message(paste("Running file:", fs_bam[idx]))
       spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx], srm_bam = grp_v[idx],
         s_prep = NULL, out_F = out_F, save_out = save_out, ...)},
-            mc.cores = n_core)
+            mc.cores = file_cores)
   srm_df <- bind_rows(spector_l)
   return(srm_df)
 }

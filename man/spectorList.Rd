@@ -4,7 +4,7 @@
 \alias{spectorList}
 \title{spectorList}
 \usage{
-spectorList(fs_bam, id_v, grp_v, s_v, out_F, n_core = 1, save_out, ...)
+spectorList(fs_bam, id_v, grp_v, s_v, out_F, file_cores = 1, save_out, ...)
 }
 \arguments{
 \item{save_out}{}

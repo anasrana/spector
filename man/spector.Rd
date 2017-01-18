@@ -5,7 +5,7 @@
 \title{Run spector for a specified path or specified files}
 \usage{
 spector(f_bam = NULL, file_type = "list", f_delim = "\\t",
-  f_head = FALSE, out_F = NULL, n_core = 1, smr_var = "rms",
+  f_head = FALSE, out_F = NULL, file_cores = 1, smr_var = "rms",
   save_out = FALSE, ...)
 }
 \arguments{
@@ -21,7 +21,7 @@ only used when \code{file_type = "list"}}
 
 \item{out_F}{path to output folder}
 
-\item{n_core}{number of cores that should be used}
+\item{file_cores}{number of cores that should be used}
 }
 \value{
 Output files saved in folder \code{out_F}, also saves a reference

@@ -11,7 +11,7 @@
 #' @param f_head binary does the \code{f_bam} file have a header,
 #'               only used when \code{file_type = "list"}
 #' @param out_F path to output folder
-#' @param n_core number of cores that should be used
+#' @param file_cores number of cores that should be used
 #' @inheritParams spector_metric
 #'
 #' @return Output files saved in folder \code{out_F}, also saves a reference
@@ -25,7 +25,7 @@ spector <- function(f_bam = NULL,
                     f_delim = "\t",
                     f_head = FALSE,
                     out_F = NULL,
-                    n_core = 1,
+                    file_cores = 1,
                     smr_var = "rms",
                     save_out = FALSE,
                     ...) {
@@ -55,7 +55,7 @@ spector <- function(f_bam = NULL,
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
     srm_df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
-                           out_F = out_F, n_core = n_core, save_out = save_out,
+                           out_F = out_F, file_cores = file_cores, save_out = save_out,
                            ...)
 
   } else if (file.exists(f_bam)) {
@@ -64,7 +64,7 @@ spector <- function(f_bam = NULL,
       fs_bam <- readIdAssign(id_path = f_bam, f_head = f_head)
       unpackList(fs_bam)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
-                            out_F = out_F, n_core = n_core,
+                            out_F = out_F, file_cores = file_cores,
                             save_out = save_out, ...)
 
 
