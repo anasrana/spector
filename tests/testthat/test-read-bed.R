@@ -1,4 +1,4 @@
-context(".bed")
+context("Reading bed file")
 
 bed_df <- readr::read_csv("bed_results.bed", col_types = "cdi")
 
