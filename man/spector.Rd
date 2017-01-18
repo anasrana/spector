@@ -4,19 +4,19 @@
 \alias{spector}
 \title{Run spector for a specified path or specified files}
 \usage{
-spector(bam_f = NULL, file_type = "list", f_delim = "\\t",
+spector(f_bam = NULL, file_type = "list", f_delim = "\\t",
   f_head = FALSE, out_F = NULL, n_core = 1, smr_var = "rms",
   save_out = FALSE, ...)
 }
 \arguments{
-\item{bam_f}{path to bam file, txt file with paths or folder}
+\item{f_bam}{path to bam file, txt file with paths or folder}
 
-\item{file_type}{type of file passed to bam_f, options are \code{"list"},
+\item{file_type}{type of file passed to f_bam, options are \code{"list"},
 \code{"bam"}, and \code{"dir"}}
 
 \item{f_delim}{file delimter, only used when \code{file_type = "list"}}
 
-\item{f_head}{binary does the \code{bam_f} file have a header,
+\item{f_head}{binary does the \code{f_bam} file have a header,
 only used when \code{file_type = "list"}}
 
 \item{out_F}{path to output folder}

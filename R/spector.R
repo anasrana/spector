@@ -4,11 +4,11 @@
 #' containing a list with the first column being a file paths and the
 #' second column an id and the final column a groupID
 #'
-#' @param bam_f path to bam file, txt file with paths or folder
-#' @param file_type type of file passed to bam_f, options are \code{"list"},
+#' @param f_bam path to bam file, txt file with paths or folder
+#' @param file_type type of file passed to f_bam, options are \code{"list"},
 #'                  \code{"bam"}, and \code{"dir"}
 #' @param f_delim file delimter, only used when \code{file_type = "list"}
-#' @param f_head binary does the \code{bam_f} file have a header,
+#' @param f_head binary does the \code{f_bam} file have a header,
 #'               only used when \code{file_type = "list"}
 #' @param out_F path to output folder
 #' @param n_core number of cores that should be used
@@ -20,7 +20,7 @@
 #'
 #' @importFrom stringr str_c
 #'
-spector <- function(bam_f = NULL,
+spector <- function(f_bam = NULL,
                     file_type = "list",
                     f_delim = "\t",
                     f_head = FALSE,
@@ -30,9 +30,9 @@ spector <- function(bam_f = NULL,
                     save_out = FALSE,
                     ...) {
 
-  ## Check if have read access to bam_f
-  if (file.access(bam_f, mode = 4) == -1) {
-    stop(str_c("'", bam_f,
+  ## Check if have read access to f_bam
+  if (file.access(f_bam, mode = 4) == -1) {
+    stop(str_c("'", f_bam,
       "'\nYou do not have acces to the file or the file does not exist"))
   }
 
@@ -47,33 +47,33 @@ spector <- function(bam_f = NULL,
   }
 
 #
-# Computing metric after checking what bam_f is
+# Computing metric after checking what f_bam is
 # --------------------------------------------------------------------------
 
-  if (dir.exists(bam_f)) {
-    fs_bam <- paste(bam_f, '/', list.files(path = bam_f, pattern = "*.bam$"),
+  if (dir.exists(f_bam)) {
+    fs_bam <- paste(f_bam, '/', list.files(path = f_bam, pattern = "*.bam$"),
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
     srm_df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
                            out_F = out_F, n_core = n_core, save_out = save_out,
                            ...)
 
-  } else if (file.exists(bam_f)) {
+  } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
-      fs_bam <- readIdAssign(id_path = bam_f, f_head = f_head)
+      fs_bam <- readIdAssign(id_path = f_bam, f_head = f_head)
       unpackList(fs_bam)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
                             out_F = out_F, n_core = n_core,
                             save_out = save_out, ...)
 
 
-    } else if (grep("*.bam$", x = bam_f) > 0 | file_type == "bam") {
+    } else if (grep("*.bam$", x = f_bam) > 0 | file_type == "bam") {
 
-      srm_df <- spectorFile(bam_f, out_F = out_F, save_out = save_out, ...)
+      srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out, ...)
 
-    } else if(!file.exists(bam_f)) {
-      stop("bam_f: file / folder not found
+    } else if(!file.exists(f_bam)) {
+      stop("f_bam: file / folder not found
             Make sure you provide the correct path")
     }
   }
