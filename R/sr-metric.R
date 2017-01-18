@@ -24,13 +24,15 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
 #
 # Load data frame from bed file
 # --------------------------------------------------------------------------
-  if (region_giab) {
+  if (region_giab & is.null(f_bed)) {
     region_df <-
       giab_10k %>%
         mutate(reg_length = end - start) %>%
         bedRegionSplit(region_size)
 
-  } else if (!region_giab) {
+  } else if (!region_giab & is.null(f_bed)) {
+    stop(str_c("Selcted custom region, but no bed file provided"))
+  } else if (!is.null(f_bed)) {
     region_df <- read_bed(bed_file = f_bed, header = bed_header,
       bed_region_size = region_size)
   }
