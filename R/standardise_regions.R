@@ -120,6 +120,9 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
   } else {
     bed_region_size <- 2^(floor(log2(min(bed_region_size))))
     message(paste0("Regions standardised to length ", bed_region_size))
+    message(paste0(sum(file_region_v < bed_region_size),
+      " region(s) discarded because the length is smaller than ",
+      bed_region_size))
   }
 
   if (max(file_region_v) < bed_region_size) {
