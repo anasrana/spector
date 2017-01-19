@@ -20,7 +20,7 @@
 #'
 #' @importFrom stringr str_c
 #'
-spector <- function(f_bam = NULL,
+spector_qc <- function(f_bam = NULL,
                     file_type = "list",
                     f_delim = "\t",
                     f_head = FALSE,
