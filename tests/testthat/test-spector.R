@@ -3,14 +3,14 @@ context("QC")
 results_df <- readr::read_csv("result_basic-bed.csv", col_types = "cdidc")
 
 test_that("spector complete run with giab", {
-  results_test <- spector(f_bam = ".", region_size = 2^14)
+  results_test <- spector_qc(f_bam = ".", region_size = 2^14)
 
   expect_that(nrow(results_test), equals(156))
   expect_that(ncol(results_test), equals(5))
 })
 
 test_that("spector verify results of complete run with custom bed file", {
-  results_test <- spector(f_bam = ".", f_bed = "basic.bed")
+  results_test <- spector_qc(f_bam = ".", f_bed = "basic.bed")
 
   expect_equal(results_test, results_df)
 })
