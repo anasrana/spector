@@ -1,21 +1,63 @@
-#' Run spector for a specified path or specified files
+#' Compute QC (spector metric) for bam files.
 #'
-#' Takes in a path to a folder of .bam files, a single .bam file or a file
-#' containing a list with the first column being a file paths and the
-#' second column an id and the final column a groupID
+#' Wavelet based technique to compute a quality metric for regions
+#' across the genome.
 #'
-#' @param f_bam path to bam file, txt file with paths or folder
-#' @param file_type type of file passed to f_bam, options are \code{"list"},
-#'                  \code{"bam"}, and \code{"dir"}
-#' @param f_delim file delimter, only used when \code{file_type = "list"}
-#' @param f_head binary does the \code{f_bam} file have a header,
-#'               only used when \code{file_type = "list"}
-#' @param out_F path to output folder
-#' @param file_cores number of cores that should be used
-#' @inheritParams spector_metric
+#' This is the main function to use for QC in the \pkg{spector} package. It will
+#' compute a quality control metric for specific regions across the genome.
+#' The default regions, supplied in the package, are based
+#' on the genome in a bottle project
+#' (\href{http://jimb.stanford.edu/giab/}{giab}) reliable regions, calculated
+#' using \code{ReliableGenome} (\href{http://github.com/popitsch/wtchg-rg}{RG}).
+#' It is also possible to supply custom regions as a bed file or a
+#' \code{data.frame} object.
 #'
-#' @return Output files saved in folder \code{out_F}, also saves a reference
-#'          file with file names
+#' It is important to supply full paths to \code{f_bam}, and \code{f_bed}.
+#' Though the path can be relative to the current working directory, which can
+#' be set with \code{\link[base]{setwd}()}. This also applies to the first
+#' column of a parameter file that can be supplied to \code{f_bam}.
+#'
+#' @param f_bam a string with path to \code{bam} file(s), it can link to
+#'        \code{*.bam} file (the full relative path is required), a folder with
+#'        \code{*.bam} files, or a file with with structure specified later.
+#' @param file_type type of file passed to f_bam (Optional). This is to ensure
+#'        the automated checks pick up the correct format. The possible options
+#'        are \code{"list"}, \code{"bam"}, and \code{"dir"}.
+#' @param f_delim the delimiter character used in \code{f_bam} file if not
+#'        \code{bam} or folder (Optional). It is only used when
+#'        \code{file_type = "list"}, with the default \code{f_delim = "\t"}.
+#' @param out_F (Optional) Folder path to save output. If omitted results
+#'        will be returned, but not saved.
+#' @param file_cores integer. Optional number indicating if the QC should be
+#'        computed in parallel across all input files.
+#' @param smr_var deprecated. Variable to use to compute summary.
+#' @param save_out logical. Indicating if output from \code{spector_qc()}
+#'        should be saved.
+#' @param ... variables passed on to downstream function, please see
+#'        \code{\link{spector_metric}()} for further details on the parameters.
+#'
+#' @return Output is a \code{tbl_df} object with a metric value for each region.
+#'         Optionally the output can also be saved, if \code{out_F} is provided.
+#'
+#' @examples
+#' \dontrun{
+#' # Compute QC on sampl1.bam with default options
+#' spector_qc(f_bam = "sample1.bam")
+#'}
+#'
+#' # Compute QC on sample1.bam with custom region size
+#' # Note. The full command is bed_region_size, but because of partial matching
+#' # we can use this partial command.
+#' spector_qc(f_bam = "tests/testthat/sample1.bam", region_size = 2^14)
+#'
+#' # Compute QC on sample1.bam with custom bed file
+#' spector_qc(f_bam = "tests/testthat/sample1.bam",
+#'  f_bed = "tests/testthat/basic.bed")
+#'
+#' # Compute QC and save output results
+#' spector_qc(f_bam = "tests/testthat/sample1.bam",
+#'  f_bed = "tests/testthat/basic.bed", out_F = "~/", save_out = T)
+#'
 #' @export
 #'
 #' @importFrom stringr str_c
