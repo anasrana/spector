@@ -63,7 +63,7 @@
 #' @importFrom stringr str_c
 #'
 spector_qc <- function(f_bam = NULL,
-                    file_type = "list",
+                    file_type = "bam",
                     f_delim = "\t",
                     out_F = NULL,
                     file_cores = 1,
