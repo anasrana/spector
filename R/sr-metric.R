@@ -1,14 +1,20 @@
-#' Calculate SpECtOR metric for one bam file
+#' Calculate spector metric for a bam file.
 #'
-#' @param bed_header binary, \code{TRUE} if bed file has a header
-#' @param f_bam
-#' @param f_bed file path for bed file if \code{region_giab = FALSE}
-#' @param region_giab logial indicating if giab regions use or not, the default
-#'                    TRUE
-#' @param region_size choose size of the regions defualt NULL chooses the max
-#'    power of 2 that fits in the smallest region
+#' @param f_bam path to bam file, relative to current working directory
+#'        (see \code{\link[base]{setwd}()} for more details).
+#' @param region_size integer. Choose size of regions to calculate metric value.
+#'        The default \code{ = NULL} means \code{region_size = } maximum power
+#'        of 2 that fits in the smallest region.
+#' @param f_bed file path for bed file to override default giab.
+#' @param bed_header logical. \code{TRUE} if bed file has a header, the default
+#'        value is \code{FALSE}.
+#' @param region_giab logical. Indicates whether or not giab regions are used,
+#'        defaults to \code{TRUE}.
+#' @param chr_cores integer. Optional number indicating if the QC should be
+#'        computed in parallel across chromosomes.
 #'
 #' @return Metric for all specified regions
+#'
 #' @importFrom dplyr mutate group_by summarise bind_rows filter
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%

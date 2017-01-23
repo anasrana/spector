@@ -64,8 +64,6 @@ spector_qc(f_bam = "sample1.bam")
 }
 
 # Compute QC on sample1.bam with custom region size
-# Note. The full command is bed_region_size, but because of partial matching
-# we can use this partial command.
 spector_qc(f_bam = "tests/testthat/sample1.bam", region_size = 2^14)
 
 # Compute QC on sample1.bam with custom bed file

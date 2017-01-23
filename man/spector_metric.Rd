@@ -2,26 +2,34 @@
 % Please edit documentation in R/sr-metric.R
 \name{spector_metric}
 \alias{spector_metric}
-\title{Calculate SpECtOR metric for one bam file}
+\title{Calculate spector metric for a bam file.}
 \usage{
 spector_metric(f_bam = NULL, region_size = NULL, f_bed = NULL,
   bed_header = FALSE, region_giab = TRUE, chr_cores = 1)
 }
 \arguments{
-\item{region_size}{choose size of the regions defualt NULL chooses the max
-power of 2 that fits in the smallest region}
+\item{f_bam}{path to bam file, relative to current working directory
+(see \code{\link[base]{setwd}()} for more details).}
 
-\item{f_bed}{file path for bed file if \code{region_giab = FALSE}}
+\item{region_size}{integer. Choose size of regions to calculate metric value.
+The default \code{ = NULL} means \code{region_size = } maximum power
+of 2 that fits in the smallest region.}
 
-\item{bed_header}{binary, \code{TRUE} if bed file has a header}
+\item{f_bed}{file path for bed file to override default giab.}
 
-\item{region_giab}{logial indicating if giab regions use or not, the default
-TRUE}
+\item{bed_header}{logical. \code{TRUE} if bed file has a header, the default
+value is \code{FALSE}.}
+
+\item{region_giab}{logical. Indicates whether or not giab regions are used,
+defaults to \code{TRUE}.}
+
+\item{chr_cores}{integer. Optional number indicating if the QC should be
+computed in parallel across chromosomes.}
 }
 \value{
 Metric for all specified regions
 }
 \description{
-Calculate SpECtOR metric for one bam file
+Calculate spector metric for a bam file.
 }
 
