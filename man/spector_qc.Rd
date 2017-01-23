@@ -4,7 +4,7 @@
 \alias{spector_qc}
 \title{Compute QC (spector metric) for bam files.}
 \usage{
-spector_qc(f_bam = NULL, file_type = "list", f_delim = "\\t",
+spector_qc(f_bam = NULL, file_type = "bam", f_delim = "\\t",
   out_F = NULL, file_cores = 1, smr_var = "rms", save_out = FALSE, ...)
 }
 \arguments{
