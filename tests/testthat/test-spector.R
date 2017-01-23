@@ -15,6 +15,13 @@ test_that("spector verify results of complete run with custom bed file", {
   expect_equal(results_test, results_df)
 })
 
+test_that("spector verify results when using a parameter file", {
+  results_test <- spector_qc(f_bam = "sample_id.txt", f_bed = "basic.bed",
+    file_type = "list")
+
+  expect_equal(results_test[, 1:5], results_df)
+})
+
 test_that("chrIntersect check if intersect works in mixed cases", {
   bed_df <- read_bed("basic.bed")
 

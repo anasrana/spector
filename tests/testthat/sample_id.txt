@@ -1,0 +1,3 @@
+#file.path	sample.id	sample.type
+sample1.bam	sample1	test1|basic
+sample2.bam	sample2	test2|mixed
