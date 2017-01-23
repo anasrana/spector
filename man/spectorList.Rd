@@ -2,9 +2,9 @@
 % Please edit documentation in R/rm_file_list.R
 \name{spectorList}
 \alias{spectorList}
-\title{spectorList}
+\title{Run spector for a list of bam file.}
 \usage{
-spectorList(fs_bam, id_v, grp_v, s_v, out_F, file_cores = 1, save_out, ...)
+spectorList(fs_bam, id_v, s_v, out_F, file_cores = 1, save_out, ...)
 }
 \arguments{
 \item{save_out}{}
@@ -13,6 +13,6 @@ spectorList(fs_bam, id_v, grp_v, s_v, out_F, file_cores = 1, save_out, ...)
 
 }
 \description{
-spectorList
+Run spector for a list of bam file.
 }
 

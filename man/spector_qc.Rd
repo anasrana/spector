@@ -5,8 +5,7 @@
 \title{Compute QC (spector metric) for bam files.}
 \usage{
 spector_qc(f_bam = NULL, file_type = "list", f_delim = "\\t",
-  f_head = FALSE, out_F = NULL, file_cores = 1, smr_var = "rms",
-  save_out = FALSE, ...)
+  out_F = NULL, file_cores = 1, smr_var = "rms", save_out = FALSE, ...)
 }
 \arguments{
 \item{f_bam}{a string with path to \code{bam} file(s), it can link to

@@ -95,7 +95,7 @@ spector_qc <- function(f_bam = NULL,
     fs_bam <- paste(f_bam, '/', list.files(path = f_bam, pattern = "*.bam$"),
       sep = "")
     id_bam <- gsub(".bam","", x = basename(fs_bam))
-    srm_df <- spectorList(fs_bam, id_v = id_bam, grp_v = NULL, s_v = NULL,
+    srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
                            out_F = out_F, file_cores = file_cores, save_out = save_out,
                            ...)
 

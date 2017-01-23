@@ -1,6 +1,5 @@
 spectorFile <- function(f_bam,
                           id_bam = NULL,
-                          srm_bam = NULL,
                           s_prep = NULL,
                           out_F = NULL,
                           save_out,
@@ -16,7 +15,6 @@ spectorFile <- function(f_bam,
   }
 
   srm_df$id_bam <- id_bam
-  srm_df$grp <- srm_bam
   srm_df$prep <- s_prep
 
 
@@ -32,7 +30,7 @@ spectorFile <- function(f_bam,
   return(srm_df)
 }
 
-#' spectorList
+#' Run spector for a list of bam file.
 #'
 #' @param fs_bam
 #' @param id_v
@@ -46,16 +44,21 @@ spectorFile <- function(f_bam,
 #'
 #' @importFrom parallel mclapply
 #' @importFrom dplyr bind_rows
-spectorList <- function(fs_bam, id_v, grp_v, s_v, out_F,
+#' @importFrom stringr str_c
+#'
+spectorList <- function(fs_bam, id_v, s_v, out_F,
                           file_cores = 1, save_out, ...) {
-# function to be run inside of mclappy
+  # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
-  spector_l <- mclapply(X = f_idx, function(idx) {
-    message(paste("Running file:", fs_bam[idx]))
-      spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx], srm_bam = grp_v[idx],
-        s_prep = NULL, out_F = out_F, save_out = save_out, ...)},
-            mc.cores = file_cores)
-  srm_df <- bind_rows(spector_l)
+
+  srm_df <-
+  mclapply(X = f_idx, function(idx) {
+    message(str_c("Running file: ", fs_bam[idx]))
+      spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx],
+        s_prep = s_v[idx], out_F = out_F, save_out = save_out, ...)},
+    mc.cores = file_cores) %>%
+  bind_rows()
+
   return(srm_df)
 }
 
