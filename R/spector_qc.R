@@ -102,8 +102,8 @@ spector_qc <- function(f_bam = NULL,
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
-      fs_bam <- readIdFile(id_path = f_bam)
-      unpackList(fs_bam)
+      bam_pars <- readIdFile(id_path = f_bam)
+      unpackList(bam_pars)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                             out_F = out_F, file_cores = file_cores,
                             save_out = save_out, ...)
