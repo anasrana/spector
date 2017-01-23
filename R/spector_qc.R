@@ -102,9 +102,9 @@ spector_qc <- function(f_bam = NULL,
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
-      fs_bam <- readIdAssign(id_path = f_bam)
+      fs_bam <- readIdFile(id_path = f_bam)
       unpackList(fs_bam)
-      srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
+      srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                             out_F = out_F, file_cores = file_cores,
                             save_out = save_out, ...)
 
@@ -176,22 +176,24 @@ saveMerged <- function(res_v, out) {
     write.csv(res_v, file = out_path, row.names = FALSE)
 }
 
-#' Title
+#' Read spector id file.
 #'
-#' @param id_path
-#' @param f_head
+#' @param id_path path to the id file
 #'
 #' @importFrom tibble as_data_frame
+#' @importFrom utils read.table
 #'
-readIdAssign <- function(id_path) {
-  list.name <- c("fs_bam", 'id_bam', 'gr_bam', 'baseline', 's_prep')
-  for (i in 1:length(list.name)) {
-    assign(list.name[i], NULL)
-  }
-  id_df <- read.csv(id_path, sep = ",", stringsAsFactors = FALSE,
-    strip.white = TRUE) %>%
-    as_data_frame()
-  colnames(id_df) <- list.name[1:ncol(id_df)]
+readIdFile <- function(id_path) {
+  list_names <- c("fs_bam", "id_bam", "sample_type")
+
+  no_cols <- max(count.fields(id_path, sep = "\t"))
+
+  id_df <-   read.table(id_path, strip.white = TRUE, stringsAsFactors = FALSE,
+    col.names = c(list_names, rep(NA, no_cols - length(list_names))),
+    colClasses = c(rep("character", length(list_names)),
+      rep("NULL", no_cols - length(list_names)))) %>%
+    tibble::as_data_frame()
+
   return(id_df)
 }
 
