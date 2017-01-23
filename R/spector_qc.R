@@ -65,7 +65,6 @@
 spector_qc <- function(f_bam = NULL,
                     file_type = "list",
                     f_delim = "\t",
-                    f_head = FALSE,
                     out_F = NULL,
                     file_cores = 1,
                     smr_var = "rms",
@@ -103,7 +102,7 @@ spector_qc <- function(f_bam = NULL,
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
-      fs_bam <- readIdAssign(id_path = f_bam, f_head = f_head)
+      fs_bam <- readIdAssign(id_path = f_bam)
       unpackList(fs_bam)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, grp_v = gr_bam,
                             out_F = out_F, file_cores = file_cores,
@@ -184,13 +183,13 @@ saveMerged <- function(res_v, out) {
 #'
 #' @importFrom tibble as_data_frame
 #'
-readIdAssign <- function(id_path, f_head = FALSE) {
+readIdAssign <- function(id_path) {
   list.name <- c("fs_bam", 'id_bam', 'gr_bam', 'baseline', 's_prep')
   for (i in 1:length(list.name)) {
     assign(list.name[i], NULL)
   }
-  id_df <- read.csv(id_path, sep = ",", header = f_head,
-    stringsAsFactors = FALSE, strip.white = TRUE) %>%
+  id_df <- read.csv(id_path, sep = ",", stringsAsFactors = FALSE,
+    strip.white = TRUE) %>%
     as_data_frame()
   colnames(id_df) <- list.name[1:ncol(id_df)]
   return(id_df)
