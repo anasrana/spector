@@ -1,9 +1,13 @@
 context("Reading bed file")
 
-bed_df <- readr::read_csv("bed_results.bed", col_types = "cdi")
+res_path <- spector_sample("bed_results.bed")
+basic_path <- spector_sample("basic.bed")
+header_path <- spector_sample("with_header.bed")
+
+bed_df <- readr::read_csv(res_path, col_types = "cdi")
 
 test_that("read_bed split size, correct region split", {
-  bed_test <- read_bed("basic.bed")
+  bed_test <- read_bed(basic_path)
 
   expect_that(nrow(bed_test), equals(21))
   expect_that(bed_test$chrom, equals(bed_df$chrom))
@@ -13,14 +17,14 @@ test_that("read_bed split size, correct region split", {
 })
 
 test_that("read_bed including header", {
-  bed_test <- read_bed("with_header.bed", header = TRUE)
+  bed_test <- read_bed(header_path, header = TRUE)
 
   expect_that(nrow(bed_test), equals(21))
   expect_that(bed_test, equals(bed_df))
 })
 
 test_that("read_bed ucsc coordinate shift", {
-  bed_test <- read_bed("with_header.bed", header = TRUE, ucsc_coord = TRUE)
+  bed_test <- read_bed(header_path, header = TRUE, ucsc_coord = TRUE)
 
   expect_that(nrow(bed_test), equals(21))
   expect_that(bed_test$start[1], equals(12764911))
@@ -31,7 +35,7 @@ test_that("read_bed ucsc coordinate shift", {
 })
 
 test_that("read_bed custom regions_size", {
-  bed_test <- read_bed("with_header.bed", header = TRUE, ucsc_coord = TRUE,
+  bed_test <- read_bed(header_path, header = TRUE, ucsc_coord = TRUE,
     bed_region_size = 2^10)
   expect_that(nrow(bed_test), equals(236))
   expect_that(ncol(bed_test), equals(3))
