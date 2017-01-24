@@ -6,7 +6,7 @@
 #' @export
 #'
 #' @examples
-#' spector_samples("sample1.bam")
-spector_samples <- function(file) {
+#' spector_sample("sample1.bam")
+spector_sample <- function(file) {
   system.file("extdata", file, package = "spector", mustWork = TRUE)
 }
