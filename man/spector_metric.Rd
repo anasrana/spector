@@ -63,12 +63,13 @@ Object (\code{tbl_df}) of metric for all specified regions.
 Wavelet based technique to compute a quality metric for regions
 across the genome.
 
-This is the main function that calculates a metric value for each region in
-the selected bed file.
+\code{spector_metric} the main function that calculates a metric value for
+each region in the selected bed file.
 }
 \details{
-This is the main function to use for QC in the \pkg{spector} package. It will
-compute a quality control metric for specific regions across the genome.
+The \code{spector_qc} function is the main function to use for QC in the
+\pkg{spector} package. It will compute a quality control metric for specific
+regions across the genome.
 The default regions, supplied in the package, are based
 on the genome in a bottle project
 (\href{http://jimb.stanford.edu/giab/}{giab}) reliable regions, calculated
@@ -81,9 +82,9 @@ Though the path can be relative to the current working directory, which can
 be set with \code{\link[base]{setwd}()}. This also applies to the first
 column of a parameter file that can be supplied to \code{f_bam}.
 
-This function performs the actual calculations, but does not include any
-checks or verifications so should ideally not be called directly. It should
-be accessed via \code{\link{spector_qc}}.
+The \code{spector_metric} function performs the actual calculations, but does
+not include any checks or verifications so should ideally not be called
+directly. It should be accessed via \code{\link{spector_qc}}.
 }
 \examples{
 \dontrun{
@@ -91,16 +92,17 @@ be accessed via \code{\link{spector_qc}}.
 spector_qc(f_bam = "sample1.bam")
 }
 
+s1_path <- spector_sample("sample1.bam")
+basic_path <- spector_sample("basic.bed")
+
 # Compute QC on sample1.bam with custom region size
-spector_qc(f_bam = "tests/testthat/sample1.bam", region_size = 2^14)
+spector_qc(f_bam = s1_path, region_size = 2^14)
 
 # Compute QC on sample1.bam with custom bed file
-spector_qc(f_bam = "tests/testthat/sample1.bam",
- f_bed = "tests/testthat/basic.bed")
+spector_qc(f_bam = s1_path, f_bed = basic_path)
 
 # Compute QC and save output results
-spector_qc(f_bam = "tests/testthat/sample1.bam",
- f_bed = "tests/testthat/basic.bed", out_F = "~/", save_out = T)
+spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/", save_out = T)
 
 }
 

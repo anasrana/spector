@@ -1,11 +1,11 @@
 #' Calculate spector metric for a bam file.
 #'
-#' This is the main function that calculates a metric value for each region in
-#' the selected bed file.
+#' \code{spector_metric} the main function that calculates a metric value for
+#' each region in the selected bed file.
 #'
-#' This function performs the actual calculations, but does not include any
-#' checks or verifications so should ideally not be called directly. It should
-#' be accessed via \code{\link{spector_qc}}.
+#' The \code{spector_metric} function performs the actual calculations, but does
+#' not include any checks or verifications so should ideally not be called
+#' directly. It should be accessed via \code{\link{spector_qc}}.
 #'
 #' @param f_bam path to bam file, relative to current working directory
 #'        (see \code{\link[base]{setwd}()} for more details).
