@@ -24,12 +24,18 @@ value is \code{FALSE}.}
 defaults to \code{TRUE}.}
 
 \item{chr_cores}{integer. Optional number indicating if the QC should be
-computed in parallel across chromosomes.}
+computed in parallel across chromosomes. Default value is \code{1}.}
 }
 \value{
-Metric for all specified regions
+Object (\code{tbl_df}) of metric for all specified regions.
 }
 \description{
-Calculate spector metric for a bam file.
+This is the main function that calculates a metric value for each region in
+the selected bed file.
+}
+\details{
+This function performs the actual calculations, but does not include any
+checks or verifications so should ideally not be called directly. It should
+be accessed via \code{\link{spector_qc}}.
 }
 
