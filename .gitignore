@@ -4,3 +4,4 @@
 vignettes/*.R
 .DS_Store
 /.idea*
+inst/doc

@@ -1,0 +1,72 @@
+--- 
+title: "Introduction to `spector` (SEquence COverage Roughness)"
+author: "Anas A Rana"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    citation_package: natbib
+bibliography: /Users/anas/Dropbox/postdoc/bibs/full.bib
+vignette: >
+  %\VignetteIndexEntry{Introduction to spector}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+
+# Lodaing packages
+library(tidyverse)
+
+library(stringr)
+library(spector)
+theme_anas <- theme_set(theme_bw())
+theme_anas <- theme_update(
+  axis.text.x = element_text(size = rel(0.9)),
+  axis.text.y = element_text(size = rel(0.9)),
+  axis.title.x = element_text(size = rel(1)),
+  axis.title.y = element_text(angle = 90, size = rel(1)),
+  axis.ticks = element_line(colour = "grey90"),
+  legend.key = element_rect(colour = "grey99", size = 0.1),
+  legend.background = element_blank(),
+  plot.background = element_blank(),
+  panel.background = element_blank(),
+  panel.border = element_rect(fill = NA, colour = "grey50"),
+  panel.grid.major = element_line(colour = "grey90", size = 0.2),
+  panel.grid.minor = element_line(colour = "grey98", size = 0.5),
+  strip.text = element_text(colour="#DBDBDB"),
+  strip.background = element_rect(colour="black", fill='black', size = 0.2)
+  )
+```
+
+# Background
+
+Recent advances in high-throughput sequencing of cancer genomes has elucidated the landscape of genetic alterations in many tumor types, thus expanding molecular classification of cancer and facilitating routine whole genome sequencing in clinical oncology.
+
+The quality of the obtained tumor genome is a function of many variables, such as tissue quality and quantity, tumor content within a sample, depth of sequencing, and effectiveness of the data processing pipeline. Tissue quality relates to the age and size of the tissue and a fixation protocol. The fresh or frozen (FF) tumor material generally yields high-quality tumor genomic DNA. However, in most cases archival specimens stored as formalin-fixed, paraffin-embedded (FFPE) tissue blocks. Formalin can fragment the genomic DNA and introduce chemical modifications during the fixation and storage process that, eventually, lead to false-positive mutation and copy-number alteration calls. As FFPE tissue currently comprise the most accessible clinical option, evaluation of which samples yield successful whole genome sequence is critically important for molecular diagnostics and production-level sequencing.
+
+## Aim
+
+The aim of this package is to obtain a metric for evaluation as a proxy for the quality of the sequenced genomic data. The metric should allow for comparison of whole genome sequence datasets (e.g. samples preserved with FFPE and FF protocols) as well as regions of particular concern.
+
+## Method
+
+This package uses wavelets to deconstruct the signal into frequency space and identify noisy regions in the genome. The algorithm simple segments the genome into regions of equal size and computes a metric for each region. This metric acts as a proxy for the quality of the signal in this region. Briefly it is a measure on how much of the signal is made up of noise. 
+
+The default regions used in `spector` are based on the genome in a bottle (giab) project ([more details](http://jimb.stanford.edu/giab/)). The regions are further subset to identify reliable regions using [ReliableGenome](http://github.com/popitsch/wtchg-rg).
+
+# First run
+
+To run `spector` the first time all we need it is access to a bam file. 
+
+```{r }
+
+# bam_f <- system.file("tests/testthat", "sample1.bam", package = "spector", 
+  # mustWork = TRUE)
+
+# results_test <- spector_qc(f_bam = bam_f, region_size = 2^14)
+
+# glimpse(results_test)
+
+```
