@@ -33,8 +33,7 @@
 #' @param smr_var deprecated. Variable to use to compute summary.
 #' @param save_out logical. Indicating if output from \code{spector_qc()}
 #'        should be saved.
-#' @param ... variables passed on to downstream function, please see
-#'        \code{\link{spector_metric}()} for further details on the parameters.
+#' @rdname spector_metric
 #'
 #' @return Output is a \code{tbl_df} object with a metric value for each region.
 #'         Optionally the output can also be saved, if \code{out_F} is provided.
