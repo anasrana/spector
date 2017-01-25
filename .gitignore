@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 vignettes/*.R
+vignettes/*.html
 .DS_Store
 /.idea*
 inst/doc
