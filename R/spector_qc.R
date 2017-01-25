@@ -101,7 +101,7 @@ spector_qc <- function(f_bam = NULL,
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
-      bam_pars <- readIdFile(id_path = f_bam)
+      bam_pars <- read_par_file(id_path = f_bam)
       unpackList(bam_pars)
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                             out_F = out_F, file_cores = file_cores,
@@ -184,7 +184,7 @@ saveMerged <- function(res_v, out) {
 #' @importFrom tibble as_data_frame
 #' @importFrom utils read.table
 #'
-readIdFile <- function(id_path) {
+read_par_file <- function(id_path) {
   list_names <- c("fs_bam", "id_bam", "sample_type")
 
   no_cols <- max(count.fields(id_path, sep = "\t"))
