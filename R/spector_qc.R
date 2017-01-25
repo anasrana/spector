@@ -179,6 +179,8 @@ saveMerged <- function(res_v, out) {
 #'
 #' @param id_path path to the id file
 #'
+#' @export
+#'
 #' @importFrom tibble as_data_frame
 #' @importFrom utils read.table
 #'
