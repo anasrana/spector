@@ -1,2 +1,2 @@
-tests/testthat/sample1.bam	sample1	test1|basic	s1_1	something
-tests/testthat/sample2.bam	smaple2	test2|mixed	s2_1	something_else
+sample1.bam	sample1	test1|basic	s1_1	something
+sample2.bam	smaple2	test2|mixed	s2_1	something_else
