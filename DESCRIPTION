@@ -1,6 +1,6 @@
 Package: spector
 Type: Package
-Version: 0.5.9.1
+Version: 0.6
 Title: Computes a measure for the signal roughnes for genomic sequencing files
 Description: Description: A tool to analyse coverage data from omics data and 
     asses its quality.    
