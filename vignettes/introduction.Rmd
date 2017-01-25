@@ -5,7 +5,6 @@ date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette:
     citation_package: natbib
-bibliography: /Users/anas/Dropbox/postdoc/bibs/full.bib
 vignette: >
   %\VignetteIndexEntry{Introduction to spector}
   %\VignetteEngine{knitr::rmarkdown}
