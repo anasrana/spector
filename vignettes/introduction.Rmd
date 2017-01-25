@@ -13,14 +13,17 @@ vignette: >
 ---
 
 ```{r, echo = FALSE, message = FALSE}
-knitr::opts_chunk$set(collapse = T, comment = "#>")
-options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 # Lodaing packages
 library(tidyverse)
 
 library(stringr)
 library(spector)
+library(knitr)
+
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+
 theme_anas <- theme_set(theme_bw())
 theme_anas <- theme_update(
   axis.text.x = element_text(size = rel(0.9)),
@@ -58,15 +61,93 @@ The default regions used in `spector` are based on the genome in a bottle (giab)
 
 # First run
 
-To run `spector` the first time all we need it is access to a bam file. 
+To run `spector` the first time all we need it is access to a bam file. There are two very basic bam files provided with the package. The files are `sample1.bam` and `sample2.bam`. To obtain the path of these files we can use the function `spector_sample()`. 
 
-```{r }
+The best way to obtain QC results from spector is to use the function `spector_qc()`. With default settings the default region size $= 2^{13}$. We notice that the package provides a progress update while running, which is especially useful for larger files.
 
-# bam_f <- system.file("tests/testthat", "sample1.bam", package = "spector", 
-  # mustWork = TRUE)
+```{r}
 
-# results_test <- spector_qc(f_bam = bam_f, region_size = 2^14)
-
-# glimpse(results_test)
+bam_f <- spector_sample("sample1.bam")
+results_qc <- spector_qc(f_bam = bam_f)
 
 ```
+
+## Region size
+
+We can specify region sizes when running `spector_qc()` using the `region_size` variable. This variable should be a power of $2$ if it isn't it is coerced to the largest power of $2$ which is smaller than `< region_size` inside the package.
+
+```{r, message = FALSE}
+
+results_qc <- spector_qc(f_bam = bam_f, region_size = 2^14)
+
+```
+
+## All files in folder
+
+It is also possible to run spector on all bam files contained inside a folder. All we need to do is to set the variable `f_bam = ` as the path to the folder containing the bam files. We can also specify a custom bed file, we select one supplied with the package corresponding to the bam files in the package. 
+
+The package will first compute chromosomal overlaps between the bed file and the bam file and only compute metric values for regions in chromosomes contained in both the bam and the bed file.
+
+```{r}
+
+bam_folder <- spector_sample("")
+basic_path <- spector_sample("basic.bed")
+
+print(bam_folder)
+
+results_qc <- spector_qc(f_bam = bam_folder, f_bed = basic_path)
+
+```
+
+## Parameter file
+
+The final way to pass bam files to spector is to use a parameter file. The file needs to have a very specific structure. 
+
+```{r}
+par_file <- spector_sample("sample_id_2.txt")
+
+cat(readChar(par_file, 1e5))
+
+```
+
+The required format is a tab-delimited file with three columns. The first contains the path to the bam file relative to the current working directory, it is recommended to use the absolute path to avoid ambiguity. The second column contains a unique sample id. The third column contains any further description of the sample type. Any further columns will be ignored. There should be no header in the parameter file, if there is it should start with a `#`. To read this parameter file spector has the function `read_par_file()`. 
+
+```{r}
+read_par_file(par_file) %>% 
+  kable()
+
+```
+
+# Results
+
+The results of a `spector_qc` run are a [`tbl_df`](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) object, which is part of the `dplyr` package. It contains an `id` variablec which encodes the genomic region in standard format the metric values and any further sample specific parameters passed to the method. 
+
+```{r}
+glimpse(results_qc)
+
+```
+
+
+## Compare results
+
+A simple way to visualise the results is to plot comparative boxplots, as shown in this example. 
+
+```{r}
+results_qc %>% 
+  ggplot(aes(x = id_bam, y = 1 / rms)) +
+  geom_boxplot()
+
+```
+
+This is not always satisfactory depending on the application. For example in this example the samples contain different chromosomes. We could do a chromosome specific comparison to get a more fine-grained picture. 
+
+```{r, fig.width = 10, fig.height = 5}
+results_qc %>% 
+  separate(id, into = c("chr", "start", "end"), convert = TRUE) %>% 
+  ggplot(aes(x = id_bam, y = 1 / rms, fill = chr)) +
+  geom_boxplot() +
+  facet_grid(.~chr)
+
+```
+
+In this case this shows us that the samples are different only in chromosome 1 and chromosome 2. This is because the sample bam files originate from the same source file with different sub-setting. 
