@@ -10,7 +10,7 @@
 #' \item Allow for easy comparison of quality between samples.
 #' }
 #'
-#' The main interface to spector quality control is \code{spector_qc()}
+#' The main interface to spector quality control is \code{\link{spector_qc}()}
 #'
 #' To learn more about spector, start with the vignettes:
 #' \code{browseVignettes(package = "spector")}
