@@ -6,7 +6,8 @@
 \title{Compute QC (spector metric) for bam files.}
 \usage{
 spector_qc(f_bam = NULL, file_type = "bam", f_delim = "\\t",
-  out_F = NULL, file_cores = 1, smr_var = "rms", save_out = FALSE, ...)
+  out_F = NULL, file_cores = 1, chr_cores = 1, smr_var = "rms",
+  save_out = FALSE, silent = FALSE, ...)
 
 spector_metric(f_bam = NULL, region_size = NULL, f_bed = NULL,
   bed_header = FALSE, region_giab = TRUE, chr_cores = 1)
@@ -30,6 +31,9 @@ will be returned, but not saved.}
 \item{file_cores}{integer. Optional number indicating if the QC should be
 computed in parallel across all input files.}
 
+\item{chr_cores}{integer. Optional number indicating if the QC should be
+computed in parallel across chromosomes. Default value is \code{1}.}
+
 \item{smr_var}{deprecated. Variable to use to compute summary.}
 
 \item{save_out}{logical. Indicating if output from \code{spector_qc()}
@@ -46,9 +50,6 @@ value is \code{FALSE}.}
 
 \item{region_giab}{logical. Indicates whether or not giab regions are used,
 defaults to \code{TRUE}.}
-
-\item{chr_cores}{integer. Optional number indicating if the QC should be
-computed in parallel across chromosomes. Default value is \code{1}.}
 
 \item{f_bam}{path to bam file, relative to current working directory
 (see \code{\link[base]{setwd}()} for more details).}
@@ -106,7 +107,8 @@ spector_qc(f_bam = s1_path, region_size = 2^14)
 spector_qc(f_bam = s1_path, f_bed = basic_path)
 
 # Compute QC and save output results
-spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/", save_out = T)
+spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/",
+ save_out = TRUE)
 
 }
 

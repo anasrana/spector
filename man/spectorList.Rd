@@ -4,7 +4,8 @@
 \alias{spectorList}
 \title{Run spector for a list of bam file.}
 \usage{
-spectorList(fs_bam, id_v, s_v, out_F, file_cores = 1, save_out, ...)
+spectorList(fs_bam, id_v, s_v, out_F, file_cores = 1, save_out, chr_cores,
+  ...)
 }
 \arguments{
 \item{save_out}{}

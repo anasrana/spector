@@ -1,11 +1,11 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
-                        save_out, ...) {
+                        save_out, chr_cores, ...) {
 
   message(paste("File:", f_bam, "\n=>\n"))
 
   add.args <- list(...)
 
-  srm_df <- spector_metric(f_bam = f_bam, ...)
+  srm_df <- spector_metric(f_bam = f_bam, chr_cores = chr_cores, ...)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
@@ -43,7 +43,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 #' @importFrom stringr str_c
 #'
 spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
-                        save_out, ...) {
+                        save_out, chr_cores, ...) {
 
   # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
@@ -52,7 +52,8 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
   mclapply(X = f_idx, function(idx) {
     message(str_c("Running file: ", fs_bam[idx]))
       spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx],
-        s_prep = s_v[idx], out_F = out_F, save_out = save_out, ...)},
+                  s_prep = s_v[idx], out_F = out_F, save_out = save_out,
+                  chr_cores = chr_cores, ...)},
       mc.cores = file_cores) %>%
     bind_rows()
 

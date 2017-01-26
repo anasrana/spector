@@ -59,23 +59,28 @@
 #' spector_qc(f_bam = s1_path, f_bed = basic_path)
 #'
 #' # Compute QC and save output results
-#' spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/", save_out = T)
+#' spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/",
+#'  save_out = TRUE)
 #'
 #' @export
 #'
 #' @importFrom stringr str_c
 #'
 spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
-                       out_F = NULL, file_cores = 1, smr_var = "rms",
-                       save_out = FALSE, ...) {
+                       out_F = NULL, file_cores = 1, chr_cores = 1,
+                       smr_var = "rms", save_out = FALSE, silent = FALSE, ...) {
 
-  ## Check if have read access to f_bam
+# ==========================================================================
+# CHECKING VARIABLE
+# ==========================================================================
+
+## Check if have read access to f_bam
   if (file.access(f_bam, mode = 4) == -1) {
     stop(str_c("'", f_bam, "'\nYou do not have access to the file or the",
                "file does not exist"), call. = FALSE)
   }
 
-  ## Create output folder if it doesn't exist already
+## Create output folder if it doesn't exist already
   if (save_out) {
 
     out_F <- outTrailingFix(out_F)
@@ -87,6 +92,21 @@ spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
                     "' created in current working directory ('", getwd(), "')"))
     }
   }
+
+## should output be printed
+
+  if (silent) {
+    output_capture = "message"
+  } else {
+    output_capture = ""
+  }
+
+## clash between parallel
+
+if (file_cores > 1 & chr_cores > 1) {
+  stop("It is advisable to only run in parallel across chromosomes OR files!",
+    "\n\tThey are nested functions.", call. = FALSE)
+}
 
 #
 # Computing metric after checking what f_bam is
@@ -100,7 +120,7 @@ spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
 
     srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
                           out_F = out_F, file_cores = file_cores,
-                          save_out = save_out, ...)
+                          chr_cores = chr_cores, save_out = save_out, ...)
 
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
@@ -110,12 +130,13 @@ spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
 
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                             out_F = out_F, file_cores = file_cores,
-                            save_out = save_out, ...)
+                            chr_cores = chr_cores, save_out = save_out, ...)
 
 
     } else if (grep("*.bam$", x = f_bam) > 0 | file_type == "bam") {
 
-      srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out, ...)
+      srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
+                            chr_cores = chr_cores, ...)
 
     } else if(!file.exists(f_bam)) {
 
