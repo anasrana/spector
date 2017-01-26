@@ -98,7 +98,7 @@ spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
   if (silent) {
     output_capture = "message"
   } else {
-    output_capture = ""
+    output_capture = NULL
   }
 
 ## clash between parallel
@@ -118,9 +118,11 @@ if (file_cores > 1 & chr_cores > 1) {
 
     id_bam <- gsub(".bam","", x = basename(fs_bam))
 
-    srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
-                          out_F = out_F, file_cores = file_cores,
-                          chr_cores = chr_cores, save_out = save_out, ...)
+    capture.output(
+      srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
+                            out_F = out_F, file_cores = file_cores,
+                            chr_cores = chr_cores, save_out = save_out, ...),
+      type = output_capture)
 
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
@@ -128,15 +130,19 @@ if (file_cores > 1 & chr_cores > 1) {
       bam_pars <- read_par_file(id_path = f_bam)
       unpackList(bam_pars)
 
-      srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
-                            out_F = out_F, file_cores = file_cores,
-                            chr_cores = chr_cores, save_out = save_out, ...)
+      capture.output(
+        srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
+                              out_F = out_F, file_cores = file_cores,
+                              chr_cores = chr_cores, save_out = save_out, ...),
+        type = output_capture)
 
 
     } else if (grep("*.bam$", x = f_bam) > 0 | file_type == "bam") {
 
-      srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
-                            chr_cores = chr_cores, ...)
+      capture.output(
+        srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
+                              chr_cores = chr_cores, ...),
+        type = output_capture)
 
     } else if(!file.exists(f_bam)) {
 
