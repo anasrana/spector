@@ -20,6 +20,6 @@ It has three main goals:
 The main interface to spector quality control is \code{\link{spector_qc}()}
 
 To learn more about spector, start with the vignettes:
-\code{\link{browseVignettes(package = "spector")}}
+\code{browseVignettes(package = "spector")}
 }
 
