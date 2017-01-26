@@ -1,7 +1,11 @@
 #' Compute QC (spector metric) for bam files.
 #'
 #' Wavelet based technique to compute a quality metric for regions
-#' across the genome.
+#' across the genome. Use \code{spector_qc()} to obtain QC metric values,
+#' internally it calls \code{spector_metric()}. Always use \code{spector_qc()}
+#' to access \code{spector} since it includes several checks and allows for
+#' more flexibility. All \code{spector_metric} variables can be passed to
+#' \code{spector_qc}.
 #'
 #' The \code{spector_qc} function is the main function to use for QC in the
 #' \pkg{spector} package. It will compute a quality control metric for specific

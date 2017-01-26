@@ -1,7 +1,6 @@
-#' Calculate spector metric for a bam file.
-#'
-#' \code{spector_metric} the main function that calculates a metric value for
-#' each region in the selected bed file.
+#' @details
+#' The \code{spector_metric} function is the main function that calculates a
+#' metric value for each region in the selected bed file.
 #'
 #' The \code{spector_metric} function performs the actual calculations, but does
 #' not include any checks or verifications so should ideally not be called

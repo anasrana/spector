@@ -61,10 +61,11 @@ Object (\code{tbl_df}) of metric for all specified regions.
 }
 \description{
 Wavelet based technique to compute a quality metric for regions
-across the genome.
-
-\code{spector_metric} the main function that calculates a metric value for
-each region in the selected bed file.
+across the genome. Use \code{spector_qc()} to obtain QC metric values,
+internally it calls \code{spector_metric()}. Always use \code{spector_qc()}
+to access \code{spector} since it includes several checks and allows for
+more flexibility. All \code{spector_metric} variables can be passed to
+\code{spector_qc}.
 }
 \details{
 The \code{spector_qc} function is the main function to use for QC in the
@@ -81,6 +82,9 @@ It is important to supply full paths to \code{f_bam}, and \code{f_bed}.
 Though the path can be relative to the current working directory, which can
 be set with \code{\link[base]{setwd}()}. This also applies to the first
 column of a parameter file that can be supplied to \code{f_bam}.
+
+The \code{spector_metric} function is the main function that calculates a
+metric value for each region in the selected bed file.
 
 The \code{spector_metric} function performs the actual calculations, but does
 not include any checks or verifications so should ideally not be called
