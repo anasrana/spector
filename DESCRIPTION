@@ -27,6 +27,7 @@ Imports:
     wavethresh (>= 4.6.0)
 Suggests:
     knitr,
+    ggplot2,
     rmarkdown,
     testthat
 License: As per confidentiality agreement between the University of Oxford,
