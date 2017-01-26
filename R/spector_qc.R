@@ -108,9 +108,9 @@ if (file_cores > 1 & chr_cores > 1) {
     "\n\tThey are nested functions.", call. = FALSE)
 }
 
-#
+# ==========================================================================
 # Computing metric after checking what f_bam is
-# --------------------------------------------------------------------------
+# ==========================================================================
 
   if (dir.exists(f_bam)) {
     fs_bam <- paste(f_bam, '/', list.files(path = f_bam, pattern = "*.bam$"),
@@ -150,6 +150,10 @@ if (file_cores > 1 & chr_cores > 1) {
                  "\nMake sure you provide the correct path"), call. = FALSE)
     }
   }
+
+# ==========================================================================
+# Save output and return
+# ==========================================================================
 
   if (save_out) {
     # save outputs
