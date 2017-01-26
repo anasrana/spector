@@ -65,28 +65,26 @@
 #'
 #' @importFrom stringr str_c
 #'
-spector_qc <- function(f_bam = NULL,
-                    file_type = "bam",
-                    f_delim = "\t",
-                    out_F = NULL,
-                    file_cores = 1,
-                    smr_var = "rms",
-                    save_out = FALSE,
-                    ...) {
+spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
+                       out_F = NULL, file_cores = 1, smr_var = "rms",
+                       save_out = FALSE, ...) {
 
   ## Check if have read access to f_bam
   if (file.access(f_bam, mode = 4) == -1) {
-    stop(str_c("'", f_bam,
-      "'\nYou do not have acces to the file or the file does not exist"))
+    stop(str_c("'", f_bam, "'\nYou do not have access to the file or the",
+               "file does not exist"), call. = FALSE)
   }
 
   ## Create output folder if it doesn't exist already
   if (save_out) {
+
     out_F <- outTrailingFix(out_F)
+
     if (!dir.exists(out_F)) {
       dir.create(out_F)
-      message(paste("Folder '", out_F,
-        "' created in current working directory ('", getwd(), "')", sep = ""))
+
+      message(str_c("Folder '", out_F,
+                    "' created in current working directory ('", getwd(), "')"))
     }
   }
 
@@ -97,16 +95,19 @@ spector_qc <- function(f_bam = NULL,
   if (dir.exists(f_bam)) {
     fs_bam <- paste(f_bam, '/', list.files(path = f_bam, pattern = "*.bam$"),
       sep = "")
+
     id_bam <- gsub(".bam","", x = basename(fs_bam))
+
     srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
-                           out_F = out_F, file_cores = file_cores, save_out = save_out,
-                           ...)
+                          out_F = out_F, file_cores = file_cores,
+                          save_out = save_out, ...)
 
   } else if (file.exists(f_bam)) {
     if (file_type == "list") {
 
       bam_pars <- read_par_file(id_path = f_bam)
       unpackList(bam_pars)
+
       srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                             out_F = out_F, file_cores = file_cores,
                             save_out = save_out, ...)
@@ -117,8 +118,9 @@ spector_qc <- function(f_bam = NULL,
       srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out, ...)
 
     } else if(!file.exists(f_bam)) {
-      stop("f_bam: file / folder not found
-            Make sure you provide the correct path")
+
+      stop(str_c("f_bam: ", f_bam, " - file/folder not found",
+                 "\nMake sure you provide the correct path"), call. = FALSE)
     }
   }
 

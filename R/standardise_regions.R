@@ -128,7 +128,7 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
 
   if (max(file_region_v) < bed_region_size) {
     stop(paste0("min region size invalid
-      Choose a number smaller than: ", max(file_region_v)))
+      Choose a number smaller than: ", max(file_region_v)), call. = FALSE)
   } else {
     return(bed_region_size)
   }

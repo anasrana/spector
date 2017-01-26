@@ -30,8 +30,8 @@
 #' @export
 #'
 spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
-                          bed_header = FALSE, region_giab = TRUE,
-                          chr_cores = 1) {
+                           bed_header = FALSE, region_giab = TRUE,
+                           chr_cores = 1) {
 
 #
 # Load data frame from bed file
@@ -43,7 +43,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
         bedRegionSplit(region_size)
 
   } else if (!region_giab & is.null(f_bed)) {
-    stop(str_c("Selcted custom region, but no bed file provided"))
+    stop("Selected custom region, but no bed file provided", call. = FALSE)
   } else if (!is.null(f_bed)) {
     region_df <- read_bed(bed_file = f_bed, header = bed_header,
       bed_region_size = region_size)
@@ -66,15 +66,12 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
     message(c("Running spector for:\n",
       paste0("Chromosome: ", unique(region_df$chrom), "\n")))
   } else {
-    stop("Issues matching chr in '*.bed' and '*.bam' or no overlap")
+    stop("Issues matching chr in '*.bed' and '*.bam' or no overlap",
+         call. = FALSE)
   }
 
   message(str_c(format(nrow(region_df), big.mark = ","),
     " regions identified."))
-
-#
-# Subset region_df by chromosome intersect
-# --------------------------------------------------------------------------
 
  chr_idx <- unique(region_df$chrom)
 
