@@ -25,7 +25,8 @@ biocViews:
     GenomicAlignments (>= 1.6.3),
     GenomicRanges,
     IRanges (>= 2.7.0),       
-    Rsamtools (>= 1.25.0)
+    Rsamtools (>= 1.25.0),
+    rtracklayer
 Suggests:
     knitr,
     ggplot2,
@@ -35,5 +36,4 @@ License: As per confidentiality agreement between the University of Oxford,
     Cancer Research Technology ltd and Genomics England ltd
 LazyData: true
 VignetteBuilder: knitr
-biocViews: rtracklayer
 RoxygenNote: 5.0.1
