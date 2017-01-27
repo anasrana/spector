@@ -20,8 +20,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
-    wavethresh (>= 4.6.0)
-biocViews:
+    wavethresh (>= 4.6.0),
     GenomicAlignments (>= 1.6.3),
     GenomicRanges,
     IRanges (>= 2.7.0),       
