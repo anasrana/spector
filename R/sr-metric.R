@@ -1,7 +1,7 @@
 #' @importFrom dplyr mutate group_by summarise bind_rows filter is.tbl
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
-#' @importFrom tidyr separate separate_rows
+#' @importFrom tidyr separate
 #' @importFrom parallel mclapply
 #'
 spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
@@ -16,11 +16,7 @@ if (!is.tbl(region_df)) {
   region_df <-
   mclapply(chr_idx, function(i_chr) {
     res_df <- region_df %>%
-      filter(chrom == i_chr) %>%
-      mutate(
-        id = paste0(chrom, ":", start, "-", end),
-        cov = chrCov(f_bam, chrom, start, end, n_bam)) %>%
-        separate_rows(cov, sep = ",") %>%
+      regionCovDf(chr = i_chr, bam_file = f_bam, bamReadCount = n_bam) %>%
       group_by(id) %>%
       summarise(metric = regionMetric(cov)) %>%
       separate(
@@ -105,4 +101,16 @@ sigNorm <- function(signal) {
   }
 
   return(signal)
+}
+
+#' @importFrom tidyr separate_rows
+#' @importFrom dplyr mutate filter
+#'
+regionCovDf <- function(region_df, chr, bam_file, bamReadCount) {
+  region_df %>%
+      filter(chrom == chr) %>%
+      mutate(
+        id = paste0(chrom, ":", start, "-", end),
+        cov = chrCov(bam_file, chrom, start, end, bamReadCount)) %>%
+        separate_rows(cov, sep = ",")
 }
