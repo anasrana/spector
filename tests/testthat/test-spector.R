@@ -1,8 +1,9 @@
-context("QC")
+context("Main QC function")
 
 s1_path <- spector_sample("sample1.bam")
 s2_path <- spector_sample("sample2.bam")
 id_path <- spector_sample("sample_id.txt")
+id_path_2 <- spector_sample("sample_id_2.txt")
 basic_path <- spector_sample("basic.bed")
 
 results_df <- readr::read_csv("result_basic-bed.csv", col_types = "cdidc")
@@ -21,10 +22,32 @@ test_that("spector verify results of complete run with custom bed file", {
 })
 
 test_that("spector verify results when using a parameter file", {
-  results_test <- spector_qc(f_bam = id_path, f_bed = basic_path,
-    file_type = "list")
+  import_par <- read_par_file(id_path)
+  spector:::unpackList(import_par)
+
+  expect_true(exists("fs_bam") & !is.null(fs_bam))
+  expect_true(exists("id_bam"))
+  expect_true(exists("sample_type"))
+  expect_equal(nrow(import_par), 2)
+
+  fs_bam <- c(s1_path, s2_path)
+
+  results_test <-
+    spector:::spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
+                              out_F = NULL, file_cores = 1, chr_cores = 1,
+                              save_out = FALSE, f_bed = basic_path)
 
   expect_equal(results_test[, 1:5], results_df)
+  expect_equal(unique(results_test$prep), sample_type)
+})
+
+test_that("test parameter file with and without header", {
+  import_par <- read_par_file(id_path)
+  import_par2 <- read_par_file(id_path_2)
+
+  expect_equal(ncol(import_par), ncol(import_par2))
+  expect_equal(nrow(import_par), nrow(import_par2))
+  expect_equal(import_par2[, -1], import_par[, -1])
 })
 
 test_that("chrIntersect check if intersect works in mixed cases", {

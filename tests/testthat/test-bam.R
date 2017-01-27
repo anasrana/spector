@@ -1,4 +1,4 @@
-context("Reading bam files")
+context("Reading bam file")
 
 s1_path <- spector_sample("sample1.bam")
 s2_path <- spector_sample("sample2.bam")
