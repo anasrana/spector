@@ -1,3 +1,6 @@
+#' @importFrom dplyr is.tbl
+#' @importFrom stringr str_c
+#'
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
@@ -9,8 +12,13 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   # Load region data frame from bed file or filter giab regions
   # --------------------------------------------------------------------------
 
-  region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
-                          region_size = region_size, bed_header = bed_header)
+  if(!is.tbl(f_bed)) {
+
+    region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
+                            region_size = region_size, bed_header = bed_header)
+  } else {
+    region_df <- f_bed
+  }
 
 
   # extract bam file stats using rsamtools
