@@ -4,7 +4,7 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        bed_header = FALSE) {
+                        header = FALSE) {
 
   message(paste("Running on file:", f_bam, "\n=>\n"))
 
@@ -15,7 +15,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   if(!is.tbl(f_bed)) {
 
     region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
-                            region_size = region_size, bed_header = bed_header)
+                            region_size = region_size, header = header)
   } else {
     region_df <- f_bed
   }
@@ -72,19 +72,21 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 #' @importFrom stringr str_c
 #'
 spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
-                        save_out, chr_cores, ...) {
+                        save_out, chr_cores, region_giab = TRUE,
+                        region_size = NULL, f_bed = NULL,
+                        bed_header = FALSE) {
 
   # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
-
-  add.args <- list(...)
 
   srm_df <-
   mclapply(X = f_idx, function(idx) {
     message(str_c("Running file: ", fs_bam[idx]))
       spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx],
                   s_prep = s_v[idx], out_F = out_F, save_out = save_out,
-                  chr_cores = chr_cores, ...)},
+                  chr_cores = chr_cores,  region_giab = region_giab,
+                        region_size = region_size, f_bed = f_bed,
+                        header = bed_header)},
       mc.cores = file_cores) %>%
     bind_rows()
 

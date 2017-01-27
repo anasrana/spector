@@ -63,9 +63,11 @@
 #'
 #' @importFrom stringr str_c
 #'
-spector_qc <- function(f_bam = NULL, file_type = "bam", f_delim = "\t",
-                       out_F = NULL, file_cores = 1, chr_cores = 1,
-                       smr_var = "rms", save_out = FALSE, silent = FALSE, ...) {
+spector_qc <- function(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
+                       region_size = NULL, file_type = "bam", out_F = NULL,
+                       save_out = FALSE, silent = FALSE, smr_var = "rms",
+                       file_cores = 1, chr_cores = 1, bed_header = FALSE,
+                       f_delim = "\t") {
 
 # ==========================================================================
 # CHECKING VARIABLE
@@ -118,7 +120,10 @@ if (file_cores > 1 & chr_cores > 1) {
     capture.output(
       srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
                             out_F = out_F, file_cores = file_cores,
-                            chr_cores = chr_cores, save_out = save_out, ...),
+                            chr_cores = chr_cores, save_out = save_out,
+                            region_giab = region_giab,
+                            region_size = region_size, f_bed = f_bed,
+                            bed_header = bed_header),
       type = output_capture)
 
   } else if (file.exists(f_bam)) {
@@ -130,7 +135,10 @@ if (file_cores > 1 & chr_cores > 1) {
       capture.output(
         srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                               out_F = out_F, file_cores = file_cores,
-                              chr_cores = chr_cores, save_out = save_out, ...),
+                              chr_cores = chr_cores, save_out = save_out,
+                              region_giab = region_giab,
+                              region_size = region_size, f_bed = f_bed,
+                              bed_header = bed_header),
         type = output_capture)
 
 
@@ -138,7 +146,10 @@ if (file_cores > 1 & chr_cores > 1) {
 
       capture.output(
         srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
-                              chr_cores = chr_cores, ...),
+                              chr_cores = chr_cores, save_out = save_out,
+                              region_giab = region_giab,
+                              region_size = region_size, f_bed = f_bed,
+                              bed_header = bed_header),
         type = output_capture)
 
     } else if(!file.exists(f_bam)) {

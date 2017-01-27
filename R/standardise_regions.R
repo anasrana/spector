@@ -154,7 +154,7 @@ sapply(1:length(n_reg), function(i_v) {
 }
 
 getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
-                       bed_header = FALSE) {
+                       header = FALSE) {
   if (region_giab & is.null(f_bed)) {
 
     region_df <-
@@ -168,7 +168,7 @@ getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
 
   } else if (!is.null(f_bed)) {
 
-    region_df <- read_bed(bed_file = f_bed, header = bed_header,
+    region_df <- read_bed(bed_file = f_bed, header = header,
                           bed_region_size = region_size)
   }
   return(region_df)
