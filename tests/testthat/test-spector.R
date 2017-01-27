@@ -73,6 +73,14 @@ test_that("spector verify results of complete run with custom bed file", {
   expect_equal(results_test, results_df)
 })
 
+test_that("test spector on single file", {
+  results_test <- spector_qc(f_bam = s1_path, f_bed = basic_path)
+
+  expect_equal(nrow(results_test), 17)
+  expect_equal(ncol(results_test), 5)
+  expect_equal(results_test$rms[17], 3.830505)
+})
+
 test_that("test basic run of spectorFile", {
 
   results_s2 <-
