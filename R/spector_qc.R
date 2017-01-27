@@ -175,12 +175,6 @@ unpackList <- function(object) {
   }
 }
 
-#' saveSummary
-#'
-#' @param res
-#' @param var_s
-#' @param out
-#'
 #' @importFrom dplyr group_by summarise
 #'
 #'

@@ -26,12 +26,6 @@ read_cov <- function(f_name, chr, start, end, n_read) {
     return(raw_reads)
 }
 
-#' generate genomic ranges object
-#'
-#' @param chr
-#' @param start
-#' @param end
-#'
 #' @importFrom GenomicRanges GRanges
 #' @importFrom S4Vectors Rle
 #' @importFrom IRanges IRanges

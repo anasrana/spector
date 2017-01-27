@@ -59,18 +59,6 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   return(srm_df)
 }
 
-#' Run spector for a list of bam file.
-#'
-#' @param fs_bam
-#' @param id_v
-#' @param grp_v
-#' @param s_v
-#' @param out_F
-#' @param file_cores
-#' @param save_out
-#'
-#' @return
-#'
 #' @importFrom parallel mclapply
 #' @importFrom dplyr bind_rows
 #' @importFrom stringr str_c

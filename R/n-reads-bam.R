@@ -1,7 +1,3 @@
-#' nReadsBam
-#'
-#' @param bam_file
-#'
 #' @importFrom Rsamtools indexBam
 #'
 nReadsBam <- function(bam_file) {
@@ -17,11 +13,6 @@ nReadsBam <- function(bam_file) {
     return(bam_stat)
 }
 
-#' readIdxstats
-#'
-#' @param bam_file
-#'
-#'
 #' @importFrom dplyr filter mutate select
 #' @importFrom Rsamtools idxstatsBam
 #' @importFrom tibble as_data_frame

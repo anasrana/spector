@@ -58,11 +58,6 @@ spector_metric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
   return(region_df)
 }
 
-#' chrIntersect
-#'
-#' @param region_df
-#' @param bam_c
-#'
 #' @importFrom dplyr filter mutate select if_else
 #' @importFrom stringr str_replace
 #'
@@ -95,10 +90,6 @@ chrCov <- function(f_name, chr, start, end, n_read) {
 
 }
 
-#' Calculate metric
-#'
-#' @param reg_cov
-#'
 #' @importFrom wavethresh wd threshold
 #'
 regionMetric <- function(reg_cov) {

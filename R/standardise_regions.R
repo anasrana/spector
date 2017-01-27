@@ -79,15 +79,6 @@ read_bed <- function(bed_file,
 # Determine number of bed_regions to be split into and uncovered area
 # ==========================================================================
 
-#' mutate function bedRegionSplit
-#'
-#' @param bed_region
-#' @param bed_region_size
-#'
-#' @return
-#'
-#' @examples
-#'
 #' @importFrom dplyr select mutate filter
 #' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
@@ -139,18 +130,6 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
 #
 # ==========================================================================
 
-#' Title
-#'
-#' @param bed_region_size
-#' @param start
-#' @param end
-#' @param n_reg
-#' @param uncov
-#'
-#' @return
-#'
-#' @examples
-#'
 #' @importFrom dplyr select mutate
 #' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
