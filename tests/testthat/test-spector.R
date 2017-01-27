@@ -72,3 +72,24 @@ test_that("test bassing bed file as tbl_df", {
 
   expect_equal(results_test, results_df)
 })
+
+test_that("test basic run of spectorFile", {
+
+  results_s2 <-
+  spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
+                        out_F = NULL, save_out = FALSE, chr_cores = 1,
+                        region_giab = TRUE, region_size = 2^15, f_bed = NULL,
+                        header = FALSE)
+
+  results_s2_bed <-
+  spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
+                        out_F = NULL, save_out = FALSE, chr_cores = 1,
+                        region_giab = TRUE, region_size = 2^14,
+                        f_bed = basic_path, header = FALSE)
+
+  expect_equal(nrow(results_s2), 3)
+  expect_equal(ncol(results_s2), 6)
+  expect_equal(unique(c(results_s2$id_bam, results_s2_bed$id_bam)), "file_id")
+  expect_equal(unique(c(results_s2$prep, results_s2_bed$prep)), "prep_id")
+
+})
