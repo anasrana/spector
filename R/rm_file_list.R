@@ -1,11 +1,44 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
-                        save_out, chr_cores, ...) {
+                        save_out, chr_cores, region_giab = TRUE,
+                        region_size = NULL, f_bed = NULL,
+                        bed_header = FALSE, ...) {
 
-  message(paste("File:", f_bam, "\n=>\n"))
+  message(paste("Running on file:", f_bam, "\n=>\n"))
 
-  add.args <- list(...)
+  #
+  # Load region data frame from bed file or filter giab regions
+  # --------------------------------------------------------------------------
 
-  srm_df <- spector_metric(f_bam = f_bam, chr_cores = chr_cores, ...)
+  region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
+                          region_size = region_size, bed_header = bed_header)
+
+
+  # extract bam file stats using rsamtools
+  # --------------------------------------------------------------------------
+
+  bam_stats <- nReadsBam(f_bam)
+  n_read <- bam_stats$n_read
+
+# ==========================================================================
+# COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
+# ==========================================================================
+
+  region_df <- chrIntersect(region_df, bam_stats$chrom)
+
+  if (nrow(region_df) > 0) {
+    message(c("Running spector for:\n",
+      paste0("Chromosome: ", unique(region_df$chrom), "\n")))
+  } else {
+    stop("Issues matching chr in '*.bed' and '*.bam' or no overlap",
+         call. = FALSE)
+  }
+
+  message(str_c(format(nrow(region_df), big.mark = ","),
+    " regions identified."))
+
+
+  srm_df <- spector_metric(region_df = region_df, f_bam = f_bam,
+                           chr_cores = chr_cores, n_bam = n_read)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
@@ -47,6 +80,8 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
 
   # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
+
+  add.args <- list(...)
 
   srm_df <-
   mclapply(X = f_idx, function(idx) {

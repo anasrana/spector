@@ -173,3 +173,24 @@ sapply(1:length(n_reg), function(i_v) {
 })
 
 }
+
+getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
+                       bed_header = FALSE) {
+  if (region_giab & is.null(f_bed)) {
+
+    region_df <-
+      giab_10k %>%
+        mutate(reg_length = end - start) %>%
+        bedRegionSplit(region_size)
+
+  } else if (!region_giab & is.null(f_bed)) {
+
+    stop("Selected custom region, but no bed file provided", call. = FALSE)
+
+  } else if (!is.null(f_bed)) {
+
+    region_df <- read_bed(bed_file = f_bed, header = bed_header,
+                          bed_region_size = region_size)
+  }
+  return(region_df)
+}

@@ -29,49 +29,7 @@
 #'
 #' @export
 #'
-spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
-                           bed_header = FALSE, region_giab = TRUE,
-                           chr_cores = 1) {
-
-#
-# Load data frame from bed file
-# --------------------------------------------------------------------------
-  if (region_giab & is.null(f_bed)) {
-    region_df <-
-      giab_10k %>%
-        mutate(reg_length = end - start) %>%
-        bedRegionSplit(region_size)
-
-  } else if (!region_giab & is.null(f_bed)) {
-    stop("Selected custom region, but no bed file provided", call. = FALSE)
-  } else if (!is.null(f_bed)) {
-    region_df <- read_bed(bed_file = f_bed, header = bed_header,
-      bed_region_size = region_size)
-  }
-
-# ==========================================================================
-# EXTRACT BAM FILE STATS USING RSamtools
-# ==========================================================================
-
-  bam_stats <- nReadsBam(f_bam)
-  n_read <- bam_stats$n_read
-
-# ==========================================================================
-# COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
-# ==========================================================================
-
-  region_df <- chrIntersect(region_df, bam_stats$chrom)
-
-  if (nrow(region_df) > 0) {
-    message(c("Running spector for:\n",
-      paste0("Chromosome: ", unique(region_df$chrom), "\n")))
-  } else {
-    stop("Issues matching chr in '*.bed' and '*.bam' or no overlap",
-         call. = FALSE)
-  }
-
-  message(str_c(format(nrow(region_df), big.mark = ","),
-    " regions identified."))
+spector_metric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
 
  chr_idx <- unique(region_df$chrom)
 
@@ -81,7 +39,7 @@ spector_metric <- function(f_bam = NULL, region_size = NULL, f_bed = NULL,
       filter(chrom == i_chr) %>%
       mutate(
         id = paste0(chrom, ":", start, "-", end),
-        cov = chrCov(f_bam, chrom, start, end, n_read)) %>%
+        cov = chrCov(f_bam, chrom, start, end, n_bam)) %>%
         separate_rows(cov, sep = ",") %>%
       group_by(id) %>%
       summarise(metric = regionMetric(cov)) %>%
