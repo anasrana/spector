@@ -10,9 +10,12 @@ read_bed(bed_file, header = FALSE, ucsc_coord = FALSE,
 \arguments{
 \item{bed_file}{Path to the bed file}
 
-\item{header}{\code{TRUE} if the bed file contains a header}
+\item{header}{logical. Set \code{TRUE} if the bed file contains a header.}
 
-\item{ucsc_coord}{\code{TRUE} if coordinates start with 0 like ucsc}
+\item{ucsc_coord}{logical. Set \code{TRUE} if coordinates start with 0 like
+ucsc.}
+
+\item{bed_region_size}{integer. Region size to normalise bed file.}
 }
 \value{
 A \code{data.frame} used in the following calculations

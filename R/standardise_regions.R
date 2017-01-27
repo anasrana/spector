@@ -1,8 +1,10 @@
 #' Read bed bed_file with bed_regions to run spector
 #'
 #' @param bed_file Path to the bed file
-#' @param header \code{TRUE} if the bed file contains a header
-#' @param ucsc_coord \code{TRUE} if coordinates start with 0 like ucsc
+#' @param header logical. Set \code{TRUE} if the bed file contains a header.
+#' @param ucsc_coord logical. Set \code{TRUE} if coordinates start with 0 like
+#'        ucsc.
+#' @param bed_region_size integer. Region size to normalise bed file.
 #'
 #' @return A \code{data.frame} used in the following calculations
 #'
@@ -13,10 +15,8 @@
 #'
 #' @export
 #'
-read_bed <- function(bed_file,
-  header = FALSE,
-  ucsc_coord = FALSE,
-  bed_region_size = NULL) {
+read_bed <- function(bed_file, header = FALSE, ucsc_coord = FALSE,
+                     bed_region_size = NULL) {
 
 # column names and first line
 # ----------------------------------------------------------------
