@@ -2,17 +2,26 @@
 % Please edit documentation in R/read-coverage.R
 \name{read_cov}
 \alias{read_cov}
-\title{Read the coverage of a region}
+\title{Read the coverage for regions on one chromosome.}
 \usage{
-read_cov(f_name, chr, start, end, n_read)
+read_cov(f_name, chr, start, end, n_read = NULL)
 }
 \arguments{
-\item{f_name}{}
+\item{f_name}{string. Full path to bam file.}
+
+\item{chr}{string. Chromosome name, make sure it follows to naming
+standards in your bam file.}
+
+\item{start}{integer vector. Starting coordinates for regions to read.}
+
+\item{end}{integer vector. Starting coordinates for regions to read.}
+
+\item{n_read}{integer. total number of reads in the bam file.}
 }
 \value{
-Vector of the coverage in a given region
+GRanges object with reads from a given chromosome.
 }
 \description{
-Read the coverage of a region
+Read the coverage for regions on one chromosome.
 }
 

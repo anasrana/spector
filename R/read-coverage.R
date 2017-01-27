@@ -1,12 +1,13 @@
-#' Read the coverage of a region
+#' Read the coverage for regions on one chromosome.
 #'
-#' @param chr
-#' @param start
-#' @param end
-#' @param n_read
-#' @param f_name
+#' @param f_name string. Full path to bam file.
+#' @param chr string. Chromosome name, make sure it follows to naming
+#'        standards in your bam file.
+#' @param start integer vector. Starting coordinates for regions to read.
+#' @param end integer vector. Starting coordinates for regions to read.
+#' @param n_read integer. total number of reads in the bam file.
 #'
-#' @return Vector of the coverage in a given region
+#' @return GRanges object with reads from a given chromosome.
 #'
 #' @importFrom Rsamtools ScanBamParam
 #' @importFrom GenomicAlignments readGAlignments coverage
@@ -14,7 +15,7 @@
 #'
 #' @export
 #'
-read_cov <- function(f_name, chr, start, end, n_read) {
+read_cov <- function(f_name, chr, start, end, n_read = NULL) {
   # Create param from provided information
   param <- ScanBamParam(which = rngObj(chr, start, end))
 
