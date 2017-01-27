@@ -1,7 +1,7 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        bed_header = FALSE, ...) {
+                        bed_header = FALSE) {
 
   message(paste("Running on file:", f_bam, "\n=>\n"))
 
@@ -37,7 +37,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
     " regions identified."))
 
 
-  srm_df <- spector_metric(region_df = region_df, f_bam = f_bam,
+  srm_df <- spectorMetric(region_df = region_df, f_bam = f_bam,
                            chr_cores = chr_cores, n_bam = n_read)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
