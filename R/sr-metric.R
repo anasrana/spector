@@ -21,7 +21,7 @@
 #'
 #' @return Object (\code{tbl_df}) of metric for all specified regions.
 #'
-#' @importFrom dplyr mutate group_by summarise bind_rows filter
+#' @importFrom dplyr mutate group_by summarise bind_rows filter is.tbl
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
@@ -30,6 +30,11 @@
 #' @export
 #'
 spector_metric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
+
+if (!is.tbl(region_df)) {
+  stop("region_df needs to be a tbl_df object after loading\n",
+    "Something went wrong", call. = FALSE)
+}
 
  chr_idx <- unique(region_df$chrom)
 
