@@ -72,6 +72,7 @@
 #' @export
 #'
 #' @importFrom stringr str_c
+#' @importFrom utils capture.output count.fields
 #'
 spector_qc <- function(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
                        region_size = NULL, file_type = "bam", out_F = NULL,
@@ -192,7 +193,7 @@ unpackList <- function(object) {
 }
 
 #' @importFrom dplyr group_by summarise
-#'
+#' @importFrom utils write.csv
 #'
 saveSummary <- function(res, var_s, out) {
 
@@ -217,6 +218,8 @@ saveSummary <- function(res, var_s, out) {
             row.names = FALSE)
 }
 
+#' @importFrom utils write.csv
+#'
 saveMerged <- function(res_v, out) {
     out_path <- paste(out, "results_bam_out_merged.csv", sep = "")
     write.csv(res_v, file = out_path, row.names = FALSE)
@@ -229,7 +232,7 @@ saveMerged <- function(res_v, out) {
 #' @export
 #'
 #' @importFrom tibble as_data_frame
-#' @importFrom utils read.table
+#' @importFrom utils read.table count.fields
 #'
 read_par_file <- function(id_path) {
   list_names <- c("fs_bam", "id_bam", "sample_type")

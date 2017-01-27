@@ -17,4 +17,5 @@
 #'
 #' @docType package
 #' @name spector
+#' @importFrom stats IQR cov end median sd setNames start
 NULL
