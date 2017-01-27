@@ -13,19 +13,18 @@ Depends:
     R (>= 3.2.0)
 Imports:
     dplyr (>= 0.5.0),
+    GenomicAlignments (>= 1.6.3),
+    GenomicRanges,
+    IRanges (>= 2.7.0),       
     magrittr,
     parallel,
     readr,
+    Rsamtools (>= 1.25.0),
     S4Vectors,
     stringr,
     tibble,
     tidyr,
     wavethresh (>= 4.6.0),
-    GenomicAlignments (>= 1.6.3),
-    GenomicRanges,
-    IRanges (>= 2.7.0),       
-    Rsamtools (>= 1.25.0),
-    rtracklayer
 Suggests:
     knitr,
     ggplot2,
