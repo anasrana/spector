@@ -64,3 +64,11 @@ test_that("chrIntersect check if intersect works in mixed cases", {
   expect_that(nrow(region_mix), equals(12))
   expect_that(nrow(region_smpl), equals(17))
 })
+
+
+test_that("test bassing bed file as tbl_df", {
+  basic_df <- read_bed(basic_path)
+  results_test <- spector_qc(f_bam = spector_sample(""), f_bed = basic_df)
+
+  expect_equal(results_test, results_df)
+})
