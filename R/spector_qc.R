@@ -1,9 +1,9 @@
 #' Compute QC (spector metric) for bam files.
 #'
 #' Wavelet based technique to compute a quality metric for regions
-#' across the genome. Use \code{spector_qc()} to obtain QC metric values.
-#' Always use \code{spector_qc()} to access \code{spector} since it includes
-#' several checks and allows for more flexibility.
+#' across the genome. The \code{spector_qc()} is the recommended function to
+#' access \code{spector} since it includes several checks and allows for more
+#' flexibility than some of the downstream functions.
 #'
 #' The \code{spector_qc} function is the main function to use for QC in the
 #' \pkg{spector} package. It will compute a quality control metric for specific
@@ -23,22 +23,32 @@
 #' @param f_bam a string with path to \code{bam} file(s), it can link to
 #'        \code{*.bam} file (the full relative path is required), a folder with
 #'        \code{*.bam} files, or a file with with structure specified later.
+#' @param f_bed file path for bed file to override default giab.
+#' @param region_giab logical. Indicates whether or not giab regions are used,
+#'        defaults to \code{TRUE}.
+#' @param region_size integer. Choose size of regions to calculate metric value.
+#'        The default \code{ = NULL} means \code{region_size = } maximum power
+#'        of 2 that fits in the smallest region.
 #' @param file_type type of file passed to f_bam (Optional). This is to ensure
 #'        the automated checks pick up the correct format. The possible options
 #'        are \code{"list"}, \code{"bam"}, and \code{"dir"}.
-#' @param f_delim the delimiter character used in \code{f_bam} file if not
-#'        \code{bam} or folder (Optional). It is only used when
-#'        \code{file_type = "list"}, with the default \code{f_delim = "\t"}.
 #' @param out_F (Optional) Folder path to save output. If omitted results
 #'        will be returned, but not saved.
-#' @param file_cores integer. Optional number indicating if the QC should be
-#'        computed in parallel across all input files.
-#' @param smr_var deprecated. Variable to use to compute summary.
 #' @param save_out logical. Indicating if output from \code{spector_qc()}
 #'        should be saved.
+#' @param silent logical. Default \code{FALSE}, if \code{TRUE} there is no
+#'        progress update for the code.
+#' @param smr_var deprecated. Variable to use to compute summary.
+#' @param file_cores integer. Optional number indicating if the QC should be
+#'        computed in parallel across all input files.
+#' @param bed_header logical. \code{TRUE} if bed file has a header, the default
+#'        value is \code{FALSE}.
+#' @param chr_cores integer. Optional number indicating if the QC should be
+#'        computed in parallel across chromosomes. Default value is \code{1}.
 #'
 #' @return Output is a \code{tbl_df} object with a metric value for each region.
-#'         Optionally the output can also be saved, if \code{out_F} is provided.
+#'         Optionally the output can also be saved to file, but only if
+#'         \code{out_F} is provided.
 #'
 #' @examples
 #' \dontrun{
@@ -66,8 +76,7 @@
 spector_qc <- function(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
                        region_size = NULL, file_type = "bam", out_F = NULL,
                        save_out = FALSE, silent = FALSE, smr_var = "rms",
-                       file_cores = 1, chr_cores = 1, bed_header = FALSE,
-                       f_delim = "\t") {
+                       file_cores = 1, chr_cores = 1, bed_header = FALSE) {
 
 # ==========================================================================
 # CHECKING VARIABLE
