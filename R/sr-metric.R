@@ -1,35 +1,10 @@
-#' @details
-#' The \code{spector_metric} function is the main function that calculates a
-#' metric value for each region in the selected bed file.
-#'
-#' The \code{spector_metric} function performs the actual calculations, but does
-#' not include any checks or verifications so should ideally not be called
-#' directly. It should be accessed via \code{\link{spector_qc}}.
-#'
-#' @param f_bam path to bam file, relative to current working directory
-#'        (see \code{\link[base]{setwd}()} for more details).
-#' @param region_size integer. Choose size of regions to calculate metric value.
-#'        The default \code{ = NULL} means \code{region_size = } maximum power
-#'        of 2 that fits in the smallest region.
-#' @param f_bed file path for bed file to override default giab.
-#' @param bed_header logical. \code{TRUE} if bed file has a header, the default
-#'        value is \code{FALSE}.
-#' @param region_giab logical. Indicates whether or not giab regions are used,
-#'        defaults to \code{TRUE}.
-#' @param chr_cores integer. Optional number indicating if the QC should be
-#'        computed in parallel across chromosomes. Default value is \code{1}.
-#'
-#' @return Object (\code{tbl_df}) of metric for all specified regions.
-#'
 #' @importFrom dplyr mutate group_by summarise bind_rows filter is.tbl
 #' @importFrom stringr str_c
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate separate_rows
 #' @importFrom parallel mclapply
 #'
-#' @export
-#'
-spector_metric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
+spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
 
 if (!is.tbl(region_df)) {
   stop("region_df needs to be a tbl_df object after loading\n",
