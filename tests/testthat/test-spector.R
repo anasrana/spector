@@ -8,19 +8,6 @@ basic_path <- spector_sample("basic.bed")
 
 results_df <- readr::read_csv("result_basic-bed.csv", col_types = "cdidc")
 
-test_that("spector complete run with giab", {
-  results_test <- spector_qc(f_bam = spector_sample(""), region_size = 2^14)
-
-  expect_that(nrow(results_test), equals(156))
-  expect_that(ncol(results_test), equals(5))
-})
-
-test_that("spector verify results of complete run with custom bed file", {
-  results_test <- spector_qc(f_bam = spector_sample(""), f_bed = basic_path)
-
-  expect_equal(results_test, results_df)
-})
-
 test_that("spector verify results when using a parameter file", {
   import_par <- read_par_file(id_path)
   spector:::unpackList(import_par)
@@ -66,9 +53,22 @@ test_that("chrIntersect check if intersect works in mixed cases", {
 })
 
 
-test_that("test bassing bed file as tbl_df", {
+test_that("test passing bed file as tbl_df", {
   basic_df <- read_bed(basic_path)
   results_test <- spector_qc(f_bam = spector_sample(""), f_bed = basic_df)
+
+  expect_equal(results_test, results_df)
+})
+
+test_that("spector complete run with giab", {
+  results_test <- spector_qc(f_bam = spector_sample(""), region_size = 2^14)
+
+  expect_that(nrow(results_test), equals(156))
+  expect_that(ncol(results_test), equals(5))
+})
+
+test_that("spector verify results of complete run with custom bed file", {
+  results_test <- spector_qc(f_bam = spector_sample(""), f_bed = basic_path)
 
   expect_equal(results_test, results_df)
 })
