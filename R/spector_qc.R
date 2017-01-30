@@ -233,6 +233,7 @@ saveMerged <- function(res_v, out) {
 #'
 #' @importFrom tibble as_data_frame
 #' @importFrom utils read.table count.fields
+#' @family data import functions
 #'
 read_par_file <- function(id_path) {
   list_names <- c("fs_bam", "id_bam", "sample_type")

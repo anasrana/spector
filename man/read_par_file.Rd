@@ -12,4 +12,7 @@ read_par_file(id_path)
 \description{
 Read spector id file.
 }
-
+\seealso{
+Other data import functions: \code{\link{read_bed}},
+  \code{\link{read_cov}}
+}

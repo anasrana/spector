@@ -24,4 +24,7 @@ GRanges object with reads from a given chromosome.
 \description{
 Read the coverage for regions on one chromosome.
 }
-
+\seealso{
+Other data import functions: \code{\link{read_bed}},
+  \code{\link{read_par_file}}
+}

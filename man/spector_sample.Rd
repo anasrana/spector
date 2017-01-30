@@ -18,4 +18,3 @@ Get path for samples provided in the spector package.
 \examples{
 spector_sample("sample1.bam")
 }
-

@@ -1,17 +1,18 @@
 #' Read bed bed_file with bed_regions to run spector
 #'
 #' @param bed_file Path to the bed file
-#' @param header logical. Set \code{TRUE} if the bed file contains a header.
-#' @param ucsc_coord logical. Set \code{TRUE} if coordinates start with 0 like
+#' @param header logical. Set `TRUE` if the bed file contains a header.
+#' @param ucsc_coord logical. Set `TRUE` if coordinates start with 0 like
 #'        ucsc.
 #' @param bed_region_size integer. Region size to normalise bed file.
 #'
-#' @return A \code{data.frame} used in the following calculations
+#' @return A `data.frame` used in the following calculations
 #'
 #' @importFrom dplyr select mutate
 #' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
+#' @family data import functions
 #'
 #' @export
 #'

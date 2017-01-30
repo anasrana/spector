@@ -13,6 +13,8 @@
 #' @importFrom GenomicAlignments readGAlignments coverage
 #' @importFrom magrittr extract2
 #'
+#' @family data import functions
+#'
 #' @export
 #'
 read_cov <- function(f_name, chr, start, end, n_read = NULL) {
