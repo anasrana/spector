@@ -172,7 +172,7 @@ if (file_cores > 1 & chr_cores > 1) {
 # Save output and return
 # ==========================================================================
 
-  if (save_out) {
+  if (save_out | !is.null(out_F)) {
     # save outputs
     saveMerged(res_v = srm_df, out = out_F)
 

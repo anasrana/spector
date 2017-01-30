@@ -58,7 +58,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   if (is.null(out_F) & save_out) {
     warning("Output folder not specified, output will not be saved",
       call. = FALSE, domain = 'spector_run')
-  } else if (save_out) {
+  } else if (save_out | !is.null(out_F)) {
     out_path <- paste(out_F, id_bam, "_out.csv", sep = "")
     write.csv(srm_df, file = out_path, row.names = FALSE)
     message(paste("Completed, output written to:", out_path))
