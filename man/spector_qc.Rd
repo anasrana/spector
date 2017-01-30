@@ -20,7 +20,7 @@ spector_qc(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
 defaults to \code{TRUE}.}
 
 \item{region_size}{integer. Choose size of regions to calculate metric value.
-The default \code{ = NULL} means \code{region_size = } maximum power
+The default \code{= NULL} means \code{region_size =} maximum power
 of 2 that fits in the smallest region.}
 
 \item{file_type}{type of file passed to f_bam (Optional). This is to ensure
@@ -48,9 +48,9 @@ computed in parallel across chromosomes. Default value is \code{1}.}
 value is \code{FALSE}.}
 }
 \value{
-Output is a \code{tbl_df} object with a metric value for each region.
-        Optionally the output can also be saved to file, but only if
-        \code{out_F} is provided.
+Output is a \code{tbl_df} object with a metric value for each
+region. Optionally the output can also be saved to file, but only if
+\code{out_F} is provided.
 }
 \description{
 Wavelet based technique to compute a quality metric for regions
@@ -60,7 +60,7 @@ flexibility than some of the downstream functions.
 }
 \details{
 The \code{spector_qc} function is the main function to use for QC in the
-\pkg{spector} package. It will compute a quality control metric for specific
+\code{spector} package. It will compute a quality control metric for specific
 regions across the genome.
 The default regions, supplied in the package, are based
 on the genome in a bottle project
@@ -71,7 +71,7 @@ It is also possible to supply custom regions as a bed file or a
 
 It is important to supply full paths to \code{f_bam}, and \code{f_bed}.
 Though the path can be relative to the current working directory, which can
-be set with \code{\link[base]{setwd}()}. This also applies to the first
+be set with \code{\link[base:setwd]{base::setwd()}}. This also applies to the first
 column of a parameter file that can be supplied to \code{f_bam}.
 }
 \examples{
@@ -94,4 +94,3 @@ spector_qc(f_bam = s1_path, f_bed = basic_path, out_F = "~/",
  save_out = TRUE)
 
 }
-

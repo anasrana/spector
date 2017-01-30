@@ -1,54 +1,54 @@
 #' Compute QC (spector metric) for bam files.
 #'
 #' Wavelet based technique to compute a quality metric for regions
-#' across the genome. The \code{spector_qc()} is the recommended function to
-#' access \code{spector} since it includes several checks and allows for more
+#' across the genome. The `spector_qc()` is the recommended function to
+#' access `spector` since it includes several checks and allows for more
 #' flexibility than some of the downstream functions.
 #'
-#' The \code{spector_qc} function is the main function to use for QC in the
-#' \pkg{spector} package. It will compute a quality control metric for specific
+#' The `spector_qc` function is the main function to use for QC in the
+#' `spector` package. It will compute a quality control metric for specific
 #' regions across the genome.
 #' The default regions, supplied in the package, are based
 #' on the genome in a bottle project
-#' (\href{http://jimb.stanford.edu/giab/}{giab}) reliable regions, calculated
-#' using \code{ReliableGenome} (\href{http://github.com/popitsch/wtchg-rg}{RG}).
+#' ([giab](http://jimb.stanford.edu/giab/)) reliable regions, calculated
+#' using `ReliableGenome` ([RG](http://github.com/popitsch/wtchg-rg)).
 #' It is also possible to supply custom regions as a bed file or a
-#' \code{data.frame} object.
+#' `data.frame` object.
 #'
-#' It is important to supply full paths to \code{f_bam}, and \code{f_bed}.
+#' It is important to supply full paths to `f_bam`, and `f_bed`.
 #' Though the path can be relative to the current working directory, which can
-#' be set with \code{\link[base]{setwd}()}. This also applies to the first
-#' column of a parameter file that can be supplied to \code{f_bam}.
+#' be set with [base::setwd()]. This also applies to the first
+#' column of a parameter file that can be supplied to `f_bam`.
 #'
-#' @param f_bam a string with path to \code{bam} file(s), it can link to
-#'        \code{*.bam} file (the full relative path is required), a folder with
-#'        \code{*.bam} files, or a file with with structure specified later.
+#' @param f_bam a string with path to `bam` file(s), it can link to
+#'        `*.bam` file (the full relative path is required), a folder with
+#'        `*.bam` files, or a file with with structure specified later.
 #' @param f_bed file path for bed file to override default giab.
 #' @param region_giab logical. Indicates whether or not giab regions are used,
-#'        defaults to \code{TRUE}.
+#'        defaults to `TRUE`.
 #' @param region_size integer. Choose size of regions to calculate metric value.
-#'        The default \code{ = NULL} means \code{region_size = } maximum power
+#'        The default `= NULL` means `region_size = ` maximum power
 #'        of 2 that fits in the smallest region.
 #' @param file_type type of file passed to f_bam (Optional). This is to ensure
 #'        the automated checks pick up the correct format. The possible options
-#'        are \code{"list"}, \code{"bam"}, and \code{"dir"}.
+#'        are `"list"`, `"bam"`, and `"dir"`.
 #' @param out_F (Optional) Folder path to save output. If omitted results
 #'        will be returned, but not saved.
-#' @param save_out logical. Indicating if output from \code{spector_qc()}
+#' @param save_out logical. Indicating if output from `spector_qc()`
 #'        should be saved.
-#' @param silent logical. Default \code{FALSE}, if \code{TRUE} there is no
+#' @param silent logical. Default `FALSE`, if `TRUE` there is no
 #'        progress update for the code.
 #' @param smr_var deprecated. Variable to use to compute summary.
 #' @param file_cores integer. Optional number indicating if the QC should be
 #'        computed in parallel across all input files.
-#' @param bed_header logical. \code{TRUE} if bed file has a header, the default
-#'        value is \code{FALSE}.
+#' @param bed_header logical. `TRUE` if bed file has a header, the default
+#'        value is `FALSE`.
 #' @param chr_cores integer. Optional number indicating if the QC should be
-#'        computed in parallel across chromosomes. Default value is \code{1}.
+#'        computed in parallel across chromosomes. Default value is `1`.
 #'
-#' @return Output is a \code{tbl_df} object with a metric value for each region.
-#'         Optionally the output can also be saved to file, but only if
-#'         \code{out_F} is provided.
+#' @return Output is a `tbl_df` object with a metric value for each
+#'         region. Optionally the output can also be saved to file, but only if
+#'         `out_F` is provided.
 #'
 #' @examples
 #' \dontrun{
