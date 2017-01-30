@@ -2,8 +2,8 @@ Package: spector
 Type: Package
 Version: 0.6
 Title: Computes a measure for the signal roughnes for genomic sequencing files
-Description: Description: A tool to analyse coverage data from omics data and 
-    asses its quality.    
+Description: Description: A tool to analyse coverage data from omics data and
+    asses its quality.
 Authors@R: c(
     person("Anas Ahmad", "Rana", email = "anas.rana@oncology.ox.ac.uk", 
         role = c("aut", "cre")), 
@@ -15,7 +15,7 @@ Imports:
     dplyr (>= 0.5.0),
     GenomicAlignments (>= 1.6.3),
     GenomicRanges,
-    IRanges (>= 2.7.0),       
+    IRanges (>= 2.7.0),
     magrittr,
     parallel,
     readr,
@@ -32,6 +32,8 @@ Suggests:
     testthat
 License: As per confidentiality agreement between the University of Oxford,
     Cancer Research Technology ltd and Genomics England ltd
+BugReports: https://github.com/anasrana/spector/issues
 LazyData: true
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
+Roxygen: list(markdown = TRUE)
