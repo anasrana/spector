@@ -9,6 +9,7 @@
 #' @return A `data.frame` used in the following calculations
 #'
 #' @importFrom dplyr select mutate
+#' @importFrom readr read_tsv
 #' @importFrom tibble as_data_frame
 #' @importFrom magrittr %>%
 #' @importFrom stringr str_c
@@ -28,32 +29,18 @@ read_bed <- function(bed_file, header = FALSE, ucsc_coord = FALSE,
 
   if (header) {
     tmp_row1 <- read.table(bed_file , nrows = 1, skip = 1)
+    skip_v <- 1
   } else {
     tmp_row1 <- read.table(bed_file , nrows = 1)
+    skip_v <- 0
   }
 
 # Reading bed files
 # ----------------------------------------------------------------
-  if (header) {
-    bed_region <- read.table(
-        bed_file,
-        as.is = TRUE,
-        stringsAsFactors = F,
-        sep = "\t",
-        skip = 1) %>%
-      as_data_frame() %>%
-      setNames(c_name[1:ncol(tmp_row1)]) %>%
-      select(chrom, start, end)
-  } else {
-    bed_region <- read.table(
-        bed_file,
-        as.is = TRUE,
-        stringsAsFactors = F,
-        sep = "\t") %>%
-      as_data_frame() %>%
-      setNames(c_name[1:ncol(tmp_row1)]) %>%
-      select(chrom, start, end)
-  }
+  bed_region <-
+    read_tsv(bed_file, skip = skip_v, col_names = c_name[1:3],
+             col_types = c("cii", str_c(rep("_", length(tmp_row1) - 3),
+                                        collapse = "")))
 
 # Shift the data if ucsc convention
 # ----------------------------------------------------------------
