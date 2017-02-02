@@ -133,7 +133,8 @@ sapply(1:length(n_reg), function(i_v) {
   for (i_n in 1:n_reg[i_v]) {
     tmp_st[i_n] <- tmp_ed[i_n] + gap_bp
     tmp_ed[i_n + 1] <- tmp_st[i_n] + bed_region_size
-    res_v[i_n] <- str_c(tmp_st[i_n], "-", tmp_ed[i_n + 1])
+    res_v[i_n] <- str_c(as.integer(tmp_st[i_n]), "-",
+                        as.integer(tmp_ed[i_n + 1]))
   }
 
   res_v %>% str_c(collapse = ",")
