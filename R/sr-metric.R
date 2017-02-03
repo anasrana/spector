@@ -4,7 +4,8 @@
 #' @importFrom tidyr separate
 #' @importFrom parallel mclapply
 #'
-spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam) {
+spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam,
+                          met = smr) {
 
 if (!is.tbl(region_df)) {
   stop("region_df needs to be a tbl_df object after loading\n",

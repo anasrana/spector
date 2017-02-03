@@ -4,7 +4,7 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        header = FALSE) {
+                        header = FALSE, smr = "rms") {
 
   message(paste("Running on file:", f_bam, "\n=>\n"))
 
@@ -46,7 +46,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 
 
   srm_df <- spectorMetric(region_df = region_df, f_bam = f_bam,
-                           chr_cores = chr_cores, n_bam = n_read)
+                           chr_cores = chr_cores, n_bam = n_read, met = smr)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))
   }
@@ -74,7 +74,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        bed_header = FALSE) {
+                        bed_header = FALSE, smr = "rms") {
 
   # function to be run inside of mclappy
   f_idx <- 1:length(fs_bam)
@@ -86,7 +86,7 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
                   s_prep = s_v[idx], out_F = out_F, save_out = save_out,
                   chr_cores = chr_cores,  region_giab = region_giab,
                         region_size = region_size, f_bed = f_bed,
-                        header = bed_header)},
+                        header = bed_header, smr = smr)},
       mc.cores = file_cores) %>%
     bind_rows()
 

@@ -133,7 +133,7 @@ if (file_cores > 1 & chr_cores > 1) {
                             chr_cores = chr_cores, save_out = save_out,
                             region_giab = region_giab,
                             region_size = region_size, f_bed = f_bed,
-                            bed_header = bed_header),
+                            bed_header = bed_header, smr = smr_var),
       type = output_capture)
 
   } else if (file.exists(f_bam)) {
@@ -148,7 +148,7 @@ if (file_cores > 1 & chr_cores > 1) {
                               chr_cores = chr_cores, save_out = save_out,
                               region_giab = region_giab,
                               region_size = region_size, f_bed = f_bed,
-                              bed_header = bed_header),
+                              bed_header = bed_header, smr = smr_var),
         type = output_capture)
 
 
@@ -158,7 +158,7 @@ if (file_cores > 1 & chr_cores > 1) {
         srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
                               chr_cores = chr_cores, region_giab = region_giab,
                               region_size = region_size, f_bed = f_bed,
-                              header = bed_header),
+                              header = bed_header, smr = smr_var),
         type = output_capture)
 
     } else if(!file.exists(f_bam)) {
