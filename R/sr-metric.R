@@ -18,12 +18,22 @@ if (!is.tbl(region_df)) {
   mclapply(chr_idx, function(i_chr) {
     res_df <- region_df %>%
       regionCovDf(chr = i_chr, bam_file = f_bam, bamReadCount = n_bam) %>%
-      group_by(id) %>%
-      summarise(metric = regionMetric(cov)) %>%
+      group_by(id)
+
+  if (met == "all") {
+    res_df <-
+    res_df %>%
+      summarise(metric = regionMetricAll(cov)) %>%
       separate(
         metric, into = c("mean", "median", "rms"),
         sep = ",", convert = TRUE) %>%
       select(id, mean, median, rms)
+    } else if (met == "rms") {
+      res_df <-
+      res_df %>%
+        summarise(metric = regionMetric(cov)) %>%
+        select(id, metric)
+    }
 
       message(str_c("Completed run chr:", i_chr))
 
@@ -69,7 +79,7 @@ chrCov <- function(f_name, chr, start, end, n_read) {
 
 #' @importFrom wavethresh wd threshold
 #'
-regionMetric <- function(reg_cov) {
+regionMetricAll <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     "NA,NA,NA"
   } else {
@@ -82,6 +92,20 @@ regionMetric <- function(reg_cov) {
   }
 }
 
+#' @importFrom wavethresh wd threshold
+#'
+regionMetric <- function(reg_cov) {
+
+  if (anyNA(reg_cov)) {
+    NA
+  } else {
+    wd_sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
+    wd_sig_tr <- threshold(wd_sig, by.level = TRUE,
+        policy = "universal", return.thresh = TRUE)
+
+    spectorRms(wd_sig_tr)
+  }
+}
 
 spectorRa <- function(wd_thr) {
   mean(abs(wd_thr), na.rm = T)
