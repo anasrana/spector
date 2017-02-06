@@ -174,9 +174,13 @@ if (file_cores > 1 & chr_cores > 1) {
 
   if (save_out | !is.null(out_F)) {
     # save outputs
-    saveMerged(res_v = srm_df, out = out_F)
+    if (smr_var == "rms") {
+      saveSummary(res = srm_df, out = out_F, var_s = smr_var)
+      saveMerged(res_v = srm_df, out = out_F)
+    } else {
+      saveMerged(res_v = srm_df, out = out_F)
+    }
 
-    saveSummary(res = srm_df, out = out_F, var_s = smr_var)
   }
 
   return(srm_df = srm_df)
@@ -200,17 +204,17 @@ saveSummary <- function(res, var_s, out) {
   if (var_s == "rms") {
     stat_spector <- res %>%
       group_by(id_bam) %>%
-      summarise(mean_rm = mean(1 / rms, na.rm = TRUE),
-                       median_rm = median(1 / rms, na.rm = TRUE),
-                       sd_rm = sd(1 / rms, na.rm = TRUE),
-                       iqr_rm = IQR(1 / rms, na.rm = TRUE))
+      summarise(mean_rm = mean(metric, na.rm = TRUE),
+                       median_rm = median(metric, na.rm = TRUE),
+                       sd_rm = sd(metric, na.rm = TRUE),
+                       iqr_rm = IQR(metric, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       group_by(id) %>%
-      summarise(mean_rm = mean(1 / mean, na.rm = TRUE),
-                       median_rm = median(1 / mean, na.rm = TRUE),
-                       sd_rm = sd(1 / mean, na.rm = TRUE),
-                       iqr_rm = IQR(1 / mean, na.rm = TRUE))
+      summarise(mean_rm = mean(mean, na.rm = TRUE),
+                       median_rm = median(mean, na.rm = TRUE),
+                       sd_rm = sd(mean, na.rm = TRUE),
+                       iqr_rm = IQR(mean, na.rm = TRUE))
   }
 
   write.csv(stat_spector,

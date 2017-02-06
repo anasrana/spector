@@ -27,12 +27,16 @@ if (!is.tbl(region_df)) {
       separate(
         metric, into = c("mean", "median", "rms"),
         sep = ",", convert = TRUE) %>%
-      select(id, mean, median, rms)
+      select(id, mean, median, rms) %>%
+      mutate(region.status = if_else(rms == 0, "not.coverd", "covered"))
     } else if (met == "rms") {
       res_df <-
       res_df %>%
         summarise(metric = regionMetric(cov)) %>%
-        select(id, metric)
+        select(id, metric) %>%
+        mutate(region.status = if_else(is.infinite(metric),
+                                       "not.coverd", "covered"),
+               metric = if_else(is.infinite(metric), as.double(NA), metric))
     }
 
       message(str_c("Completed run chr:", i_chr))
@@ -108,15 +112,15 @@ regionMetric <- function(reg_cov) {
 }
 
 spectorRa <- function(wd_thr) {
-  mean(abs(wd_thr), na.rm = T)
+  1 / mean(abs(wd_thr), na.rm = T)
 }
 
 spectorRms <- function(wd_thr) {
-  sqrt(mean(wd_thr^2))
+  1 / sqrt(mean(wd_thr^2))
 }
 
 spectorMed <- function(wd_thr) {
-  median(abs(wd_thr), na.rm = T)
+  1 / median(abs(wd_thr), na.rm = T)
 }
 
 sigNorm <- function(signal) {
