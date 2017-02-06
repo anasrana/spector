@@ -124,7 +124,7 @@ checkRegionSize <- function(bed_region_size, file_region_v) {
 #' @importFrom stringr str_c
 #'
 expandBedRegion <- function(bed_region_size, start, end, n_reg, uncov) {
-sapply(1:length(n_reg), function(i_v) {
+sapply(seq_along(n_reg), function(i_v) {
   gap_bp <- round(uncov[i_v] / (n_reg[i_v] + 1))
   tmp_st <- c(rep(NA, n_reg[i_v]))
   tmp_ed <- c(start[i_v], rep(NA, n_reg[i_v]))

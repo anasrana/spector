@@ -75,7 +75,7 @@ chrCov <- function(f_name, chr, start, end, n_read) {
   sig <-
     read_cov(f_name, chr, start, end, n_read)
 
-  sapply(1:length(start), function(i_start) {
+  sapply(seq_along(start), function(i_start) {
     paste0(sig[(start[i_start]):end[i_start]], collapse = ",")
   })
 

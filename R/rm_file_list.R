@@ -77,7 +77,7 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
                         bed_header = FALSE, smr = "rms") {
 
   # function to be run inside of mclappy
-  f_idx <- 1:length(fs_bam)
+  f_idx <- seq_along(fs_bam)
 
   srm_df <-
   mclapply(X = f_idx, function(idx) {
