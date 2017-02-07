@@ -76,20 +76,26 @@ read_bed <- function(bed_file, header = FALSE, ucsc_coord = FALSE,
 bedRegionSplit <- function(bed_region, bed_region_size) {
 
   min_region <- checkRegionSize(bed_region_size, bed_region$reg_length)
-
+  bed_region <-
   bed_region %>%
-    filter(reg_length >= min_region) %>%
-    mutate(
-      n_reg = reg_length %/% min_region,
-      uncov = reg_length %% min_region,
-      new_reg = expandBedRegion(min_region, start, end, n_reg, uncov),
-      orig_reg = str_c(chrom, ":", start, "-", end)
-      ) %>%
-    select(-start, -end, -reg_length) %>%
-    separate_rows(new_reg, sep = ",") %>%
-    separate(new_reg, into = c("start", "end"), convert = TRUE) %>%
-    mutate(start = start + 1) %>%
-    select(chrom, start, end)
+    filter(reg_length >= min_region)
+
+  if (length(unique(bed_region$reg_length)) > 1) {
+    bed_region %>%
+      mutate(
+        n_reg = reg_length %/% min_region,
+        uncov = reg_length %% min_region,
+        new_reg = expandBedRegion(min_region, start, end, n_reg, uncov),
+        orig_reg = str_c(chrom, ":", start, "-", end)
+        ) %>%
+      select(-start, -end, -reg_length) %>%
+      separate_rows(new_reg, sep = ",") %>%
+      separate(new_reg, into = c("start", "end"), convert = TRUE) %>%
+      mutate(start = start + 1) %>%
+      select(chrom, start, end)
+    } else {
+      bed_region
+    }
 }
 
 checkRegionSize <- function(bed_region_size, file_region_v) {
