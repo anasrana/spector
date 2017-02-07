@@ -75,7 +75,7 @@ read_bed <- function(bed_file, header = FALSE, ucsc_coord = FALSE,
 #'
 bedRegionSplit <- function(bed_region, bed_region_size) {
 
-  min_region <- checkRegionSize(bed_region_size, bed_region$reg_length)
+  min_region <- checkRegionSize(bed_region_size, bed_region)
   bed_region <-
   bed_region %>%
     filter(reg_length >= min_region)
@@ -98,22 +98,35 @@ bedRegionSplit <- function(bed_region, bed_region_size) {
     }
 }
 
-checkRegionSize <- function(bed_region_size, file_region_v) {
+#' @importFrom dplyr summarise mutate
+#'
+checkRegionSize <- function(bed_region_size, file_region) {
+
+  max_file <- file_region %>%
+                summarise(tmp = max(reg_length)) %>%
+                with(tmp)
+
   if (is.null(bed_region_size)) {
     message("No region size specified:
       Using largest power of 2 that fits into min(region) in the bed file")
-    bed_region_size <- 2^(floor(log2(min(file_region_v))))
+    bed_region_size <- file_region %>%
+                          summarise(tmp = 2^(floor(log2(min(reg_length))))) %>%
+                          with(tmp)
   } else {
     bed_region_size <- 2^(floor(log2(min(bed_region_size))))
     message(paste0("Regions standardised to length ", bed_region_size))
-    message(paste0(sum(file_region_v < bed_region_size),
-      " region(s) discarded because the length is smaller than ",
-      bed_region_size))
+    n_drop <- file_region %>%
+      mutate(filt = reg_length < bed_region_size) %>%
+      summarise(n_drop = sum(filt)) %>%
+      with(n_drop)
+      message(paste0(n_drop,
+                     " region(s) discarded because the length is smaller than ",
+                     bed_region_size))
   }
 
-  if (max(file_region_v) < bed_region_size) {
+  if (max_file < bed_region_size) {
     stop(paste0("min region size invalid
-      Choose a number smaller than: ", max(file_region_v)), call. = FALSE)
+      Choose a number smaller than: ", max_file), call. = FALSE)
   } else {
     return(bed_region_size)
   }

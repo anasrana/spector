@@ -42,7 +42,8 @@ test_that("read_bed custom regions_size", {
 })
 
 test_that("checkRegionSize test if correct region supplied", {
-  region_size <- checkRegionSize(2000, c(12, 20, 1999, 2000, 5000))
+  region_size <- checkRegionSize(2000,
+                  dplyr::data_frame(reg_length = c(12, 20, 1999, 2000, 5000)))
 
   expect_that(region_size, equals(1024))
 })
