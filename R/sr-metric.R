@@ -3,6 +3,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom tidyr separate
 #' @importFrom parallel mclapply
+#' @importFrom purrr map map_dbl
 #'
 spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam,
                           met = smr) {
@@ -16,27 +17,25 @@ if (!is.tbl(region_df)) {
 
   region_df <-
   mclapply(chr_idx, function(i_chr) {
+
     res_df <- region_df %>%
       regionCovDf(chr = i_chr, bam_file = f_bam, bamReadCount = n_bam) %>%
-      group_by(id)
+      mutate(wd_thresh = map(cov, regionMetric),
+             metric = map_dbl(wd_thresh, spectorRms),
+             region.status = if_else(is.infinite(metric),
+                                     "not.coverd", "covered"),
+             metric = if_else(is.infinite(metric), as.double(NA), metric))
 
   if (met == "all") {
     res_df <-
     res_df %>%
-      summarise(metric = regionMetricAll(cov)) %>%
-      separate(
-        metric, into = c("mean", "median", "rms"),
-        sep = ",", convert = TRUE) %>%
-      select(id, mean, median, rms) %>%
-      mutate(region.status = if_else(rms == 0, "not.coverd", "covered"))
+      mutate(median = map_dbl(wd_thresh, spectorMed),
+             mean = map_dbl(wd_thresh, spectorRa)) %>%
+      select(id, metric, mean, median, region.status)
     } else if (met == "rms") {
       res_df <-
       res_df %>%
-        summarise(metric = regionMetric(cov)) %>%
-        select(id, metric) %>%
-        mutate(region.status = if_else(is.infinite(metric),
-                                       "not.coverd", "covered"),
-               metric = if_else(is.infinite(metric), as.double(NA), metric))
+        select(id, metric, region.status)
     }
 
       message(str_c("Completed run chr:", i_chr))
@@ -75,8 +74,8 @@ chrCov <- function(f_name, chr, start, end, n_read) {
   sig <-
     read_cov(f_name, chr, start, end, n_read)
 
-  sapply(seq_along(start), function(i_start) {
-    paste0(sig[(start[i_start]):end[i_start]], collapse = ",")
+  lapply(seq_along(start), function(i_start) {
+    sig[(start[i_start]):end[i_start]]
   })
 
 }
@@ -103,11 +102,11 @@ regionMetric <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     NA
   } else {
-    wd_sig <- wd(reg_cov, filter.number = 1, family = "DaubExPhase")
+    wd_sig <- wd(as.vector(reg_cov), filter.number = 1, family = "DaubExPhase")
     wd_sig_tr <- threshold(wd_sig, by.level = TRUE,
         policy = "universal", return.thresh = TRUE)
 
-    spectorRms(wd_sig_tr)
+    return(wd_sig_tr)
   }
 }
 
@@ -140,6 +139,5 @@ regionCovDf <- function(region_df, chr, bam_file, bamReadCount) {
       filter(chrom == chr) %>%
       mutate(
         id = paste0(chrom, ":", start, "-", end),
-        cov = chrCov(bam_file, chrom, start, end, bamReadCount)) %>%
-        separate_rows(cov, sep = ",")
+        cov = chrCov(bam_file, chrom, start, end, bamReadCount))
 }
