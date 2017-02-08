@@ -26,7 +26,8 @@ read_cov <- function(f_name, chr, start, end, n_read = NULL) {
     coverage() %>%
     extract2(chr)
 
-    return(raw_reads)
+  raw_reads <- raw_reads / n_read
+  return(raw_reads)
 }
 
 #' @importFrom GenomicRanges GRanges

@@ -25,7 +25,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   # --------------------------------------------------------------------------
 
   bam_stats <- nReadsBam(f_bam)
-  n_read <- bam_stats$n_read
+  n_read <- sum(bam_stats$n_read / 10^9, na.rm = TRUE)
 
 # ==========================================================================
 # COMPARE CHROMOSOME LISTS BETWEEN BAM AND BED FILE
