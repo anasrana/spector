@@ -91,7 +91,7 @@ bedRegionSplit <- function(bed_region, bed_region_size) {
       select(-start, -end, -reg_length) %>%
       separate_rows(new_reg, sep = ",") %>%
       separate(new_reg, into = c("start", "end"), convert = TRUE) %>%
-      mutate(start = start + 1) %>%
+      mutate(start = as.integer(start + 1)) %>%
       select(chrom, start, end)
     } else {
       bed_region

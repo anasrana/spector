@@ -23,7 +23,7 @@ if (!is.tbl(region_df)) {
       mutate(wd_thresh = map(cov, regionMetric),
              metric = map_dbl(wd_thresh, spectorRms),
              region.status = if_else(is.infinite(metric),
-                                     "not.coverd", "covered"),
+                                     "not.covered", "covered"),
              metric = if_else(is.infinite(metric), as.double(NA), metric))
 
   if (met == "all") {
@@ -31,11 +31,11 @@ if (!is.tbl(region_df)) {
     res_df %>%
       mutate(median = map_dbl(wd_thresh, spectorMed),
              mean = map_dbl(wd_thresh, spectorRa)) %>%
-      select(id, metric, mean, median, region.status)
+      select(chrom, start, end, metric, mean, median, region.status)
     } else if (met == "rms") {
       res_df <-
       res_df %>%
-        select(id, metric, region.status)
+        select(chrom, start, end, metric, region.status)
     }
 
       message(str_c("Completed run chr:", i_chr))
