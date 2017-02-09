@@ -4,7 +4,7 @@ res_path <- spector_sample("bed_results.bed")
 basic_path <- spector_sample("basic.bed")
 header_path <- spector_sample("with_header.bed")
 
-bed_df <- readr::read_csv(res_path, col_types = "cdi")
+bed_df <- readr::read_csv(res_path, col_types = "cii")
 
 test_that("read_bed split size, correct region split", {
   bed_test <- read_bed(basic_path)
