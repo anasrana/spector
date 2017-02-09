@@ -111,15 +111,15 @@ regionMetric <- function(reg_cov) {
 }
 
 spectorRa <- function(wd_thr) {
-  1 / mean(abs(wd_thr), na.rm = T)
+  mean(abs(wd_thr), na.rm = T)
 }
 
 spectorRms <- function(wd_thr) {
-  1 / sqrt(mean(wd_thr^2))
+  sqrt(mean(wd_thr^2))
 }
 
 spectorMed <- function(wd_thr) {
-  1 / median(abs(wd_thr), na.rm = T)
+  median(abs(wd_thr), na.rm = T)
 }
 
 sigNorm <- function(signal) {
