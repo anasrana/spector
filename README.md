@@ -17,9 +17,10 @@ This will tell you the version of _Bioconductor_ and ask you to update if necess
 The next step is to install the package with all dependencies and vignettes.
 
 ```r
+library(devtools)
 biocLite("anasrana/spector", 
-         auth_token = "22c9212536e52ece27ce37e9eca03728697954de", 
-         dependencies = TRUE,  build_vignettes = TRUE, ref = "v0.6.5")
+         auth_token = "49485aa1816abc309172159a55e3949e91286236", 
+         dependencies = TRUE,  build_vignettes = TRUE, ref = "v0.6.6")
 ```
 
 ## Manually install dependencies
@@ -41,8 +42,8 @@ _Versions required in brackets_
 library(devtools)
 
 install_github("anasrana/spector", 
-               dependencies = TRUE, build_vignettes = TRUE, ref = "v0.6.5",
-               auth_token = "22c9212536e52ece27ce37e9eca03728697954de") 
+               dependencies = TRUE, build_vignettes = TRUE, ref = "v0.6.6",
+               auth_token = "49485aa1816abc309172159a55e3949e91286236") 
 ```
 
 

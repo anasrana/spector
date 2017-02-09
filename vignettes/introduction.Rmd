@@ -143,10 +143,9 @@ This is not always satisfactory depending on the application. For example in thi
 
 ```{r, fig.width = 10, fig.height = 5}
 results_qc %>% 
-  separate(id, into = c("chr", "start", "end"), convert = TRUE) %>% 
-  ggplot(aes(x = id_bam, y = metric, fill = chr)) +
+  ggplot(aes(x = id_bam, y = metric, fill = chrom)) +
   geom_boxplot() +
-  facet_grid(.~chr)
+  facet_grid(.~chrom)
 
 ```
 
