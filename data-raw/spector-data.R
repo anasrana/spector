@@ -1,6 +1,10 @@
 library(tidyverse)
 library(stringr)
 
+# ==========================================================================
+# GIAB Data
+# ==========================================================================
+
 #
 # Data source:
 # https://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/GIAB_integration
@@ -28,5 +32,50 @@ giab_10k <- giab %>%
     chrom %in% 1:22) %>%  # remove X-Chromosome
   dplyr::distinct(chrom, start, end)
 
-# Output giab_10k data_frame in R/sysdata.rda
-devtools::use_data(giab_10k, compress = "xz", internal = TRUE, overwrite = TRUE)
+# ==========================================================================
+# GENOME DATA
+# ==========================================================================
+
+genome_version <- c("hg19", "hg38")
+
+
+genome_size <-
+lapply(genome_version, function(g_ver) {
+  hg_db <- src_mysql(dbname = g_ver, host = "genome-mysql.cse.ucsc.edu",
+                     user = "genome")
+
+
+  hg_db %>%
+    tbl("chromInfo") %>%
+    select(chrom, size) %>%
+    mutate(genome = g_ver) %>%
+    collect() %>%
+    dplyr::filter(str_detect(chrom, "chr[0-9]{1,2}\\b"))
+  }) %>%
+bind_rows()
+
+
+genome_gap <-
+lapply(genome_version, function(g_ver) {
+  hg_db <- src_mysql(dbname = g_ver, host = "genome-mysql.cse.ucsc.edu",
+                     user = "genome")
+  hg_db %>%
+    tbl("gap") %>%
+    collect() %>%
+
+    dplyr::filter(type  %in% c("telomere", "centromere")) %>%
+    select(chrom, chromStart, chromEnd, type) %>%
+    mutate(genome = g_ver) %>%
+    collect() %>%
+    dplyr::filter(str_detect(chrom, "chr[0-9]{1,2}\\b"))
+  }) %>%
+bind_rows()
+
+
+# ==========================================================================
+# Saving Data
+# ==========================================================================
+
+# Output giab_10k and genome data in R/sysdata.rda
+devtools::use_data(giab_10k, genome_size, genome_gap, compress = "xz",
+                   internal = TRUE, overwrite = TRUE)
