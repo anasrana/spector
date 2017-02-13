@@ -10,9 +10,10 @@ full_genome_regions(genome_version, region_size = NULL, reg_overlap = 0)
 \item{genome_version}{character. The genome version of your bam file.
 Currently supported are \code{"hg19"} and \code{"hg38"}.}
 
-\item{region_size}{integer.}
+\item{region_size}{integer. Size of the regions computed along the genome.
+Should ideally be a power of 2, if it isn't it is coerced to one.}
 
-\item{reg_overlap}{}
+\item{reg_overlap}{numeric. fraction of overlap for regions.}
 }
 \value{
 A \code{tbl_df} with chromosome, start, and end columns.

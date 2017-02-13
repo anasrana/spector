@@ -23,6 +23,27 @@
 full_genome_regions <- function(genome_version, region_size = NULL,
                             reg_overlap = 0) {
 
+  if (is.null(region_size)) {
+    message("region_size not specified, choosing default value 2^16")
+    region_size <- 2^16
+  } else if (region_size < 2^10) {
+    stop("Region size below 2^10 is not supported,",
+         " the metric values are not meaningful.", call. = FALSE)
+  } else {
+    region_size <- 2^(floor(log2(min(region_size))))
+  }
+
+  if (reg_overlap > 1 | reg_overlap < 0) {
+    stop("reg_overlap = ", reg_overlap,
+         ": It should be a fraction of the region size, in the range [0, 1]",
+         call. = FALSE)
+  }
+
+  if (!(genome_version %in% unique(genome_gap$genome))) {
+    stop("Currently only `", str_c(unique(genome_gap$genome), collapse = ", "),
+         "` are supported as genome_version", call. = FALSE )
+  }
+
   region_df <-
   genome_size %>%
     filter(genome == genome_version) %>%
