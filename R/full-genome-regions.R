@@ -2,8 +2,9 @@
 #'
 #' @param genome_version character. The genome version of your bam file.
 #'        Currently supported are `"hg19"` and `"hg38"`.
-#' @param region_size integer.
-#' @param reg_overlap
+#' @param region_size integer. Size of the regions computed along the genome.
+#'        Should ideally be a power of 2, if it isn't it is coerced to one.
+#' @param reg_overlap numeric. fraction of overlap for regions.
 #'
 #' @return A `tbl_df` with chromosome, start, and end columns.
 #'
@@ -12,6 +13,7 @@
 #' @importFrom dplyr filter mutate
 #' @importFrom purrr map2
 #' @importFrom tidyr unnest
+#' @importFrom stringr str_c
 #'
 #' @family data import functions
 #'
