@@ -25,6 +25,6 @@ GRanges object with reads from a given chromosome.
 Read the coverage for regions on one chromosome.
 }
 \seealso{
-Other data import functions: \code{\link{read_bed}},
-  \code{\link{read_par_file}}
+Other data import functions: \code{\link{full_genome_regions}},
+  \code{\link{read_bed}}, \code{\link{read_par_file}}
 }

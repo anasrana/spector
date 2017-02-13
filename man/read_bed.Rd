@@ -24,6 +24,6 @@ A \code{data.frame} used in the following calculations
 Read bed bed_file with bed_regions to run spector
 }
 \seealso{
-Other data import functions: \code{\link{read_cov}},
-  \code{\link{read_par_file}}
+Other data import functions: \code{\link{full_genome_regions}},
+  \code{\link{read_cov}}, \code{\link{read_par_file}}
 }

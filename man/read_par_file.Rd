@@ -13,6 +13,6 @@ read_par_file(id_path)
 Read spector id file.
 }
 \seealso{
-Other data import functions: \code{\link{read_bed}},
-  \code{\link{read_cov}}
+Other data import functions: \code{\link{full_genome_regions}},
+  \code{\link{read_bed}}, \code{\link{read_cov}}
 }
