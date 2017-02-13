@@ -31,7 +31,9 @@ test_that("read_bed ucsc coordinate shift", {
   expect_that(bed_test$start[17], equals(133006534))
   expect_that(bed_test$end[18], equals(14402))
   expect_that(bed_test$end[13], equals(179884855))
-
+  expect_is(bed_test$start, "integer")
+  expect_is(bed_test$end, "integer")
+  expect_is(bed_test$chrom, "character")
 })
 
 test_that("read_bed custom regions_size", {
@@ -46,4 +48,17 @@ test_that("checkRegionSize test if correct region supplied", {
                   dplyr::data_frame(reg_length = c(12, 20, 1999, 2000, 5000)))
 
   expect_that(region_size, equals(1024))
+})
+
+test_that("full genome regions computed accuratley", {
+  region_df <- full_genome_regions(genome_version = "hg19", region_size = 2^20)
+
+  expect_equal(nrow(region_df), 2628)
+  expect_equal(ncol(region_df), 3)
+  expect_is(region_df$chrom, "character")
+  expect_is(region_df$start, "integer")
+  expect_is(region_df$end, "integer")
+  expect_error(full_genome_regions(genome_version = "hg18"))
+  expect_error(full_genome_regions(genome_version = "hg19",
+                                   region_size = "2^9"))
 })
