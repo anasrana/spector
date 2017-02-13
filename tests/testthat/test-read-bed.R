@@ -62,3 +62,15 @@ test_that("full genome regions computed accuratley", {
   expect_error(full_genome_regions(genome_version = "hg19",
                                    region_size = "2^9"))
 })
+
+test_that("full genome regions computed with overlap", {
+  region_df <- full_genome_regions(genome_version = "hg19", region_size = 2^20,
+                                   reg_overlap = 0.9)
+
+  expect_equal(nrow(region_df), 2714)
+  expect_equal(ncol(region_df), 3)
+  expect_is(region_df$chrom, "character")
+  expect_is(region_df$start, "integer")
+  expect_is(region_df$end, "integer")
+
+})

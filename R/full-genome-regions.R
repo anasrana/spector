@@ -89,9 +89,9 @@ regionCompute <- function(size_chrom = NULL, region_size = 2^14,
   lapply(size_chrom, function(i_size) {
     idx_n <- seq.int(from = 1, to = floor(i_size / region_size), by = 1)
     data_frame(
-      start = (idx_n - 1) * region_size + 1 +
+      start = (idx_n - 1) * region_size + 1 -
               (idx_n - 1) * ( overlap_s * region_size),
-      end = idx_n * region_size +
+      end = idx_n * region_size -
             (idx_n - 1) * (overlap_s * region_size)
       )
   })
