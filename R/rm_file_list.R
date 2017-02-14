@@ -83,7 +83,7 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
   mclapply(X = f_idx, function(idx) {
     message(str_c("Running file: ", fs_bam[idx]))
       spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx],
-                  s_prep = s_v[idx], out_F = out_F, save_out = save_out,
+                  s_prep = s_v[idx], out_F = NULL, save_out = FALSE,
                   chr_cores = chr_cores,  region_giab = region_giab,
                         region_size = region_size, f_bed = f_bed,
                         header = bed_header, smr = smr)},

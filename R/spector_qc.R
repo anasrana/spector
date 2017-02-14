@@ -150,7 +150,14 @@ if (file_cores > 1 & chr_cores > 1) {
                               region_size = region_size, f_bed = f_bed,
                               bed_header = bed_header, smr = smr_var),
         type = output_capture)
+    # ==========================================================================
+    # Save output and return
+    # ==========================================================================
 
+    if (save_out | !is.null(out_F)) {
+      # save outputs
+        saveMerged(res_v = srm_df, out = out_F)
+    }
 
     } else if (grep("*.bam$", x = f_bam) > 0 | file_type == "bam") {
 
@@ -168,20 +175,6 @@ if (file_cores > 1 & chr_cores > 1) {
     }
   }
 
-# ==========================================================================
-# Save output and return
-# ==========================================================================
-
-  if (save_out | !is.null(out_F)) {
-    # save outputs
-    if (smr_var == "rms") {
-      saveSummary(res = srm_df, out = out_F, var_s = smr_var)
-      saveMerged(res_v = srm_df, out = out_F)
-    } else {
-      saveMerged(res_v = srm_df, out = out_F)
-    }
-
-  }
 
   return(srm_df = srm_df)
 }
