@@ -114,6 +114,9 @@ checkRegionSize <- function(bed_region_size, file_region) {
     bed_region_size <- file_region %>%
                           summarise(tmp = 2^(floor(log2(min(reg_length))))) %>%
                           with(tmp)
+  } else if (bed_region_size < 2^10) {
+    stop("Region size below 2^10 is not supported,",
+         " the metric values are not meaningful.", call. = FALSE)
   } else {
     bed_region_size <- 2^(floor(log2(min(bed_region_size))))
     message(paste0("Regions standardised to length ", bed_region_size))

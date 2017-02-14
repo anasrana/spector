@@ -111,3 +111,7 @@ test_that("spector runs with function returning all variables", {
   expect_equal(results_test, results_all)
 
 })
+
+test_that("spector fails when region sizes small", {
+  expect_error(spector_qc(s1_path, region_size = 2^9))
+})
