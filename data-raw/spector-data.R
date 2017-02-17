@@ -11,26 +11,50 @@ library(stringr)
 #   GIAB v2.19_2
 # --------------------------------------------------------------------------
 
-url_giab <-
-  str_c("https://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/analysis/",
-    "GIAB_integration/union13callableMQonlymerged_addcert_nouncert_",
-    "excludesimplerep_excludesegdups_excludedecoy_excludeRepSeqSTRs_",
-    "noCNVs_v2.19_2mindatasets_5minYesNoRatio_AddRTGPlatGenConf_",
-    "filtNISTclustergt9_RemNISTfilt_RemPartComp_RemRep_RemPartComp_v0.2.bed.gz")
+url_giab_hg19 <-
+  str_c("ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/",
+    "NA12878_HG001/NISTv3.3.2/GRCh37/",
+    "HG001_GRCh37_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID",
+    "_CHROM1-X_v.3.3.2_highconf_nosomaticdel.bed")
+
+url_giab_hg38 <-
+  str_c("ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/",
+    "NA12878_HG001/NISTv3.3.2/GRCh38/",
+    "HG001_GRCh38_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-10X-SOLID",
+    "_CHROM1-X_v.3.3.2_highconf_nosomaticdel_noCENorHET7.bed")
+
+
 
 # Download file and save in data-raw/
-download.file(url_giab, "data-raw/giab.bed")
+download.file(url_giab_hg19, "data-raw/giab_hg19.bed")
+download.file(url_giab_hg38, "data-raw/giab_hg38.bed")
+
+giab_hg19 <-
+  read.table("data-raw/giab_hg19.bed", col.names = c("chrom", "start", "end"),
+    stringsAsFactors = FALSE) %>%
+  tbl_df() %>%
+  mutate(genome = "hg19")
+
+giab_hg38 <-
+  read.table("data-raw/giab_hg38.bed", col.names = c("chrom", "start", "end"),
+    stringsAsFactors = FALSE) %>%
+  tbl_df() %>%
+  mutate(genome = "hg38")
 
 giab <-
   read.table("data-raw/giab.bed", col.names = c("chrom", "start", "end"),
     stringsAsFactors = FALSE) %>%
-  tbl_df()
+  tbl_df() %>%
+  mutate(genome = "hg38")
 
-giab_10k <- giab %>%
-  dplyr::filter(
-    (end - start) > 10000, # filter out regions that are too large
-    chrom %in% 1:22) %>%  # remove X-Chromosome
-  dplyr::distinct(chrom, start, end)
+giab_10k <-
+  bind_rows(giab_hg19, giab_hg38) %>%
+  # remove X-Chromosome
+  dplyr::filter(chrom %in% c(1:22, str_c("chr", 1:22))) %>%
+  # filter out regions that are too large
+  dplyr::filter((end - start) > 2^13) %>%
+  group_by(genome) %>%
+  dplyr::distinct(chrom, start, end, .keep_all = TRUE)
 
 # ==========================================================================
 # GENOME DATA
