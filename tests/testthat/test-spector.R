@@ -62,9 +62,9 @@ test_that("test passing bed file as tbl_df", {
 })
 
 test_that("spector complete run with giab", {
-  results_test <- spector_qc(f_bam = spector_sample(""), region_size = 2^14)
+  results_test <- spector_qc(f_bam = spector_sample(""), region_size = 2^16)
 
-  expect_that(nrow(results_test), equals(156))
+  expect_that(nrow(results_test), equals(109))
   expect_that(ncol(results_test), equals(6))
 })
 
@@ -87,7 +87,7 @@ test_that("test basic run of spectorFile", {
   results_s2 <-
   spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                         out_F = NULL, save_out = FALSE, chr_cores = 1,
-                        region_giab = TRUE, region_size = 2^15, f_bed = NULL,
+                        region_giab = TRUE, region_size = 2^16, f_bed = NULL,
                         header = FALSE)
 
   results_s2_bed <-
@@ -96,7 +96,7 @@ test_that("test basic run of spectorFile", {
                         region_giab = TRUE, region_size = 2^14,
                         f_bed = basic_path, header = FALSE)
 
-  expect_equal(nrow(results_s2), 3)
+  expect_equal(nrow(results_s2), 35)
   expect_equal(ncol(results_s2), 7)
   expect_equal(unique(c(results_s2$id_bam, results_s2_bed$id_bam)), "file_id")
   expect_equal(unique(c(results_s2$prep, results_s2_bed$prep)), "prep_id")
@@ -114,4 +114,38 @@ test_that("spector runs with function returning all variables", {
 
 test_that("spector fails when region sizes small", {
   expect_error(spector_qc(s1_path, region_size = 2^9))
+})
+
+test_that("spector picks up genome version", {
+expect_message(
+   tmp <-
+    spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
+                        out_F = NULL, save_out = FALSE, chr_cores = 1,
+                        region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                        header = FALSE, genome_v = "hg38"),
+  "Genome version selected: hg38")
+
+expect_message(
+  spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
+                      out_F = NULL, save_out = FALSE, chr_cores = 1,
+                      region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                      header = FALSE, genome_v = "GRCh37"),
+  "Genome version selected: hg19")
+
+expect_message(
+   spector_qc(f_bam = s2_path, f_bed = basic_path),
+  "Genome version selected: hg19")
+})
+
+test_that("spector fails with wrong genome", {
+
+expect_error(
+  spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
+                      out_F = NULL, save_out = FALSE, chr_cores = 1,
+                      region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                      header = FALSE, genome_v = "hg18")
+)
+
+expect_error(spector_qc(f_bam = s2_path, f_bed = basic_path, genome = "hg18"))
+
 })
