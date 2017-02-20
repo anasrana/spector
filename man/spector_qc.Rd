@@ -49,6 +49,10 @@ computed in parallel across chromosomes. Default value is \code{1}.}
 \item{bed_header}{logical. \code{TRUE} if bed file has a header, the default
 value is \code{FALSE}.}
 
+\item{region_overlap}{numeric. This is a number used when computing full
+genome regions in the package. It indicated the fractional overlap
+between neighbouring regions.}
+
 \item{genome}{character. The genome version of the bam file. Unless a \code{f_bed}
 file is provided, the only possibel options are \code{"hg19"} or \code{"hg38"}.}
 }

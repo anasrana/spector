@@ -31,6 +31,9 @@
 #' @param region_size integer. Choose size of regions to calculate metric value.
 #'        The default `= NULL` means `region_size = ` maximum power
 #'        of 2 that fits in the smallest region.
+#' @param region_overlap numeric. This is a number used when computing full
+#'        genome regions in the package. It indicated the fractional overlap
+#'        between neighbouring regions.
 #' @param file_type type of file passed to f_bam (Optional). This is to ensure
 #'        the automated checks pick up the correct format. The possible options
 #'        are `"list"`, `"bam"`, and `"dir"`.
