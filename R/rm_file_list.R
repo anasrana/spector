@@ -2,9 +2,10 @@
 #' @importFrom stringr str_c
 #'
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
-                        save_out, chr_cores, region_giab = TRUE,
+                        save_out, chr_cores, regions = "giab",
                         region_size = NULL, f_bed = NULL,
-                        header = FALSE, smr = "rms", genome_v = "hg19") {
+                        header = FALSE, smr = "rms", genome_v = "hg19",
+                        region_o = 0) {
 
   message(paste("Running on file:", f_bam, "\n=>\n"))
 
@@ -14,9 +15,9 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 
   if(!is.tbl(f_bed)) {
 
-    region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
+    region_df <- getRegions(regions = regions, f_bed = f_bed,
                             region_size = region_size, header = header,
-                            genome = genome_v)
+                            genome = genome_v, reg_overlap = region_o)
   } else {
     region_df <- f_bed
   }
@@ -73,9 +74,10 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 #' @importFrom stringr str_c
 #'
 spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
-                        save_out, chr_cores, region_giab = TRUE,
+                        save_out, chr_cores, regions = "giab",
                         region_size = NULL, f_bed = NULL,
-                        bed_header = FALSE, smr = "rms", genome_v = "hg19") {
+                        bed_header = FALSE, smr = "rms", genome_v = "hg19",
+                        region_o = 0) {
 
   # function to be run inside of mclappy
   f_idx <- seq_along(fs_bam)
@@ -85,9 +87,9 @@ spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
     message(str_c("Running file: ", fs_bam[idx]))
       spectorFile(f_bam = fs_bam[idx], id_bam = id_v[idx],
                   s_prep = s_v[idx], out_F = NULL, save_out = FALSE,
-                  chr_cores = chr_cores,  region_giab = region_giab,
+                  chr_cores = chr_cores,  regions = regions,
                         region_size = region_size, f_bed = f_bed,
-                        header = bed_header, smr = smr)},
+                        header = bed_header, smr = smr, region_o = region_o)},
       mc.cores = file_cores) %>%
     bind_rows()
 

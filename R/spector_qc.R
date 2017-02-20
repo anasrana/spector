@@ -24,8 +24,10 @@
 #'        `*.bam` file (the full relative path is required), a folder with
 #'        `*.bam` files, or a file with with structure specified later.
 #' @param f_bed file path for bed file to override default giab.
-#' @param region_giab logical. Indicates whether or not giab regions are used,
-#'        defaults to `TRUE`.
+#' @param regions character. Indicates the type of region to be used to process
+#'        the bam file. The default value is `"giab"`, other options are
+#'        `"full.genome"/"genome"/"full"` for regions spanning the full genome,
+#'        or "custom" for custom bed files (`f_bed = ` needed).
 #' @param region_size integer. Choose size of regions to calculate metric value.
 #'        The default `= NULL` means `region_size = ` maximum power
 #'        of 2 that fits in the smallest region.
@@ -76,11 +78,11 @@
 #' @importFrom stringr str_c
 #' @importFrom utils capture.output count.fields
 #'
-spector_qc <- function(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
+spector_qc <- function(f_bam = NULL, f_bed = NULL, regions = "giab",
                        region_size = NULL, file_type = "bam", out_F = NULL,
                        save_out = FALSE, silent = FALSE, smr_var = "rms",
                        file_cores = 1, chr_cores = 1, bed_header = FALSE,
-                       genome = "hg19") {
+                       region_overlap = 0, genome = "hg19") {
 
 # ==========================================================================
 # CHECKING VARIABLE
@@ -134,9 +136,10 @@ if (file_cores > 1 & chr_cores > 1) {
       srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
                             out_F = out_F, file_cores = file_cores,
                             chr_cores = chr_cores, save_out = save_out,
-                            region_giab = region_giab, genome_v = genome,
+                            regions = regions, genome_v = genome,
                             region_size = region_size, f_bed = f_bed,
-                            bed_header = bed_header, smr = smr_var),
+                            bed_header = bed_header, smr = smr_var,
+                            region_o = region_overlap),
       type = output_capture)
 
   } else if (file.exists(f_bam)) {
@@ -149,9 +152,10 @@ if (file_cores > 1 & chr_cores > 1) {
         srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                               out_F = out_F, file_cores = file_cores,
                               chr_cores = chr_cores, save_out = save_out,
-                              region_giab = region_giab, genome_v = genome,
+                              regions = regions, genome_v = genome,
                               region_size = region_size, f_bed = f_bed,
-                              bed_header = bed_header, smr = smr_var),
+                              bed_header = bed_header, smr = smr_var,
+                              region_o = region_overlap),
         type = output_capture)
     # ==========================================================================
     # Save output and return
@@ -166,10 +170,10 @@ if (file_cores > 1 & chr_cores > 1) {
 
       capture.output(
         srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
-                              chr_cores = chr_cores, region_giab = region_giab,
+                              chr_cores = chr_cores, regions = regions,
                               region_size = region_size, f_bed = f_bed,
                               header = bed_header, smr = smr_var,
-                              genome_v = genome),
+                              genome_v = genome, region_o = region_overlap),
         type = output_capture)
 
     } else if(!file.exists(f_bam)) {

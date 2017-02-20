@@ -87,13 +87,13 @@ test_that("test basic run of spectorFile", {
   results_s2 <-
   spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                         out_F = NULL, save_out = FALSE, chr_cores = 1,
-                        region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                        regions = "giab", region_size = 2^16, f_bed = NULL,
                         header = FALSE)
 
   results_s2_bed <-
   spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                         out_F = NULL, save_out = FALSE, chr_cores = 1,
-                        region_giab = TRUE, region_size = 2^14,
+                        regions = "giab", region_size = 2^14,
                         f_bed = basic_path, header = FALSE)
 
   expect_equal(nrow(results_s2), 35)
@@ -121,14 +121,14 @@ expect_message(
    tmp <-
     spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                         out_F = NULL, save_out = FALSE, chr_cores = 1,
-                        region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                        regions = "giab", region_size = 2^16, f_bed = NULL,
                         header = FALSE, genome_v = "hg38"),
   "Genome version selected: hg38")
 
 expect_message(
   spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                       out_F = NULL, save_out = FALSE, chr_cores = 1,
-                      region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                      regions = "giab", region_size = 2^16, f_bed = NULL,
                       header = FALSE, genome_v = "GRCh37"),
   "Genome version selected: hg19")
 
@@ -142,7 +142,7 @@ test_that("spector fails with wrong genome", {
 expect_error(
   spector:::spectorFile(f_bam = s2_path, id_bam = "file_id", s_prep = "prep_id",
                       out_F = NULL, save_out = FALSE, chr_cores = 1,
-                      region_giab = TRUE, region_size = 2^16, f_bed = NULL,
+                      regions = "giab", region_size = 2^16, f_bed = NULL,
                       header = FALSE, genome_v = "hg18")
 )
 

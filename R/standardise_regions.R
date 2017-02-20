@@ -167,13 +167,14 @@ sapply(seq_along(n_reg), function(i_v) {
 }
 
 
+#' @importFrom stringr str_detect ignore.case
 #' @importFrom dplyr group_by filter mutate
 #'
-getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
-                       header = FALSE, genome = "hg19") {
+getRegions <- function(regions = "giab", f_bed = NULL, region_size = NULL,
+                       header = FALSE, genome = "hg19", reg_overlap = 0) {
   checkGenome(genome)
 
-  if (region_giab & is.null(f_bed)) {
+  if (regions == "giab" & is.null(f_bed)) {
 
     region_df <-
       giab_10k %>%
@@ -182,7 +183,7 @@ getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
         mutate(reg_length = end - start) %>%
         bedRegionSplit(region_size)
 
-  } else if (!region_giab & is.null(f_bed)) {
+  } else if (regions == "custom" & is.null(f_bed)) {
 
     stop("Selected custom region, but no bed file provided", call. = FALSE)
 
@@ -190,6 +191,11 @@ getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
 
     region_df <- read_bed(bed_file = f_bed, header = header,
                           bed_region_size = region_size)
+  } else if (regions %in% c("full.genome", "genome", "full")) {
+
+    region_df <- full_genome_regions(genome_version = genome,
+                                     region_size = region_size,
+                                     reg_overlap = reg_overlap)
   }
   return(region_df)
 }

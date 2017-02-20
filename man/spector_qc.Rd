@@ -4,10 +4,10 @@
 \alias{spector_qc}
 \title{Compute QC (spector metric) for bam files.}
 \usage{
-spector_qc(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
+spector_qc(f_bam = NULL, f_bed = NULL, regions = "giab",
   region_size = NULL, file_type = "bam", out_F = NULL, save_out = FALSE,
   silent = FALSE, smr_var = "rms", file_cores = 1, chr_cores = 1,
-  bed_header = FALSE, genome = "hg19")
+  bed_header = FALSE, region_overlap = 0, genome = "hg19")
 }
 \arguments{
 \item{f_bam}{a string with path to \code{bam} file(s), it can link to
@@ -16,8 +16,10 @@ spector_qc(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
 
 \item{f_bed}{file path for bed file to override default giab.}
 
-\item{region_giab}{logical. Indicates whether or not giab regions are used,
-defaults to \code{TRUE}.}
+\item{regions}{character. Indicates the type of region to be used to process
+the bam file. The default value is \code{"giab"}, other options are
+\code{"full.genome"/"genome"/"full"} for regions spanning the full genome,
+or "custom" for custom bed files (\code{f_bed =} needed).}
 
 \item{region_size}{integer. Choose size of regions to calculate metric value.
 The default \code{= NULL} means \code{region_size =} maximum power
