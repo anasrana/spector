@@ -38,7 +38,7 @@
 #'        the automated checks pick up the correct format. The possible options
 #'        are `"list"`, `"bam"`, and `"dir"`.
 #' @param genome character. The genome version of the bam file. Unless a `f_bed`
-#'        file is provided, the only possibel options are `"hg19"` or `"hg38"`.
+#'        file is provided, the only possible options are `"hg19"` or `"hg38"`.
 #' @param out_F (Optional) Folder path to save output. If omitted results
 #'        will be returned, but not saved.
 #' @param save_out logical. Indicating if output from `spector_qc()`
