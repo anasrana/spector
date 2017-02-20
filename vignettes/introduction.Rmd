@@ -65,7 +65,7 @@ To run `spector` the first time all we need it is access to a bam file. There ar
 
 The best way to obtain QC results from spector is to use the function `spector_qc()`. With default settings the default region size $= 2^{13}$. We notice that the package provides a progress update while running, which is especially useful for larger files.
 
-```{r}
+```{r, eval = FALSE}
 
 bam_f <- spector_sample("sample1.bam")
 results_qc <- spector_qc(f_bam = bam_f)
@@ -77,8 +77,8 @@ results_qc <- spector_qc(f_bam = bam_f)
 We can specify region sizes when running `spector_qc()` using the `region_size` variable. This variable should be a power of $2$ if it isn't it is coerced to the largest power of $2$ which is smaller than `< region_size` inside the package.
 
 ```{r, message = FALSE}
-
-results_qc <- spector_qc(f_bam = bam_f, region_size = 2^14)
+bam_f <- spector_sample("sample1.bam")
+results_qc <- spector_qc(f_bam = bam_f, region_size = 2^16)
 
 ```
 
