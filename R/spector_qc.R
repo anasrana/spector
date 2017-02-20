@@ -249,7 +249,7 @@ read_par_file <- function(id_path) {
     col.names = c(list_names, rep(NA, no_cols - length(list_names))),
     colClasses = c(rep("character", length(list_names)),
       rep("NULL", no_cols - length(list_names)))) %>%
-    tibble::as_data_frame()
+    as_data_frame()
 
   return(id_df)
 }
