@@ -167,7 +167,7 @@ sapply(seq_along(n_reg), function(i_v) {
 }
 
 
-#' @importFrom stringr str_detect ignore.case
+#' @importFrom stringr str_detect
 #' @importFrom dplyr group_by filter mutate
 #'
 getRegions <- function(regions = "giab", f_bed = NULL, region_size = NULL,

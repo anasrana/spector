@@ -1,15 +1,16 @@
-#' @importFrom stringr str_detect ignore.case
+#' @importFrom stringr str_detect
 #'
 checkGenome <- function(genome) {
-  if (genome %in% c("GRCh37", "hg19", "GRCh38", "hg38")) {
-    if (str_detect(genome, ignore.case("GRCh"))) {
-      if (str_detect(genome, "38")) {
-        genome <- "hg38"
-      } else if (str_detect(genome, "37")) {
-        genome <- "hg19"
-      }
+#ToDo check for implementation to allow for different case and mixed case
+  if (str_detect(genome, "38|19|37")) {
+    if (str_detect(genome, "38")) {
+      genome <- "hg38"
+    } else if (str_detect(genome, "37|19")) {
+      genome <- "hg19"
     }
+  }
 
+  if (genome %in% c("hg19", "hg38")) {
     message("Genome version selected: ", genome)
   } else {
     stop("This package only supports `GRCh37` and `GRCh38` genomes.\n",
