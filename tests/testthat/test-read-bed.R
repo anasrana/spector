@@ -74,3 +74,13 @@ test_that("full genome regions computed with overlap", {
   expect_is(region_df$end, "integer")
 
 })
+
+test_that("full region genome version", {
+  region_df <- full_genome_regions("hg38", region_size = 2^20)
+  expect_equal(nrow(region_df), 2709)
+  expect_equal(region_df %>%
+                dplyr::mutate(reg = end - start + 1) %>%
+                with(reg) %>%
+                unique(), 2^20)
+
+})

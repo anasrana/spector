@@ -135,6 +135,10 @@ expect_message(
 expect_message(
    spector_qc(f_bam = s2_path, f_bed = basic_path),
   "Genome version selected: hg19")
+
+expect_message(
+   spector_qc(f_bam = s2_path, f_bed = basic_path, genome = "GRCh38"),
+  "Genome version selected: hg38")
 })
 
 test_that("spector fails with wrong genome", {
