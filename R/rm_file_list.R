@@ -4,7 +4,7 @@
 spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        header = FALSE, smr = "rms") {
+                        header = FALSE, smr = "rms", genome_v = "hg19") {
 
   message(paste("Running on file:", f_bam, "\n=>\n"))
 
@@ -15,7 +15,8 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
   if(!is.tbl(f_bed)) {
 
     region_df <- getRegions(region_giab = region_giab, f_bed = f_bed,
-                            region_size = region_size, header = header)
+                            region_size = region_size, header = header,
+                            genome = genome_v)
   } else {
     region_df <- f_bed
   }
@@ -74,7 +75,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
 spectorList <- function(fs_bam, id_v, s_v, out_F, file_cores = 1,
                         save_out, chr_cores, region_giab = TRUE,
                         region_size = NULL, f_bed = NULL,
-                        bed_header = FALSE, smr = "rms") {
+                        bed_header = FALSE, smr = "rms", genome_v = "hg19") {
 
   # function to be run inside of mclappy
   f_idx <- seq_along(fs_bam)

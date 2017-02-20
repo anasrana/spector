@@ -7,7 +7,7 @@
 spector_qc(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
   region_size = NULL, file_type = "bam", out_F = NULL, save_out = FALSE,
   silent = FALSE, smr_var = "rms", file_cores = 1, chr_cores = 1,
-  bed_header = FALSE)
+  bed_header = FALSE, genome = "hg19")
 }
 \arguments{
 \item{f_bam}{a string with path to \code{bam} file(s), it can link to
@@ -46,6 +46,9 @@ computed in parallel across chromosomes. Default value is \code{1}.}
 
 \item{bed_header}{logical. \code{TRUE} if bed file has a header, the default
 value is \code{FALSE}.}
+
+\item{genome}{character. The genome version of the bam file. Unless a \code{f_bed}
+file is provided, the only possibel options are \code{"hg19"} or \code{"hg38"}.}
 }
 \value{
 Output is a \code{tbl_df} object with a metric value for each

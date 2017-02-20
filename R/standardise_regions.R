@@ -166,12 +166,19 @@ sapply(seq_along(n_reg), function(i_v) {
 
 }
 
+
+#' @importFrom dplyr group_by filter mutate
+#'
 getRegions <- function(region_giab = TRUE, f_bed = NULL, region_size = NULL,
-                       header = FALSE) {
+                       header = FALSE, genome = "hg19") {
+  checkGenome(genome)
+
   if (region_giab & is.null(f_bed)) {
 
     region_df <-
       giab_10k %>%
+        filter(genome == genome) %>%
+        group_by() %>%
         mutate(reg_length = end - start) %>%
         bedRegionSplit(region_size)
 

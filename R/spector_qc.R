@@ -32,6 +32,8 @@
 #' @param file_type type of file passed to f_bam (Optional). This is to ensure
 #'        the automated checks pick up the correct format. The possible options
 #'        are `"list"`, `"bam"`, and `"dir"`.
+#' @param genome character. The genome version of the bam file. Unless a `f_bed`
+#'        file is provided, the only possibel options are `"hg19"` or `"hg38"`.
 #' @param out_F (Optional) Folder path to save output. If omitted results
 #'        will be returned, but not saved.
 #' @param save_out logical. Indicating if output from `spector_qc()`
@@ -77,7 +79,8 @@
 spector_qc <- function(f_bam = NULL, f_bed = NULL, region_giab = TRUE,
                        region_size = NULL, file_type = "bam", out_F = NULL,
                        save_out = FALSE, silent = FALSE, smr_var = "rms",
-                       file_cores = 1, chr_cores = 1, bed_header = FALSE) {
+                       file_cores = 1, chr_cores = 1, bed_header = FALSE,
+                       genome = "hg19") {
 
 # ==========================================================================
 # CHECKING VARIABLE
@@ -131,7 +134,7 @@ if (file_cores > 1 & chr_cores > 1) {
       srm_df <- spectorList(fs_bam, id_v = id_bam, s_v = NULL,
                             out_F = out_F, file_cores = file_cores,
                             chr_cores = chr_cores, save_out = save_out,
-                            region_giab = region_giab,
+                            region_giab = region_giab, genome_v = genome,
                             region_size = region_size, f_bed = f_bed,
                             bed_header = bed_header, smr = smr_var),
       type = output_capture)
@@ -146,7 +149,7 @@ if (file_cores > 1 & chr_cores > 1) {
         srm_df <- spectorList(fs_bam = fs_bam, id_v = id_bam, s_v = sample_type,
                               out_F = out_F, file_cores = file_cores,
                               chr_cores = chr_cores, save_out = save_out,
-                              region_giab = region_giab,
+                              region_giab = region_giab, genome_v = genome,
                               region_size = region_size, f_bed = f_bed,
                               bed_header = bed_header, smr = smr_var),
         type = output_capture)
@@ -165,7 +168,8 @@ if (file_cores > 1 & chr_cores > 1) {
         srm_df <- spectorFile(f_bam, out_F = out_F, save_out = save_out,
                               chr_cores = chr_cores, region_giab = region_giab,
                               region_size = region_size, f_bed = f_bed,
-                              header = bed_header, smr = smr_var),
+                              header = bed_header, smr = smr_var,
+                              genome_v = genome),
         type = output_capture)
 
     } else if(!file.exists(f_bam)) {
