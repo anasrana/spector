@@ -54,7 +54,7 @@ genome regions in the package. It indicated the fractional overlap
 between neighbouring regions.}
 
 \item{genome}{character. The genome version of the bam file. Unless a \code{f_bed}
-file is provided, the only possibel options are \code{"hg19"} or \code{"hg38"}.}
+file is provided, the only possible options are \code{"hg19"} or \code{"hg38"}.}
 }
 \value{
 Output is a \code{tbl_df} object with a metric value for each
