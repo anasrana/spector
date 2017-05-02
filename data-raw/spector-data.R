@@ -97,9 +97,20 @@ bind_rows()
 
 
 # ==========================================================================
+# Baseline data
+# ==========================================================================
+
+#
+# Pre computed baselines for 2^13 - 2^17 for comparison and computing GIM
+# --------------------------------------------------------------------------
+
+base_gim <- read_csv("data-raw/baseline.csv", col_type = "ddi")
+
+
+# ==========================================================================
 # Saving Data
 # ==========================================================================
 
 # Output giab_10k and genome data in R/sysdata.rda
-devtools::use_data(giab_10k, genome_size, genome_gap, compress = "xz",
+devtools::use_data(giab_10k, genome_size, genome_gap, base_gim, compress = "xz",
                    internal = TRUE, overwrite = TRUE)
