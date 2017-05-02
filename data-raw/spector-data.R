@@ -41,12 +41,6 @@ giab_hg38 <-
   tbl_df() %>%
   mutate(genome = "hg38")
 
-giab <-
-  read.table("data-raw/giab.bed", col.names = c("chrom", "start", "end"),
-    stringsAsFactors = FALSE) %>%
-  tbl_df() %>%
-  mutate(genome = "hg38")
-
 giab_10k <-
   bind_rows(giab_hg19, giab_hg38) %>%
   # remove X-Chromosome
