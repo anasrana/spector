@@ -89,6 +89,11 @@ lapply(genome_version, function(g_ver) {
   }) %>%
 bind_rows()
 
+# ==========================================================================
+# LAS limits to identify quality in region
+# ==========================================================================
+
+las_limits <- read_csv("data-raw/las_limits.csv", col_type = "iddd")
 
 # ==========================================================================
 # Baseline data
@@ -106,5 +111,5 @@ base_gim <- read_csv("data-raw/baseline.csv", col_type = "ddi")
 # ==========================================================================
 
 # Output giab_10k and genome data in R/sysdata.rda
-devtools::use_data(giab_10k, genome_size, genome_gap, base_gim, compress = "xz",
-                   internal = TRUE, overwrite = TRUE)
+devtools::use_data(giab_10k, genome_size, genome_gap, base_gim, las_limits,
+                   compress = "xz", internal = TRUE, overwrite = TRUE)
