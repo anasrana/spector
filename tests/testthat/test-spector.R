@@ -79,7 +79,7 @@ test_that("test spector on single file", {
 
   expect_equal(nrow(results_test), 17)
   expect_equal(ncol(results_test), 6)
-  expect_equal(results_test$metric[16], 7555236.720667904)
+  expect_equal(results_test$las[16], 7555236.720667904)
 })
 
 test_that("test basic run of spectorFile", {

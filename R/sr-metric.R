@@ -5,7 +5,7 @@
 #' @importFrom parallel mclapply
 #' @importFrom purrr map map_dbl
 #'
-spectorMetric <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam,
+spectorLas <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam,
                           met = smr) {
 
 if (!is.tbl(region_df)) {
@@ -20,22 +20,22 @@ if (!is.tbl(region_df)) {
 
     res_df <- region_df %>%
       regionCovDf(chr = i_chr, bam_file = f_bam, bamReadCount = n_bam) %>%
-      mutate(wd_thresh = map(cov, regionMetric),
-             metric = map_dbl(wd_thresh, spectorRms),
-             region.status = if_else(is.infinite(metric),
+      mutate(wd_thresh = map(cov, regionLas),
+             las = map_dbl(wd_thresh, spectorRms),
+             region.status = if_else(is.infinite(las),
                                      "not.covered", "covered"),
-             metric = if_else(is.infinite(metric), as.double(NA), metric))
+             las = if_else(is.infinite(las), as.double(NA), las))
 
   if (met == "all") {
     res_df <-
     res_df %>%
       mutate(median = map_dbl(wd_thresh, spectorMed),
              mean = map_dbl(wd_thresh, spectorRa)) %>%
-      select(chrom, start, end, metric, mean, median, region.status)
+      select(chrom, start, end, las, mean, median, region.status)
     } else if (met == "rms") {
       res_df <-
       res_df %>%
-        select(chrom, start, end, metric, region.status)
+        select(chrom, start, end, las, region.status)
     }
 
       message(str_c("Completed run chr:", i_chr))
@@ -82,7 +82,7 @@ chrCov <- function(f_name, chr, start, end, n_read) {
 
 #' @importFrom wavethresh wd threshold
 #'
-regionMetricAll <- function(reg_cov) {
+regionLasAll <- function(reg_cov) {
   if (anyNA(reg_cov)) {
     "NA,NA,NA"
   } else {
@@ -97,7 +97,7 @@ regionMetricAll <- function(reg_cov) {
 
 #' @importFrom wavethresh wd threshold
 #'
-regionMetric <- function(reg_cov) {
+regionLas <- function(reg_cov) {
 
   if (anyNA(reg_cov)) {
     NA

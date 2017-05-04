@@ -47,7 +47,7 @@ spectorFile <- function(f_bam, id_bam = NULL, s_prep = NULL, out_F = NULL,
     " regions identified."))
 
 
-  srm_df <- spectorMetric(region_df = region_df, f_bam = f_bam,
+  srm_df <- spectorLas(region_df = region_df, f_bam = f_bam,
                            chr_cores = chr_cores, n_bam = n_read, met = smr)
   if (is.null(id_bam)) {
     id_bam <- gsub(".bam", "", x = basename(f_bam))

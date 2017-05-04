@@ -1,4 +1,4 @@
-chrom,start,end,metric,mean,median,region.status,id_bam
+chrom,start,end,las,mean,median,region.status,id_bam
 1,12764910,12773101,6169802.299125766,3252797.8375676926,0.0,covered,sample1
 1,12775045,12783236,0.0,0.0,0.0,covered,sample1
 1,47377097,47385288,9362517.372622816,4491192.235658923,0.0,covered,sample1

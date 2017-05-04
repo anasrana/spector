@@ -1,4 +1,4 @@
-chrom,start,end,metric,region.status,id_bam
+chrom,start,end,las,region.status,id_bam
 1,12764910,12773101,6169802.299125766,covered,sample1
 1,12775045,12783236,0.0,covered,sample1
 1,47377097,47385288,9362517.372622816,covered,sample1

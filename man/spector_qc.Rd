@@ -2,7 +2,7 @@
 % Please edit documentation in R/spector_qc.R
 \name{spector_qc}
 \alias{spector_qc}
-\title{Compute QC (spector metric) for bam files.}
+\title{Compute QC (spector LAS) for bam files.}
 \usage{
 spector_qc(f_bam = NULL, f_bed = NULL, regions = "giab",
   region_size = NULL, file_type = "bam", out_F = NULL, save_out = FALSE,
@@ -21,7 +21,7 @@ the bam file. The default value is \code{"giab"}, other options are
 \code{"full.genome"/"genome"/"full"} for regions spanning the full genome,
 or "custom" for custom bed files (\code{f_bed =} needed).}
 
-\item{region_size}{integer. Choose size of regions to calculate metric value.
+\item{region_size}{integer. Choose size of regions to calculate LAS value.
 The default \code{= NULL} means \code{region_size =} maximum power
 of 2 that fits in the smallest region.}
 
@@ -57,19 +57,19 @@ between neighbouring regions.}
 file is provided, the only possible options are \code{"hg19"} or \code{"hg38"}.}
 }
 \value{
-Output is a \code{tbl_df} object with a metric value for each
+Output is a \code{tbl_df} object with a LAS value for each
 region. Optionally the output can also be saved to file, but only if
 \code{out_F} is provided.
 }
 \description{
-Wavelet based technique to compute a quality metric for regions
+Wavelet based technique to compute a quality LAS for regions
 across the genome. The \code{spector_qc()} is the recommended function to
 access \code{spector} since it includes several checks and allows for more
 flexibility than some of the downstream functions.
 }
 \details{
 The \code{spector_qc} function is the main function to use for QC in the
-\code{spector} package. It will compute a quality control metric for specific
+\code{spector} package. It will compute a quality control LAS for specific
 regions across the genome.
 The default regions, supplied in the package, are based
 on the genome in a bottle project

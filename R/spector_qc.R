@@ -1,12 +1,12 @@
-#' Compute QC (spector metric) for bam files.
+#' Compute QC (spector LAS) for bam files.
 #'
-#' Wavelet based technique to compute a quality metric for regions
+#' Wavelet based technique to compute a quality LAS for regions
 #' across the genome. The `spector_qc()` is the recommended function to
 #' access `spector` since it includes several checks and allows for more
 #' flexibility than some of the downstream functions.
 #'
 #' The `spector_qc` function is the main function to use for QC in the
-#' `spector` package. It will compute a quality control metric for specific
+#' `spector` package. It will compute a quality control LAS for specific
 #' regions across the genome.
 #' The default regions, supplied in the package, are based
 #' on the genome in a bottle project
@@ -28,7 +28,7 @@
 #'        the bam file. The default value is `"giab"`, other options are
 #'        `"full.genome"/"genome"/"full"` for regions spanning the full genome,
 #'        or "custom" for custom bed files (`f_bed = ` needed).
-#' @param region_size integer. Choose size of regions to calculate metric value.
+#' @param region_size integer. Choose size of regions to calculate LAS value.
 #'        The default `= NULL` means `region_size = ` maximum power
 #'        of 2 that fits in the smallest region.
 #' @param region_overlap numeric. This is a number used when computing full
@@ -53,7 +53,7 @@
 #' @param chr_cores integer. Optional number indicating if the QC should be
 #'        computed in parallel across chromosomes. Default value is `1`.
 #'
-#' @return Output is a `tbl_df` object with a metric value for each
+#' @return Output is a `tbl_df` object with a LAS value for each
 #'         region. Optionally the output can also be saved to file, but only if
 #'         `out_F` is provided.
 #'
@@ -126,7 +126,7 @@ if (file_cores > 1 & chr_cores > 1) {
 }
 
 # ==========================================================================
-# Computing metric after checking what f_bam is
+# Computing LAS after checking what f_bam is
 # ==========================================================================
 
   if (dir.exists(f_bam)) {
@@ -208,10 +208,10 @@ saveSummary <- function(res, var_s, out) {
   if (var_s == "rms") {
     stat_spector <- res %>%
       group_by(id_bam) %>%
-      summarise(mean_rm = mean(metric, na.rm = TRUE),
-                       median_rm = median(metric, na.rm = TRUE),
-                       sd_rm = sd(metric, na.rm = TRUE),
-                       iqr_rm = IQR(metric, na.rm = TRUE))
+      summarise(mean_rm = mean(las, na.rm = TRUE),
+                       median_rm = median(las, na.rm = TRUE),
+                       sd_rm = sd(las, na.rm = TRUE),
+                       iqr_rm = IQR(las, na.rm = TRUE))
   } else if (var_s == "mean") {
     stat_spector <- res %>%
       group_by(id) %>%
@@ -222,7 +222,7 @@ saveSummary <- function(res, var_s, out) {
   }
 
   write.csv(stat_spector,
-            file = paste(out, "SUMMARY_STAT_metric.csv", sep = ""),
+            file = paste(out, "SUMMARY_STAT_LAS.csv", sep = ""),
             row.names = FALSE)
 }
 

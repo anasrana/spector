@@ -134,7 +134,7 @@ A simple way to visualise the results is to plot comparative boxplots, as shown 
 
 ```{r}
 results_qc %>% 
-  ggplot(aes(x = id_bam, y = metric)) +
+  ggplot(aes(x = id_bam, y = las)) +
   geom_boxplot()
 
 ```
@@ -143,7 +143,7 @@ This is not always satisfactory depending on the application. For example in thi
 
 ```{r, fig.width = 10, fig.height = 5}
 results_qc %>% 
-  ggplot(aes(x = id_bam, y = metric, fill = chrom)) +
+  ggplot(aes(x = id_bam, y = las, fill = chrom)) +
   geom_boxplot() +
   facet_grid(.~chrom)
 

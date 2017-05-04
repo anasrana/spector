@@ -1,7 +1,7 @@
 # spector 0.6.6
 
 * use purrr for a speed boost and memory efficiency 
-* return `tbl_df` contains `chrom`, `start`, `end`, and `metric`  for standard run
+* return `tbl_df` contains `chrom`, `start`, `end`, and `las`  for standard run
 * added normalisation of bam file reads to 10^9
 
 # spector 0.6.5

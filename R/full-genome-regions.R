@@ -28,7 +28,7 @@ full_genome_regions <- function(genome_version, region_size = NULL,
     region_size <- 2^16
   } else if (region_size < 2^10) {
     stop("Region size below 2^10 is not supported,",
-         " the metric values are not meaningful.", call. = FALSE)
+         " the LAS values are not meaningful.", call. = FALSE)
   } else {
     region_size <- 2^(floor(log2(min(region_size))))
   }
