@@ -2,6 +2,7 @@
 
 export("%>%")
 export(full_genome_regions)
+export(las_status)
 export(read_bed)
 export(read_cov)
 export(read_par_file)

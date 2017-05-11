@@ -6,7 +6,11 @@
 #' @importFrom purrr map map_dbl
 #'
 spectorLas <- function(region_df, f_bam = NULL, chr_cores = 1, n_bam,
-                          met = smr) {
+                          met = smr, c_off = 0.8) {
+
+## LAS initial bits
+region_size <- regionSize(region_df)
+las_lim <- lasFilter(r_size = region_size, coff = c_off)
 
 if (!is.tbl(region_df)) {
   stop("region_df needs to be a tbl_df object after loading\n",
@@ -42,7 +46,8 @@ if (!is.tbl(region_df)) {
 
       return(res_df)
   }, mc.cores = chr_cores) %>%
-  bind_rows()
+  bind_rows() %>%
+  las_status(las_lim)
 
   message(paste("Completed file:", f_bam))
   return(region_df)
