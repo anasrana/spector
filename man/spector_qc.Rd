@@ -7,7 +7,8 @@
 spector_qc(f_bam = NULL, f_bed = NULL, regions = "giab",
   region_size = NULL, file_type = "bam", out_F = NULL, save_out = FALSE,
   silent = FALSE, smr_var = "rms", file_cores = 1, chr_cores = 1,
-  bed_header = FALSE, region_overlap = 0, genome = "hg19")
+  bed_header = FALSE, region_overlap = 0, genome = "hg19",
+  res_verbose = TRUE)
 }
 \arguments{
 \item{f_bam}{a string with path to \code{bam} file(s), it can link to
@@ -55,6 +56,9 @@ between neighbouring regions.}
 
 \item{genome}{character. The genome version of the bam file. Unless a \code{f_bed}
 file is provided, the only possible options are \code{"hg19"} or \code{"hg38"}.}
+
+\item{res_verbose}{logical. \code{TRUE} for a verbose output including information
+regions. \code{FALSE} for summary results only.}
 }
 \value{
 Output is a \code{tbl_df} object with a LAS value for each

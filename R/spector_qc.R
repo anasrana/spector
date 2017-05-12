@@ -34,6 +34,8 @@
 #' @param region_overlap numeric. This is a number used when computing full
 #'        genome regions in the package. It indicated the fractional overlap
 #'        between neighbouring regions.
+#' @param res_verbose logical. `TRUE` for a verbose output including information
+#'        regions. `FALSE` for summary results only.
 #' @param file_type type of file passed to f_bam (Optional). This is to ensure
 #'        the automated checks pick up the correct format. The possible options
 #'        are `"list"`, `"bam"`, and `"dir"`.
@@ -85,7 +87,8 @@ spector_qc <- function(f_bam = NULL, f_bed = NULL, regions = "giab",
                        region_size = NULL, file_type = "bam", out_F = NULL,
                        save_out = FALSE, silent = FALSE, smr_var = "rms",
                        file_cores = 1, chr_cores = 1, bed_header = FALSE,
-                       region_overlap = 0, genome = "hg19") {
+                       region_overlap = 0, genome = "hg19",
+                       res_verbose = TRUE) {
 
 # ==========================================================================
 # CHECKING VARIABLE
@@ -186,8 +189,12 @@ if (file_cores > 1 & chr_cores > 1) {
     }
   }
 
-
-  return(srm_df = srm_df)
+  if (res_verbose) {
+    return(srm_df = srm_df)
+  } else {
+    srm_df <- calc_gim(srm_df)
+    return(srm_df = srm_df)
+  }
 }
 
 #
