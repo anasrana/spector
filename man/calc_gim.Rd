@@ -15,7 +15,7 @@ calc_gim(res_df, grp = "id_bam", r_size = NULL)
 in which case it is automatically calculated form \code{res_df}.}
 }
 \value{
-GIM
+GIM score for sample
 }
 \description{
 Compute GIM for samples or groups of samples
