@@ -1,9 +1,10 @@
 #' Las limits
 #'
-#' @param dat_df
-#' @param las_lim
+#' @param dat_df `tbl_df` object with LAS scores as a column.
+#' @param las_lim `tbl_df` object containing upper and lower limits on LAS
+#'        based on las_limits object contained in package.
 #'
-#' @return
+#' @return output is `tbl_df` object adding a column for region.status
 #' @export
 #'
 #' @importFrom dplyr mutate if_else

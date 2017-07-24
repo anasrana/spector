@@ -7,7 +7,13 @@
 las_status(dat_df, las_lim)
 }
 \arguments{
-\item{las_lim}{}
+\item{dat_df}{\code{tbl_df} object with LAS scores as a column.}
+
+\item{las_lim}{\code{tbl_df} object containing upper and lower limits on LAS
+based on las_limits object contained in package.}
+}
+\value{
+output is \code{tbl_df} object adding a column for region.status
 }
 \description{
 Las limits
