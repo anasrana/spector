@@ -31,8 +31,7 @@ Suggests:
     ggplot2,
     rmarkdown,
     testthat
-License: As per confidentiality agreement between the University of Oxford,
-    Cancer Research Technology ltd and Genomics England ltd
+License: GPL-3
 BugReports: https://github.com/anasrana/spector/issues
 LazyData: true
 VignetteBuilder: knitr
