@@ -14,6 +14,9 @@ calc_gim(res_df, grp = "id_bam", r_size = NULL)
 \item{r_size}{integer. Region size used in computation. The defualt is \code{NULL}
 in which case it is automatically calculated form \code{res_df}.}
 }
+\value{
+GIM
+}
 \description{
 Compute GIM for samples or groups of samples
 }

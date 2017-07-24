@@ -7,7 +7,7 @@
 #' @param r_size integer. Region size used in computation. The defualt is `NULL`
 #'        in which case it is automatically calculated form `res_df`.
 #'
-#' @return
+#' @return GIM score for sample
 #' @export
 #'
 #' @importFrom dplyr filter select_ mutate full_join select_ group_by_
