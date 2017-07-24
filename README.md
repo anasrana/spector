@@ -19,8 +19,7 @@ The next step is to install the package with all dependencies and vignettes.
 ```r
 library(devtools)
 biocLite("anasrana/spector", 
-         auth_token = "49485aa1816abc309172159a55e3949e91286236", 
-         dependencies = TRUE,  build_vignettes = TRUE, ref = "v0.6.6")
+         dependencies = TRUE,  build_vignettes = TRUE, ref = "v0.8")
 ```
 
 ## Manually install dependencies
@@ -42,8 +41,7 @@ _Versions required in brackets_
 library(devtools)
 
 install_github("anasrana/spector", 
-               dependencies = TRUE, build_vignettes = TRUE, ref = "v0.6.6",
-               auth_token = "49485aa1816abc309172159a55e3949e91286236") 
+               dependencies = TRUE, build_vignettes = TRUE, ref = "v0.8") 
 ```
 
 
