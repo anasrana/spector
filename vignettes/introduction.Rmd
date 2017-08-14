@@ -14,12 +14,10 @@ vignette: >
 ```{r, echo = FALSE, message = FALSE}
 
 # Lodaing packages
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(stringr)
 library(spector)
 library(knitr)
-library(ggplot2)
 
 knitr::opts_chunk$set(collapse = T, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
@@ -45,17 +43,20 @@ theme_anas <- theme_update(
 
 # Background
 
-Recent advances in high-throughput sequencing of cancer genomes has elucidated the landscape of genetic alterations in many tumor types, thus expanding molecular classification of cancer and facilitating routine whole genome sequencing in clinical oncology.
+Recent advances in high-throughput sequencing of cancer genomes has elucidated the landscape of genetic alterations in many tumour types, thus expanding molecular classification of cancer and facilitating routine whole genome sequencing in clinical oncology.
 
-The quality of the obtained tumor genome is a function of many variables, such as tissue quality and quantity, tumor content within a sample, depth of sequencing, and effectiveness of the data processing pipeline. Tissue quality relates to the age and size of the tissue and a fixation protocol. The fresh or frozen (FF) tumor material generally yields high-quality tumor genomic DNA. However, in most cases archival specimens stored as formalin-fixed, paraffin-embedded (FFPE) tissue blocks. Formalin can fragment the genomic DNA and introduce chemical modifications during the fixation and storage process that, eventually, lead to false-positive mutation and copy-number alteration calls. As FFPE tissue currently comprise the most accessible clinical option, evaluation of which samples yield successful whole genome sequence is critically important for molecular diagnostics and production-level sequencing.
+In samples obtained by high throughput sequencing we find aberrations in the coverage. It is difficult to elucidate the source of such aberrations, as they can stem from any part of the sequencing process or can be due to biological factors. 
+
+All whole genome sequencing (WGS) data contains noise the challenge is identifying the limits of this _acceptable noise_. One the one hand we have acceptable levels of noise which can be used further detailed study of a sample, on the other we have samples or regions along the genome of a sample that contain significant aberrations that make further study difficult.
 
 ## Aim
 
-The aim of this package is to obtain a metric for evaluation as a proxy for the quality of the sequenced genomic data. The metric should allow for comparison of whole genome sequence datasets (e.g. samples preserved with FFPE and FF protocols) as well as regions of particular concern.
+Understanding the location and strength of aberrations is central to any further investigation as to it's source or simple quantification of aberrations per sample and along the sample. We have developed
+a Local Aberration Score (LAS) to quantify local aberrations for equally sized regions along the genome. The package also computes a sample wide Genome Integrity Metric (GIM) which is based on a comparison of LAS for a sample with a baseline computed as part of the package. The LAS should allow for comparison of whole genome sequence datasets (e.g. samples preserved with FFPE and FF protocols) as well as regions of particular concern.
 
 ## Method
 
-This package uses wavelets to deconstruct the signal into frequency space and identify noisy regions in the genome. The algorithm simple segments the genome into regions of equal size and computes a metric for each region. This metric acts as a proxy for the quality of the signal in this region. Briefly it is a measure on how much of the signal is made up of noise. 
+This package uses wavelets to decompose the signal into coefficients on different levels, these are used to set a threshold between _acceptable noise_ and strong aberrations. The algorithm simple segments the genome into regions of equal size and computes a LAS for each region. It can also be used in a targeted fashion by supplying a custom bed file. 
 
 The default regions used in `spector` are based on the genome in a bottle (giab) project ([more details](http://jimb.stanford.edu/giab/)). The regions are further subset to identify reliable regions using [ReliableGenome](http://github.com/popitsch/wtchg-rg).
 
@@ -86,14 +87,12 @@ results_qc <- spector_qc(f_bam = bam_f, region_size = 2^16)
 
 It is also possible to run spector on all bam files contained inside a folder. All we need to do is to set the variable `f_bam = ` as the path to the folder containing the bam files. We can also specify a custom bed file, we select one supplied with the package corresponding to the bam files in the package. 
 
-The package will first compute chromosomal overlaps between the bed file and the bam file and only compute metric values for regions in chromosomes contained in both the bam and the bed file.
+The package will first compute chromosomal overlaps between the bed file and the bam file and only compute LAS values for regions in chromosomes contained in both the bam and the bed file.
 
 ```{r}
 
 bam_folder <- spector_sample("")
 basic_path <- spector_sample("basic.bed")
-
-print(bam_folder)
 
 results_qc <- spector_qc(f_bam = bam_folder, f_bed = basic_path)
 
@@ -120,7 +119,7 @@ read_par_file(par_file) %>%
 
 # Results
 
-The results of a `spector_qc` run are a [`tbl_df`](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) object, which is part of the `dplyr` package. It contains an `id` variablec which encodes the genomic region in standard format the metric values and any further sample specific parameters passed to the method. 
+The results of a `spector_qc` run are a [`tbl_df`](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) object, which is part of the `dplyr` package. It contains an `id` variablec which encodes the genomic region in standard format the LAS values and any further sample specific parameters passed to the method. 
 
 ```{r}
 glimpse(results_qc)
