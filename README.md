@@ -17,9 +17,9 @@ This will tell you the version of _Bioconductor_ and ask you to update if necess
 The next step is to install the package with all dependencies and vignettes.
 
 ```r
+source("https://bioconductor.org/biocLite.R")
 library(devtools)
-biocLite("anasrana/spector", 
-         dependencies = TRUE,  build_vignettes = TRUE, ref = "v0.8")
+biocLite("anasrana/spector", dependencies = TRUE,  build_vignettes = TRUE)
 ```
 
 ## Manually install dependencies
